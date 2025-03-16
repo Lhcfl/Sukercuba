@@ -13,7 +13,7 @@
       </div>
       <div
         v-if="reactions"
-        class="d-flex"
+        class="d-flex flex-wrap"
       >
         <div
           v-for="(pair, index) in reactions"
@@ -21,8 +21,11 @@
         >
           <MkAvatar
             :user="pair.user"
-          />        
-          <MkAnyEmoji :name="pair.reaction" />
+          />
+          <MkAnyEmoji
+            :class="$style.emoji"
+            :name="pair.reaction"
+          />
         </div>
       </div>
     </VCardItem>
@@ -78,5 +81,20 @@ const appearNote = computed(() => props.notification.type === 'renote:grouped' ?
 <style lang="scss" module>
 .note {
   max-height: 100px;
+}
+.emoji {
+  height: 1.7em;
+  width: 1.7em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(var(--v-theme-background));
+  border-radius: 100px;
+  padding: 2px;
+  margin-left: -1.3em;
+  transform: translateY(0.5em);
+  margin-right: 0.5em;
+  position: relative;
+  left: 0;
 }
 </style>
