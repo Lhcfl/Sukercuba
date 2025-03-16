@@ -1,7 +1,7 @@
 <template>
   <MkNotificationNoteEvent
-    v-if="NoteEventNotificationTypes.includes(notification.type as never)"
-    :notification="notification"
+    v-if="isNoteEventNotification(notification)"
+    :notification
   />
   <MkNote
     v-else-if="notification.type === 'mention' || notification.type === 'quote' || notification.type === 'reply'"
@@ -11,11 +11,15 @@
 </template>
 
 <script lang="ts" setup>
-import { NoteEventNotificationTypes } from "@/types/notification";
+import { NoteEventNotificationTypes, type ExtractNotifications } from "@/types/notification";
 import type { Notification } from "misskey-js/entities.js";
 defineProps<{
   notification: Notification;
 }>()
+
+function isNoteEventNotification(n: Notification): n is ExtractNotifications<typeof NoteEventNotificationTypes> {
+  return (NoteEventNotificationTypes as readonly string[]).includes(n.type)
+}
 </script>
 
 <style lang="scss" module>
