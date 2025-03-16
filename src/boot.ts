@@ -1,5 +1,5 @@
+import { useCustomEmojisData } from "./stores/custom-emoji-map";
 
 export async function boot() {
-  const { fetchCustomEmojis } = await import("./scripts/custom-emoji-map");
-  fetchCustomEmojis();
+  useCustomEmojisData().init();
 }

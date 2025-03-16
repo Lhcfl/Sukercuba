@@ -1,11 +1,14 @@
 import { defineStore } from "pinia";
 import * as Misskey from "misskey-js";
+import { SiteStore } from "./site-store";
 
 export const useAccount = defineStore(
   "account",
   () => {
     const token = ref("");
     const site = ref("");
+
+    const siteStore = computed(() => new SiteStore(site.value));
 
     const api = computed(
       () =>
@@ -58,6 +61,7 @@ export const useAccount = defineStore(
     return {
       token,
       site,
+      siteStore,
       api,
       apiGet: misskeyApiGet,
     };

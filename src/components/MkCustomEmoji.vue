@@ -22,7 +22,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 </template>
 
 <script lang="ts" setup>
-import { customEmojisMap } from "@/scripts/custom-emoji-map";
+import { useCustomEmojisData } from "@/stores/custom-emoji-map";
 
 const props = defineProps<{
   name: string;
@@ -35,6 +35,8 @@ const props = defineProps<{
   menuReaction?: boolean;
   fallbackToImage?: boolean;
 }>();
+
+const emojis = useCustomEmojisData();
 
 const customEmojiName = computed(() =>
   (props.name[0] === ":"
@@ -54,7 +56,7 @@ const url = computed(() => {
     return props.url;
   }
   if (isLocal.value) {
-    return customEmojisMap.get(customEmojiName.value)?.url ?? undefined;
+    return emojis.emojiMap.get(customEmojiName.value)?.url ?? undefined;
   }
   return props.host
     ? `/emoji/${customEmojiName.value}@${props.host}.webp`

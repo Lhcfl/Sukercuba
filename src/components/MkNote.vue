@@ -6,14 +6,12 @@
       <span>
         <VIcon icon="mdi-repeat-variant" />
         <VAvatar :image="note.user.avatarUrl ?? undefined" />
-        {{ note.user.name }}
+        <MkUserName :user="note.user" />
       </span>
     </VCardItem>
     <VCardItem :prepend-avatar="appearNote.user.avatarUrl ?? undefined">
       <div class="d-flex flex-column">
-        <span>
-          {{ appearNote.user.name }}
-        </span>
+        <MkUserName :user="appearNote.user" />
         <span>
           @{{ Misskey.acct.toString(appearNote.user) }}
         </span>
@@ -24,6 +22,7 @@
         <p v-if="appearNote.text">
           <MkMfm
             :text="appearNote.text"
+            :author="appearNote.user"
             :emoji-urls="appearNote.emojis"
           />
         </p>
@@ -53,6 +52,7 @@
 
 <script lang="ts" setup>
 import * as Misskey from "misskey-js";
+import MkMfm from "./MkMfm.vue";
 
 const props = defineProps<{
   note: Misskey.entities.Note,

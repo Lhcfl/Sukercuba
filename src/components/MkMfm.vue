@@ -782,7 +782,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 h(MkCustomEmoji, {
                   key: Math.random(),
                   name: token.props.name,
-                  url: props.emojiUrls && props.emojiUrls[token.props.name],
+                  url: props.emojiUrls[token.props.name],
                   normal: props.plain || props.stpvInline,
                   host: props.author.host,
                   useOriginalSize: scale >= 2.5,

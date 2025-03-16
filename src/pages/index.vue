@@ -1,5 +1,11 @@
 <template>
   <MkNotes :next />
+  <VNavigationDrawer
+    location="right"
+    :width="400"
+  >
+    <MkNotifications />
+  </VNavigationDrawer>
 </template>
 
 <script lang="ts" setup>
