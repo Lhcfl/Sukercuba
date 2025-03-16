@@ -1,5 +1,5 @@
 <template>
-  <VCard>
+  <VCard v-ripple>
     <VCardItem :prepend-icon="icon">
       <div
         v-if="users"

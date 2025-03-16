@@ -1,5 +1,5 @@
 <template>
-  <VCard>
+  <VCard v-ripple>
     <VCardItem
       v-if="isPureRenote"
     >
