@@ -22,6 +22,7 @@ declare module 'vue' {
     MkNote: typeof import('./components/MkNote.vue')['default']
     MkNoteReactions: typeof import('./components/MkNoteReactions.vue')['default']
     MkNotes: typeof import('./components/MkNotes.vue')['default']
+    MkNoteText: typeof import('./components/MkNoteText.vue')['default']
     MkNotification: typeof import('./components/MkNotification.vue')['default']
     'MkNotification.NoteEvent': typeof import('./components/MkNotification.NoteEvent.vue')['default']
     'MkNotification.Reaction': typeof import('./components/MkNotification.Reaction.vue')['default']

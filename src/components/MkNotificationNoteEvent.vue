@@ -80,7 +80,7 @@ const reactions = computed(() => {
   return null;
 })
 
-const appearNote = computed(() => props.notification.type === 'renote:grouped' ? props.notification.note.renote! : props.notification.note)
+const appearNote = computed(() => props.notification.type.startsWith('renote') ? props.notification.note.renote! : props.notification.note)
 
 </script>
 

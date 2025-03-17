@@ -1,10 +1,13 @@
 <template>
   <div>
-    <MkPostForm />
-    <VDivider />
+    <div>
+      <MkPostForm />
+      <VDivider />
+    </div>
+    <MkNotes :next />
   </div>
-  <MkNotes :next />
   <VNavigationDrawer
+    mobile-breakpoint="md"
     location="right"
     :width="400"
   >

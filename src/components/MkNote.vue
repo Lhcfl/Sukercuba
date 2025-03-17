@@ -21,20 +21,49 @@
         </span>
       </div>
     </VCardItem>
-    <VCardText :class="$style.cardText">
-      <div :class="collapsed && $style.collapsed">
-        <p v-if="appearNote.text">
-          <MkMfm
-            :text="appearNote.text"
-            :author="appearNote.user"
-            :emoji-urls="appearNote.emojis"
-          />
-        </p>
-        <MkGallery
-          v-if="appearNote.files"
-          :images="appearNote.files"
-        />
-      </div>
+    <VCardText
+      v-if="appearNote.cw"
+      :class="$style.cwCardText"
+    >
+      <VExpansionPanels
+        bg-color="#0000"
+        ripple
+      >
+        <VExpansionPanel
+          :elevation="0"
+        >
+          <VExpansionPanelTitle>
+            <template #default="{ expanded }">
+              <div class="d-inline-block">
+                <p>
+                  <MkMfm
+                    :text="appearNote.cw"
+                    :author="appearNote.user"
+                    :emoji-urls="appearNote.emojis"
+                  />
+                </p>
+                <p v-if="!expanded">
+                  <VChip>
+                    查看更多
+                  </VChip>
+                </p>
+              </div>
+            </template>
+          </VExpansionPanelTitle>
+          <VExpansionPanelText>
+            <MkNoteText :note="appearNote" />
+          </VExpansionPanelText>
+        </VExpansionPanel>
+      </VExpansionPanels>
+    </VCardText>
+    <VCardText
+      v-else
+      :class="$style.cardText"
+    >
+      <MkNoteText
+        :note="appearNote"
+        :class="collapsed && $style.collapsed"
+      />
       <VBtn
         v-if="isLongNote"
         :class="$style.collapseBtn"
@@ -84,6 +113,12 @@ const collapsed = ref(isLongNote.value);
   }
   .cardText {
     padding-bottom: 0;
+  }
+  .cwCardText {
+    padding: 0;
+    :global(.v-expansion-panel-text__wrapper) {
+      padding: 0 1rem;
+    }
   }
 }
 </style>

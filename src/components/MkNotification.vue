@@ -6,6 +6,7 @@
   />
   <MkNote
     v-else-if="notification.type === 'mention' || notification.type === 'quote' || notification.type === 'reply'"
+    variant="flat"
     :note="notification.note"
   />
   <span v-else> 暂未实现 </span>
