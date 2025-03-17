@@ -6,6 +6,8 @@
     >
       <MkNote
         :note
+        variant="flat"
+        tile
       />
       <VDivider />
     </div>

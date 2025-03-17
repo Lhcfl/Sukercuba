@@ -2,6 +2,7 @@
   <MkNotificationNoteEvent
     v-if="isNoteEventNotification(notification)"
     :notification
+    variant="flat"
   />
   <MkNote
     v-else-if="notification.type === 'mention' || notification.type === 'quote' || notification.type === 'reply'"

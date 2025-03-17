@@ -1,5 +1,9 @@
 <template>
-  <VCard v-ripple>
+  <VCard
+    v-ripple
+    :class="$style.note"
+    :variant
+  >
     <VCardItem
       v-if="isPureRenote"
     >
@@ -17,7 +21,7 @@
         </span>
       </div>
     </VCardItem>
-    <VCardText>
+    <VCardText :class="$style.cardText">
       <div :class="collapsed && $style.collapsed">
         <p v-if="appearNote.text">
           <MkMfm
@@ -54,9 +58,11 @@
 <script lang="ts" setup>
 import * as Misskey from "misskey-js";
 import MkMfm from "./MkMfm.vue";
+import type { VCard } from "vuetify/components";
 
 const props = defineProps<{
   note: Misskey.entities.Note,
+  variant?: VCard["$props"]["variant"],
 }>()
 
 const isPureRenote = computed(() => Misskey.note.isPureRenote(props.note));
@@ -66,13 +72,18 @@ const collapsed = ref(isLongNote.value);
 </script>
 
 <style lang="scss" module>
-.collapsed {
-  max-height: 200px;
-  overflow: hidden;
-}
-.collapseBtn {
-  margin: auto;
-  position: sticky;
-  bottom: 10px;
+.note {
+  .collapsed {
+    max-height: 200px;
+    overflow: hidden;
+  }
+  .collapseBtn {
+    margin: auto;
+    position: sticky;
+    bottom: 10px;
+  }
+  .cardText {
+    padding-bottom: 0;
+  }
 }
 </style>

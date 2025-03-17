@@ -1,4 +1,8 @@
 <template>
+  <div>
+    <MkPostForm />
+    <VDivider />
+  </div>
   <MkNotes :next />
   <VNavigationDrawer
     location="right"

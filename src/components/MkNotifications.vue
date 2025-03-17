@@ -4,7 +4,10 @@
       v-for="notification in notifications"
       :key="notification.id"
     >
-      <MkNotification :notification />
+      <MkNotification
+        tile
+        :notification
+      />
       <VDivider />
     </div>
   </VInfiniteScroll>

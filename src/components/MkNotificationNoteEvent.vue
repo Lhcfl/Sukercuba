@@ -1,5 +1,8 @@
 <template>
-  <VCard v-ripple>
+  <VCard
+    v-ripple 
+    :variant
+  >
     <VCardItem :prepend-icon="icon">
       <div
         v-if="users"
@@ -25,6 +28,7 @@
           <MkAnyEmoji
             :class="$style.emoji"
             :name="pair.reaction"
+            :urls="appearNote.reactionEmojis"
           />
         </div>
       </div>
@@ -48,9 +52,11 @@
 
 <script lang="ts" setup>
 import type { ExtractNotifications, NoteEventNotificationTypes } from "@/types/notification";
+import type { VCard } from "vuetify/components";
 
 const props = defineProps<{
   notification: ExtractNotifications<typeof NoteEventNotificationTypes>;
+  variant?: VCard["$props"]["variant"]
 }>()
 
 const icon = computed(() => ({

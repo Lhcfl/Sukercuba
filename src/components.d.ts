@@ -28,6 +28,7 @@ declare module 'vue' {
     'MkNotification.WithNote': typeof import('./components/MkNotification.WithNote.vue')['default']
     MkNotificationNoteEvent: typeof import('./components/MkNotificationNoteEvent.vue')['default']
     MkNotifications: typeof import('./components/MkNotifications.vue')['default']
+    MkPostForm: typeof import('./components/MkPostForm.vue')['default']
     MkUrl: typeof import('./components/MkUrl.vue')['default']
     MkUserName: typeof import('./components/MkUserName.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
