@@ -29,43 +29,88 @@
       @click.stop="renoteOrCancel"
     />
     <VBtn icon="mdi-format-quote-close-outline" />
-    <VBtn icon="mdi-heart-outline" />
-    <VBtn icon="mdi-sticker-emoji" />
+    <VBtn
+      v-if="note.myReaction"
+      icon="mdi-minus"
+      color="primary"
+      :loading="reacting"
+      @click.stop="undoReact"
+    />
+    <template v-else>
+      <VBtn
+        icon="mdi-heart-outline"
+        :loading="reacting"
+        @click.stop="react()"
+      />
+      <VBtn
+        icon="mdi-sticker-emoji"
+        :loading="reacting"
+      />
+    </template>
     <VBtn icon="mdi-dots-horizontal" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useAccount } from '@/stores/account';
-import { useNoteCache, type NoteWithExtension } from '@/stores/note-cache';
+import { useAccount } from "@/stores/account";
+import { useNoteCache, type NoteWithExtension } from "@/stores/note-cache";
 
 const props = defineProps<{
-  note: NoteWithExtension
+  note: NoteWithExtension;
 }>();
 
 const noteCache = useNoteCache();
 const account = useAccount();
 const renoting = ref(false);
+const reacting = ref(false);
 
 async function renoteOrCancel() {
   try {
     renoting.value = true;
     if (props.note.renotedByMe) {
-      await account.api.request('notes/unrenote', { noteId: props.note.id });
+      await account.api.request("notes/unrenote", { noteId: props.note.id });
       // 有一个小 Bug 要防止
       setTimeout(() => {
         noteCache.update({ id: props.note.id, renotedByMe: false });
-      }, 300)
+      }, 300);
     } else {
-      await account.api.request('notes/create', { renoteId: props.note.id });
+      await account.api.request("notes/create", { renoteId: props.note.id });
       setTimeout(() => {
         noteCache.update({ id: props.note.id, renotedByMe: true });
-      }, 300)
+      }, 300);
     }
-  } catch(err) {
+  } catch (err) {
     console.error(err);
   } finally {
     renoting.value = false;
+  }
+}
+
+async function react(reaction?: string) {
+  try {
+    reacting.value = true;
+    reaction ??= "❤️";
+    await account.api.request("notes/reactions/create", {
+      noteId: props.note.id,
+      reaction,
+    });
+  } catch (err) {
+    console.error(err);
+  } finally {
+    reacting.value = false;
+  }
+}
+
+async function undoReact() {
+  try {
+    reacting.value = true;
+    await account.api.request("notes/reactions/delete", {
+      noteId: props.note.id,
+    });
+  } catch (err) {
+    console.error(err);
+  } finally {
+    reacting.value = false;
   }
 }
 </script>
