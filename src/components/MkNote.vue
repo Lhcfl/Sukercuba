@@ -43,7 +43,10 @@
             </template>
           </VExpansionPanelTitle>
           <VExpansionPanelText>
-            <MkNoteText :note="appearNote" />
+            <MkNoteText
+              :note="appearNote"
+              :detailed
+            />
           </VExpansionPanelText>
         </VExpansionPanel>
       </VExpansionPanels>
@@ -53,6 +56,7 @@
       :class="$style.cardText"
     >
       <MkNoteText
+        :detailed
         :note="appearNote"
         :class="collapsed && $style.collapsed"
       />
@@ -65,7 +69,7 @@
       </VBtn>
       <MkNoteReactions :note="appearNote" />
     </VCardText>
-    <VCardActions>
+    <VCardActions v-if="!hideActions">
       <MkNoteActions :note="appearNote" />
     </VCardActions>
   </VCard>
@@ -77,11 +81,16 @@ import MkMfm from "./MkMfm.vue";
 import type { VCard } from "vuetify/components";
 import { useNoteCache } from "@/stores/note-cache";
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   note: Misskey.entities.Note;
   variant?: VCard["$props"]["variant"];
   newFetch?: boolean;
-}>();
+  hideActions?: boolean,
+  detailed?: boolean
+}>(), {
+  variant: "text",
+  detailed: true,
+});
 
 const noteCache = useNoteCache();
 const note = noteCache.cached(props.note, props.newFetch);
