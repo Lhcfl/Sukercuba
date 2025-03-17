@@ -16,6 +16,5 @@
 .note-enter-from,
 .note-leave-to {
   opacity: 0;
-  margin-top: -200px;
-  transform: translateY(200px);
+  transform: translateX(200px);
 }

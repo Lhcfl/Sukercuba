@@ -1,6 +1,9 @@
 <template>
   <VNavigationDrawer>
-    <VListItem title="Sukerkuba" />
+    <VListItem
+      title="Sukerkuba"
+      :to="{ name: '/' }"
+    />
     <VListItem>
       <VSelect
         v-model="theme.global.name.value"

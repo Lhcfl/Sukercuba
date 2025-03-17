@@ -1,15 +1,19 @@
 <template>
   <div>
     <p v-if="note.text">
-      <VIcon
-        v-if="note.renoteId && !detailed"
+      <VBtn
+        v-if="note.renoteId && simple"
+        variant="plain"
         icon="mdi-format-quote-close-outline"
         color="primary"
+        @click.stop="routeToNote(note.renoteId)"
       />
-      <VIcon
-        v-if="note.replyId && !detailed"
+      <VBtn
+        v-if="note.replyId && simple"
+        variant="plain"
         icon="mdi-reply-outline"
         color="primary"
+        @click.stop="routeToNote(note.replyId)"
       />
       <MkMfm
         :text="note.text"
@@ -31,11 +35,15 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { Note } from 'misskey-js/entities.js';
+import router from "@/router";
+import type { Note } from "misskey-js/entities.js";
 
 defineProps<{
   note: Note;
-  detailed?: boolean;
-}>()
+  simple?: boolean;
+}>();
 
+function routeToNote(id: string) {
+  router.push({ name: "/notes/[id]", params: { id } });
+}
 </script>

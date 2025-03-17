@@ -60,7 +60,7 @@ watch(props, () => {
   notes.value = [];
 });
 
-async function load(context: { done: (stat: "ok" | "error") => void }) {
+async function load(context: { done: (stat: "ok" | "error" | "empty") => void }) {
   try {
     const params = {
       untilId: notes.value.at(-1)?.id,
@@ -82,7 +82,7 @@ async function load(context: { done: (stat: "ok" | "error") => void }) {
     const cachedRes = res.map(note => noteCache.cached(note, true).value);
 
     notes.value.push(...cachedRes);
-    context.done("ok");
+    context.done(cachedRes.length === 0 ? "empty" : "ok");
   } catch {
     context.done("error");
   }
