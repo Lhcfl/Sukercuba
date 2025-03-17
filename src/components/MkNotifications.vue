@@ -15,33 +15,35 @@
 <script lang="ts" setup>
 import { useAccount } from "@/stores/account";
 import type { Notification } from "misskey-js/entities.js";
-import type { Connection } from "misskey-js/streaming.js";
 const account = useAccount();
 
 const notifications = ref<Notification[]>([]);
 const untilId = ref<string>();
-let connection: Connection | undefined;
 
 onMounted(() => {
-  // Misskey的类型不够完善
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  connection = account.streamApi.useChannel("notification" as any, (n : Notification) => {
+  const connection = account.streamApi.useChannel("main");
+  connection.on("notification", (n: Notification) => {
     notifications.value.unshift(n);
+  });
+  connection.on('notificationFlushed', () => {
+    notifications.value = [];
   })
+
+  onUnmounted(() => {
+    connection.dispose();
+  });
 });
 
-onUnmounted(() => {
-  connection?.dispose();
-})
-
-async function load(context: { done: (stat: 'ok' |'error') => void }) {
+async function load(context: { done: (stat: "ok" | "error") => void }) {
   try {
-    const res = await account.api.request('i/notifications-grouped', { untilId: untilId.value});
+    const res = await account.api.request("i/notifications-grouped", {
+      untilId: untilId.value,
+    });
     untilId.value = res.at(-1)?.id;
     notifications.value = notifications.value.concat(res);
-    context.done('ok');
+    context.done("ok");
   } catch {
-    context.done('error')
+    context.done("error");
   }
 }
 </script>
