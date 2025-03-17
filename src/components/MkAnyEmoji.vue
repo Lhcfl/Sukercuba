@@ -2,6 +2,7 @@
   <MkCustomEmoji
     v-if="isCustom"
     v-bind="props"
+    :url
   />
   <MkEmoji
     v-else
@@ -16,6 +17,7 @@ const props = defineProps<{
   noStyle?: boolean;
   host?: string | null;
   url?: string;
+  urls?: Record<string, string | undefined>;
   useOriginalSize?: boolean;
   menu?: boolean;
   menuReaction?: boolean;
@@ -23,4 +25,5 @@ const props = defineProps<{
 }>();
 
 const isCustom = computed(() => props.name.startsWith(":"))
+const url = computed(() => isCustom.value ? ((props.urls ?? {})[props.name.slice(1, -1)] ?? props.url) : props.url)
 </script>

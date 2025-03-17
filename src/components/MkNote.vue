@@ -38,6 +38,7 @@
       >
         展开
       </VBtn>
+      <MkNoteReactions :note="appearNote" />
     </VCardText>
     <VCardActions>
       <VBtn icon="mdi-reply" />
