@@ -38,6 +38,7 @@
         autofocus
         auto-grow
         hide-details="auto"
+        @keydown="onkeydown"
       />
       <VCombobox
         v-if="draft.showTags"
@@ -97,6 +98,8 @@
           prepend-icon="mdi-send-outline"
           :loading
           text="发送"
+          type="submit"
+          :disabled="submitDisabled"
           @click.stop="submit"
         />
       </div>
@@ -111,8 +114,9 @@ import type { NotesCreateRequest } from "misskey-js/entities.js";
 
 const account = useAccount();
 const loading = ref(false);
-
 const draft = useDraft();
+
+const submitDisabled = computed(() => !draft.computedText);
 
 async function submit() {
   try {
@@ -131,5 +135,9 @@ async function submit() {
   } finally {
     loading.value = false;
   }
+}
+
+function onkeydown(ev: KeyboardEvent) {
+  if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey) && !submitDisabled.value) submit();
 }
 </script>

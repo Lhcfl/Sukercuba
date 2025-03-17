@@ -141,7 +141,7 @@ export const useNoteCache = defineStore("note-cache", () => {
     }
   }
 
-  function updateNote(
+  function update(
     note: Partial<Note> & { id: Note["id"] },
     fully = false
   ) {
@@ -162,8 +162,8 @@ export const useNoteCache = defineStore("note-cache", () => {
       (oldNote.value as Record<string, unknown>)[key] = (note as Record<string, unknown>)[key];
     }
 
-    if (note.reply) updateNote(note.reply)
-    if (note.renote) updateNote(note.renote)
+    if (note.reply) update(note.reply)
+    if (note.renote) update(note.renote)
   }
 
   function cached(note: Note, fully = false): Ref<NoteWithExtension> {
@@ -191,22 +191,10 @@ export const useNoteCache = defineStore("note-cache", () => {
       account.streamApi.send("sr", { id: storedNote.value.id });
 
       noteCache.set(note.id, storedNote);
-      console.log("stored note: ", storedNote.value);
       return storedNote;
     } else {
-      console.log("stored(updated) note: ", oldNote.value);
-      updateNote(note, fully);
       return oldNote;
     }
-  }
-
-  function update(data: Partial<NoteWithExtension> & { id: Note["id"] }) {
-    console.log(noteCache.get(data.id));
-    watch(noteCache.get(data.id)!, (nv, ov) => {
-      console.log([ov, "->", nv]);   
-    }, { once: true });
-    console.log("updating note: ", data);
-    updateNote(data);
   }
 
   return {

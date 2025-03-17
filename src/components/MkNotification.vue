@@ -10,7 +10,14 @@
     :note="notification.note"
     new-fetch
   />
-  <span v-else> 暂未实现 </span>
+  <VCard v-else>
+    <VCardTitle>
+      {{ notification.type }}
+    </VCardTitle>
+    <VCardText>
+      <span>暂未实现</span>
+    </VCardText>
+  </VCard>
 </template>
 
 <script lang="ts" setup>
