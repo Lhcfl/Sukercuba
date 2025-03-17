@@ -1,53 +1,69 @@
 <template>
-  <div>
-    <VBtn
-      v-if="note.repliesCount == 0"
-      icon="mdi-reply"
-    />
-    <VBtn
-      v-else
-      prepend-icon="mdi-reply"
-      rounded
-      size="large"
-      :text="note.repliesCount"
-    />
-    <VBtn
-      v-if="note.renoteCount == 0"
-      icon="mdi-repeat-variant"
-      :loading="renoting"
-      :color="note.renotedByMe ? 'primary' : undefined"
-      @click.stop="renoteOrCancel"
-    />
-    <VBtn
-      v-else
-      prepend-icon="mdi-repeat-variant"
-      rounded
-      :loading="renoting"
-      :color="note.renotedByMe ? 'primary' : undefined"
-      size="large"
-      :text="note.renoteCount"
-      @click.stop="renoteOrCancel"
-    />
-    <VBtn icon="mdi-format-quote-close-outline" />
-    <VBtn
-      v-if="note.myReaction"
-      icon="mdi-minus"
-      color="primary"
-      :loading="reacting"
-      @click.stop="undoReact"
-    />
-    <template v-else>
+  <div class="d-flex flex-column w-100">
+    <div class="d-flex align-center">
       <VBtn
-        icon="mdi-heart-outline"
-        :loading="reacting"
-        @click.stop="react()"
+        v-if="note.repliesCount == 0"
+        icon="mdi-reply"
+        :color="posting === 'reply' ? 'primary' : undefined"
+        @click.stop="posting = posting === 'reply' ? null : 'reply'"
       />
       <VBtn
-        icon="mdi-sticker-emoji"
-        :loading="reacting"
+        v-else
+        prepend-icon="mdi-reply"
+        rounded
+        size="large"
+        :text="note.repliesCount"
+        :color="posting === 'reply' ? 'primary' : undefined"
+        @click.stop="posting = posting === 'reply' ? null : 'reply'"
       />
-    </template>
-    <VBtn icon="mdi-dots-horizontal" />
+      <VBtn
+        v-if="note.renoteCount == 0"
+        icon="mdi-repeat-variant"
+        :loading="renoting"
+        :color="note.renotedByMe ? 'primary' : undefined"
+        @click.stop="renoteOrCancel"
+      />
+      <VBtn
+        v-else
+        prepend-icon="mdi-repeat-variant"
+        rounded
+        :loading="renoting"
+        :color="note.renotedByMe ? 'primary' : undefined"
+        size="large"
+        :text="note.renoteCount"
+        @click.stop="renoteOrCancel"
+      />
+      <VBtn
+        icon="mdi-format-quote-close-outline"
+        :color="posting === 'quote' ? 'primary' : undefined"
+        @click.stop="posting = posting === 'quote' ? null : 'quote'"
+      />
+      <VBtn
+        v-if="note.myReaction"
+        icon="mdi-minus"
+        color="primary"
+        :loading="reacting"
+        @click.stop="undoReact"
+      />
+      <template v-else>
+        <VBtn
+          icon="mdi-heart-outline"
+          :loading="reacting"
+          @click.stop="react()"
+        />
+        <VBtn
+          icon="mdi-sticker-emoji"
+          :loading="reacting"
+        />
+      </template>
+      <VBtn icon="mdi-dots-horizontal" />
+    </div>
+    <MkPostForm
+      v-if="posting"
+      :reply-id="posting === 'reply' ? note.id : undefined"
+      :quote-id="posting === 'quote' ? note.id : undefined"
+      @done="posting = null"
+    />
   </div>
 </template>
 
@@ -62,6 +78,7 @@ const props = defineProps<{
 const account = useAccount();
 const renoting = ref(false);
 const reacting = ref(false);
+const posting = ref<"reply" | "quote" | null>(null);
 
 async function renoteOrCancel() {
   try {

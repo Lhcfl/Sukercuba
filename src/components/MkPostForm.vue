@@ -1,9 +1,12 @@
 <template>
   <VCard
+    v-ripple.stop
     variant="flat"
     :loading
     :disabled="loading"
     tile
+    @keydown.stop
+    @keyup.stop
   >
     <VCardActions class="d-flex justify-space-between">
       <MkAvatar
@@ -95,7 +98,7 @@
         <VBtn
           color="primary"
           variant="tonal"
-          prepend-icon="mdi-send-outline"
+          :prepend-icon="sendIcon"
           :loading
           text="发送"
           type="submit"
@@ -112,10 +115,20 @@ import { useAccount } from "@/stores/account";
 import { useDraft } from "@/stores/draft";
 import type { NotesCreateRequest } from "misskey-js/entities.js";
 
+const props = defineProps<{
+  replyId?: string,
+  quoteId?: string,
+  editId?: string,
+}>();
+
+const emit = defineEmits<{
+  done: []
+}>();
+
 const account = useAccount();
 const loading = ref(false);
-const draft = useDraft();
-
+const draft = useDraft(props);
+const sendIcon = computed(() => props.editId ? 'mdi-circle-edit-outline' : props.quoteId ? 'mdi-comment-quote-outline' : props.replyId ? 'mdi-reply-outline' : "mdi-send-outline");
 const submitDisabled = computed(() => !draft.computedText);
 
 async function submit() {
@@ -125,9 +138,12 @@ async function submit() {
     const req: NotesCreateRequest = {
       text: draft.computedText,
       cw: draft.computedCw,
+      replyId: props.replyId,
+      renoteId: props.quoteId,
     }
     await account.api.request("notes/create", req);
     
+    emit("done");
     // Clean draft
     draft.text = "";
   } catch (err) {
