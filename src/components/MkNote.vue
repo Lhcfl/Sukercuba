@@ -4,9 +4,7 @@
     :class="$style.note"
     :variant
   >
-    <VCardItem
-      v-if="isPureRenote"
-    >
+    <VCardItem v-if="isPureRenote">
       <span>
         <VIcon icon="mdi-repeat-variant" />
         <VAvatar :image="note.user.avatarUrl ?? undefined" />
@@ -16,9 +14,7 @@
     <VCardItem :prepend-avatar="appearNote.user.avatarUrl ?? undefined">
       <div class="d-flex flex-column">
         <MkUserName :user="appearNote.user" />
-        <span>
-          @{{ Misskey.acct.toString(appearNote.user) }}
-        </span>
+        <span> @{{ Misskey.acct.toString(appearNote.user) }} </span>
       </div>
     </VCardItem>
     <VCardText
@@ -29,9 +25,7 @@
         bg-color="#0000"
         ripple
       >
-        <VExpansionPanel
-          :elevation="0"
-        >
+        <VExpansionPanel :elevation="0">
           <VExpansionPanelTitle>
             <template #default="{ expanded }">
               <div class="d-inline-block text-body-2">
@@ -43,9 +37,7 @@
                   />
                 </p>
                 <p v-if="!expanded">
-                  <VChip>
-                    查看更多
-                  </VChip>
+                  <VChip> 查看更多 </VChip>
                 </p>
               </div>
             </template>
@@ -74,12 +66,7 @@
       <MkNoteReactions :note="appearNote" />
     </VCardText>
     <VCardActions>
-      <VBtn icon="mdi-reply" />
-      <VBtn icon="mdi-repeat-variant" />
-      <VBtn icon="mdi-format-quote-close-outline" />
-      <VBtn icon="mdi-heart-outline" />
-      <VBtn icon="mdi-sticker-emoji" />
-      <VBtn icon="mdi-dots-horizontal" />
+      <MkNoteActions :note="appearNote" />
     </VCardActions>
   </VCard>
 </template>
@@ -88,16 +75,29 @@
 import * as Misskey from "misskey-js";
 import MkMfm from "./MkMfm.vue";
 import type { VCard } from "vuetify/components";
+import { useNoteCache } from "@/stores/note-cache";
 
 const props = defineProps<{
-  note: Misskey.entities.Note,
-  variant?: VCard["$props"]["variant"],
-}>()
+  note: Misskey.entities.Note;
+  variant?: VCard["$props"]["variant"];
+}>();
 
-const isPureRenote = computed(() => Misskey.note.isPureRenote(props.note));
-const appearNote = computed(() => isPureRenote.value ? props.note.renote! : props.note);
-const isLongNote = computed(() => appearNote.value.text && (appearNote.value.text.length > 400 || appearNote.value.text.split('\n').length > 5));
+const noteCache = useNoteCache();
+
+const note = noteCache.stored(props.note);
+const isPureRenote = computed(() => Misskey.note.isPureRenote(note.value));
+const appearNote = computed(() =>
+  isPureRenote.value ? note.value.renote! : note.value
+);
+const isLongNote = computed(
+  () =>
+    appearNote.value.text &&
+    (appearNote.value.text.length > 400 ||
+      appearNote.value.text.split("\n").length > 5)
+);
+
 const collapsed = ref(isLongNote.value);
+
 </script>
 
 <style lang="scss" module>

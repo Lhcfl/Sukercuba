@@ -33,8 +33,6 @@
 
 <script lang="ts" setup>
 import { availableTimelines } from '@/types/timeline';
-
-
 const tabs = availableTimelines.map(x => ({
   text: x,
   value: x
