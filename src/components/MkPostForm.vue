@@ -16,10 +16,10 @@
         <VBtn icon="mdi-clock-outline" />
       </div>
     </VCardActions>
-    <VCardText>
+    <VCardText class="py-0">
       <VTextarea
-        v-if="showCw"
-        v-model="cw"
+        v-if="draft.showCw"
+        v-model="draft.cw"
         :rows="2"
         density="compact"
         auto-grow
@@ -28,8 +28,10 @@
         hide-details="auto"
       />
       <VTextarea
-        v-model="text"
+        v-model="draft.text"
         :loading
+        :rows="2"
+        density="compact"
         placeholder="在想些什么"
         variant="underlined"
         flat
@@ -38,8 +40,8 @@
         hide-details="auto"
       />
       <VCombobox
-        v-if="showTags"
-        v-model="appendTags"
+        v-if="draft.showTags"
+        v-model="draft.appendTags"
         label="tags"
         variant="underlined"
         :delimiters="[' ']"
@@ -57,13 +59,13 @@
         </template>
       </VCombobox>
     </VCardText>
-    <VCardText v-if="showPreview">
-      <p v-if="computedCw">
-        <MkMfm :text="computedCw" />
+    <VCardText v-if="draft.showPreview">
+      <p v-if="draft.computedCw">
+        <MkMfm :text="draft.computedCw" />
         <VDivider />
       </p>
       <p>
-        <MkMfm :text="computedText" />
+        <MkMfm :text="draft.computedText" />
       </p>
     </VCardText>
     <VCardActions class="d-flex justify-space-between">
@@ -72,13 +74,13 @@
         <VBtn icon="mdi-poll" />
         <VBtn
           icon="mdi-eye-off-outline"
-          :color="showCw ? 'primary' : undefined"
-          @click.stop="showCw = !showCw"
+          :color="draft.showCw ? 'primary' : undefined"
+          @click.stop="draft.showCw = !draft.showCw"
         />
         <VBtn
           icon="mdi-tag-multiple-outline"
-          :color="showTags ? 'primary' : undefined"
-          @click.stop="showTags = !showTags"
+          :color="draft.showTags ? 'primary' : undefined"
+          @click.stop="draft.showTags = !draft.showTags"
         />
         <VBtn icon="mdi-sticker-emoji" />
         <VBtn icon="mdi-dots-horizontal" />
@@ -86,8 +88,8 @@
       <div>
         <VBtn
           icon="mdi-eye-outline"
-          :color="showPreview ? 'primary' : undefined"
-          @click.stop="showPreview = !showPreview"
+          :color="draft.showPreview ? 'primary' : undefined"
+          @click.stop="draft.showPreview = !draft.showPreview"
         />
         <VBtn
           color="primary"
@@ -104,43 +106,26 @@
 
 <script setup lang="ts">
 import { useAccount } from "@/stores/account";
+import { useDraft } from "@/stores/draft";
 import type { NotesCreateRequest } from "misskey-js/entities.js";
 
 const account = useAccount();
-
-const showCw = ref(false);
-const showTags = ref(false);
-const showPreview = ref(false);
 const loading = ref(false);
 
-const text = ref("");
-const cw = ref("");
-const appendTags = ref<string[]>([])
-
-const computedCw = computed(() => showCw.value ? cw.value : undefined);
-const computedTags = computed(() => showTags.value ? appendTags.value : []);
-const computedText = computed(() => {
-  let ret = text.value;
-  if (computedTags.value.length > 0) {
-    if (ret.at(-1) === '\n') {
-      ret += "\n";
-    } else {
-      ret += " ";
-    }
-    ret += computedTags.value.map(x=>`#${x}`).join(" ");
-  }
-  return ret;
-})
+const draft = useDraft();
 
 async function submit() {
   try {
     loading.value = true;
-    await new Promise((r) => setTimeout(r, 1000));
+    
     const req: NotesCreateRequest = {
-      text: computedText.value,
-      cw: computedCw.value,
+      text: draft.computedText,
+      cw: draft.computedCw,
     }
     await account.api.request("notes/create", req);
+    
+    // Clean draft
+    draft.text = "";
   } catch (err) {
     console.error(err);
   } finally {

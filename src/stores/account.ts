@@ -25,6 +25,10 @@ export const useAccount = defineStore(
         })
     );
 
+    const streamApi = computed(
+      () => new Misskey.Stream(site.value, { token: token.value })
+    );
+
     // Implements Misskey.api.ApiClient.request
     function misskeyApiGet<
       ResT = void,
@@ -72,6 +76,7 @@ export const useAccount = defineStore(
       site,
       siteStore,
       api,
+      streamApi,
       apiGet: misskeyApiGet,
     };
   },

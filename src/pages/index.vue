@@ -4,7 +4,23 @@
       <MkPostForm />
       <VDivider />
     </div>
-    <MkNotes :next />
+    <VTabs :items="tabs">
+      <template #tab="{item}">
+        <VTab :key="item.value">
+          {{ item.text }}
+        </VTab>
+      </template>
+      <template #item="{item}">
+        <VTabsWindowItem
+          :key="item.value"
+          :value="item.value"
+        >
+          <MkTimeline
+            :timeline="item.value"
+          />
+        </VTabsWindowItem>
+      </template>
+    </VTabs>
   </div>
   <VNavigationDrawer
     mobile-breakpoint="md"
@@ -16,14 +32,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount } from "@/stores/account";
-import type { Note } from "misskey-js/entities.js";
-const account = useAccount();
+import { availableTimelines } from '@/types/timeline';
 
-async function next(notes: Note[]) {
-    const last = notes.at(-1);
-    return account.api.request('notes/timeline', {
-      untilId: last?.id,
-    })
-}
+
+const tabs = availableTimelines.map(x => ({
+  text: x,
+  value: x
+}))
+
 </script>

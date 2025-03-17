@@ -15,10 +15,24 @@
 <script lang="ts" setup>
 import { useAccount } from "@/stores/account";
 import type { Notification } from "misskey-js/entities.js";
+import type { Connection } from "misskey-js/streaming.js";
 const account = useAccount();
 
 const notifications = ref<Notification[]>([]);
 const untilId = ref<string>();
+let connection: Connection | undefined;
+
+onMounted(() => {
+  // Misskey的类型不够完善
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  connection = account.streamApi.useChannel("notification" as any, (n : Notification) => {
+    notifications.value.unshift(n);
+  })
+});
+
+onUnmounted(() => {
+  connection?.dispose();
+})
 
 async function load(context: { done: (stat: 'ok' |'error') => void }) {
   try {

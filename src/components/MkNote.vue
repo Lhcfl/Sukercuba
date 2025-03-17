@@ -34,7 +34,7 @@
         >
           <VExpansionPanelTitle>
             <template #default="{ expanded }">
-              <div class="d-inline-block">
+              <div class="d-inline-block text-body-2">
                 <p>
                   <MkMfm
                     :text="appearNote.cw"
