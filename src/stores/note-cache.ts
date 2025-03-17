@@ -2,6 +2,7 @@ import type { EmojiSimple, Note } from "misskey-js/entities.js";
 import { defineStore } from "pinia";
 import type { Ref } from "vue";
 import { useAccount } from "./account";
+import { isPureRenote } from "misskey-js/note.js";
 
 export type NoteWithExtension = Note & {
   renote?: NoteWithExtension,
@@ -34,7 +35,7 @@ export const useNoteCache = defineStore("note-cache", () => {
 						noteId: (body as unknown as { id: string }).id,
 					});
 
-					stored(replyNote);
+					cached(replyNote);
 				} catch { /* empty */ }
 				break;
 			}
@@ -93,7 +94,7 @@ export const useNoteCache = defineStore("note-cache", () => {
 			case 'deleted': {
         if (note == null) { return; }
 				
-        note.value.isDeleted = true;
+        deleteNote(note.value.id, note.value.userId == me?.id && isPureRenote(note.value));
 				break;
 			}
 
@@ -107,6 +108,7 @@ export const useNoteCache = defineStore("note-cache", () => {
 				} else {
 					// perform delete
 					note.value.isDeleted = true;
+          deleteNote(note.value.id, note.value.userId == me?.id && isPureRenote(note.value));
 				}
 				break;
 			}
@@ -119,12 +121,25 @@ export const useNoteCache = defineStore("note-cache", () => {
 						noteId: id,
 					});
 
-					stored(editedNote, true);
+					cached(editedNote, true);
 				} catch { /* empty */ }
 				break;
 			}
     }
   })
+
+  function deleteNote(noteId: Note["id"], isMe?: boolean) {
+    const note = noteCache.get(noteId);
+    if (note == null) return;
+    if (note.value.isDeleted) return;
+    note.value.isDeleted = true;
+    if (note.value.renote) {
+      note.value.renote.renoteCount--;
+      if (isMe) {
+        note.value.renote.renotedByMe = false;
+      }
+    }
+  }
 
   function updateNote(
     note: Partial<Note> & { id: Note["id"] },
@@ -151,18 +166,25 @@ export const useNoteCache = defineStore("note-cache", () => {
     if (note.renote) updateNote(note.renote)
   }
 
-  function stored(note: Note, fully = false): Ref<NoteWithExtension> {
+  function cached(note: Note, fully = false): Ref<NoteWithExtension> {
     const oldNote = noteCache.get(note.id);
 
     if (oldNote == null) {
       const storedNote = ref(note) as ActullyStoredNote;
       const reply = note.reply;
       if (reply) {
-        storedNote.value.reply = stored(reply) as never;
+        storedNote.value.reply = cached(reply) as never;
       }
       const renote = note.renote;
       if (renote) {
-        storedNote.value.renote = stored(renote) as never;
+        const storedRenote = cached(renote);
+        storedNote.value.renote = storedRenote as never;
+        if (fully) {
+          storedRenote.value.renoteCount++;
+          if (storedNote.value.userId == account.me?.id) {
+            storedRenote.value.renotedByMe = true;
+          }
+        }
       }
       
       // subscribe the note
@@ -189,7 +211,7 @@ export const useNoteCache = defineStore("note-cache", () => {
 
   return {
     noteCache,
-    stored,
+    cached,
     update,
   };
 });

@@ -80,11 +80,11 @@ import { useNoteCache } from "@/stores/note-cache";
 const props = defineProps<{
   note: Misskey.entities.Note;
   variant?: VCard["$props"]["variant"];
+  newFetch?: boolean;
 }>();
 
 const noteCache = useNoteCache();
-
-const note = noteCache.stored(props.note);
+const note = noteCache.cached(props.note, props.newFetch);
 const isPureRenote = computed(() => Misskey.note.isPureRenote(note.value));
 const appearNote = computed(() =>
   isPureRenote.value ? note.value.renote! : note.value

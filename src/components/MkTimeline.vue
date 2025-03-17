@@ -1,22 +1,24 @@
 <template>
   <VInfiniteScroll @load="load">
-    <div
-      v-for="note in notes"
-      :key="note.id"
-    >
-      <MkNote
-        :note
-        variant="flat"
-        tile
-      />
-      <VDivider />
-    </div>
+    <TransitionGroup name="note">
+      <div
+        v-for="note in computedNotes"
+        :key="note.id"
+      >
+        <MkNote
+          :note
+          variant="flat"
+          tile
+        />
+        <VDivider />
+      </div>
+    </TransitionGroup>
   </VInfiniteScroll>
 </template>
 <script lang="ts" setup>
 import { useAccount } from "@/stores/account";
+import { useNoteCache, type NoteWithExtension } from "@/stores/note-cache";
 import type { Timeline } from "@/types/timeline";
-import type { Note } from "misskey-js/entities.js";
 
 const props = withDefaults(
   defineProps<{
@@ -33,7 +35,9 @@ const props = withDefaults(
 );
 
 const account = useAccount();
-const notes = ref<Note[]>([]);
+const noteCache = useNoteCache();
+const notes = ref<NoteWithExtension[]>([]);
+const computedNotes = computed(() => notes.value.filter(x => !x.isDeleted));
 
 onMounted(() => {
   const connection = account.streamApi.useChannel(props.timeline, {
@@ -42,7 +46,8 @@ onMounted(() => {
     withReplies: props.withReplies,
   });
   connection.on("note", (note) => {
-    notes.value.unshift(note);
+    const cached = noteCache.cached(note, true);
+    notes.value.unshift(cached.value);
   });
 
   onUnmounted(() => {
@@ -73,7 +78,10 @@ async function load(context: { done: (stat: "ok" | "error") => void }) {
         account.api.request("notes/hybrid-timeline", params),
     };
 
-    notes.value = notes.value.concat(await mapedRequest[props.timeline]());
+    const res = await mapedRequest[props.timeline]();
+    const cachedRes = res.map(note => noteCache.cached(note, true).value);
+
+    notes.value.push(...cachedRes);
     context.done("ok");
   } catch {
     context.done("error");

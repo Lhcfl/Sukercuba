@@ -53,13 +53,12 @@
 
 <script setup lang="ts">
 import { useAccount } from "@/stores/account";
-import { useNoteCache, type NoteWithExtension } from "@/stores/note-cache";
+import type { NoteWithExtension } from "@/stores/note-cache";
 
 const props = defineProps<{
   note: NoteWithExtension;
 }>();
 
-const noteCache = useNoteCache();
 const account = useAccount();
 const renoting = ref(false);
 const reacting = ref(false);
@@ -69,15 +68,8 @@ async function renoteOrCancel() {
     renoting.value = true;
     if (props.note.renotedByMe) {
       await account.api.request("notes/unrenote", { noteId: props.note.id });
-      // 有一个小 Bug 要防止
-      setTimeout(() => {
-        noteCache.update({ id: props.note.id, renotedByMe: false });
-      }, 300);
     } else {
       await account.api.request("notes/create", { renoteId: props.note.id });
-      setTimeout(() => {
-        noteCache.update({ id: props.note.id, renotedByMe: true });
-      }, 300);
     }
   } catch (err) {
     console.error(err);

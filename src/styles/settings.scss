@@ -8,3 +8,14 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+.note-enter-active,
+.note-leave-active {
+  transition: all 0.3s ease;
+}
+.note-enter-from,
+.note-leave-to {
+  opacity: 0;
+  margin-top: -200px;
+  transform: translateY(200px);
+}
