@@ -10,7 +10,10 @@
       :note="appearNote.reply"
       :detailed="false"
     />
-    <VCardItem v-if="isPureRenote">
+    <VCardItem
+      v-if="isPureRenote"
+      class="pb-0"
+    >
       <span>
         <VIcon icon="mdi-repeat-variant" />
         <VAvatar :image="note.user.avatarUrl ?? undefined" />
