@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
+    "@vueuse/core": "^13.0.0",
     "core-js": "^3.37.1",
     "idb-keyval": "^6.2.1",
     "mfm-js": "^0.24.0",
