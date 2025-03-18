@@ -68,14 +68,18 @@
           <VListItem
             v-if="note.userId == account.me?.id"
             prepend-icon="mdi-square-edit-outline"
-            @click="posting = 'edit'"
+            @click.stop="posting = 'edit'"
           >
             Edit
           </VListItem>
-          <VListItem
-            prepend-icon="mdi-translate"
-          >
+          <VListItem prepend-icon="mdi-translate">
             Translate
+          </VListItem>
+          <VListItem
+            prepend-icon="mdi-remote-desktop"
+            @click.stop="openRemote()"
+          >
+            Open in remote
           </VListItem>
         </VList>
       </VMenu>
@@ -105,7 +109,7 @@ const props = defineProps<{
 const account = useAccount();
 const renoting = ref(false);
 const reacting = ref(false);
-const posting = ref<"reply" | "quote" | 'edit' | null>(null);
+const posting = ref<"reply" | "quote" | "edit" | null>(null);
 
 async function renoteOrCancel() {
   try {
@@ -148,5 +152,9 @@ async function undoReact() {
   } finally {
     reacting.value = false;
   }
+}
+
+function openRemote() {
+  window.open(props.note.url ?? new URL("/notes/" + props.note.id, account.site));
 }
 </script>

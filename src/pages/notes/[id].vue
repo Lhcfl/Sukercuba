@@ -1,9 +1,12 @@
 <template>
   <div
     v-if="!note"
-    v-loading
-    class="h-screen"
-  />
+    class="d-flex h-screen w-100 align-center justify-space-evenly"
+  >
+    <VProgressCircular
+      indeterminate
+    />
+  </div>
   <div v-else>
     <VInfiniteScroll
       side="start"
