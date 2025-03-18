@@ -2,35 +2,39 @@
   <VCard
     v-ripple 
     :variant
+    @click.stop="router.push({ name: '/notes/[id]', params: { id: appearNote.id }})"
   >
     <VCardItem :prepend-icon="icon">
       <div
-        v-if="users"
-        class="d-flex"
-      >
-        <MkAvatar
-          v-for="user in users"
-          :key="user.id"
-          :user="user"
-        />
-      </div>
-      <div
-        v-if="reactions"
+        v-if="avatars"
         class="d-flex flex-wrap"
       >
         <div
-          v-for="(pair, index) in reactions"
+          v-for="(pair, index) in avatars"
           :key="index"
         >
           <MkAvatar
             :user="pair.user"
           />
           <MkAnyEmoji
+            v-if="pair.reaction"
             :class="$style.emoji"
             :name="pair.reaction"
             :urls="appearNote.reactionEmojis"
           />
         </div>
+        <VBtn
+          v-if="showMore"
+          variant="flat"
+          icon="mdi-chevron-up"
+          @click.stop="showMore = false"
+        />
+        <VBtn
+          v-else-if="reactions && reactions.length > 3"
+          variant="flat"
+          icon="mdi-chevron-down"
+          @click.stop="showMore = true"
+        />
       </div>
     </VCardItem>
     <VCardText>
@@ -51,6 +55,7 @@
 </template>
 
 <script lang="ts" setup>
+import router from "@/router";
 import type { ExtractNotifications, NoteEventNotificationTypes } from "@/types/notification";
 import type { VCard } from "vuetify/components";
 
@@ -76,11 +81,15 @@ const users = computed(() => {
 })
 
 const reactions = computed(() => {
+  if (users.value) return users.value.map((user) => ({user, reaction: null}));
   if (props.notification.type === 'reaction:grouped') return props.notification.reactions;
   return null;
 })
 
 const appearNote = computed(() => props.notification.type.startsWith('renote') ? props.notification.note.renote! : props.notification.note)
+
+const showMore = ref(false);
+const avatars = computed(() => showMore.value ? reactions.value : reactions.value?.slice(0, 3));
 
 </script>
 
