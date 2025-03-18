@@ -82,8 +82,7 @@ const collapsed = ref(true);
 watch(noteTextRef, () => {
   const observer = useResizeObserver(noteTextRef, () => {
     const height = noteTextRef.value?.clientHeight;
-    console.log(noteTextRef.value?.clientHeight);
-    if (height && height > 200) {
+    if (height && height > 400) {
       isLongNote.value = true;
       observer.stop();
     }
@@ -95,7 +94,7 @@ watch(noteTextRef, () => {
 
 <style lang="scss" module>
 .collapsed {
-  max-height: 200px;
+  max-height: 300px;
   overflow: hidden;
   /* 使用 mask 进行透明渐变 */
   -webkit-mask-image: linear-gradient(to bottom, black, black 70%, transparent);

@@ -84,5 +84,9 @@ function routeToNote() {
 <style lang="scss" module>
 .note {
   overflow: visible;
+
+  :global(.v-card-item__content) {
+    overflow: visible;
+  }
 }
 </style>

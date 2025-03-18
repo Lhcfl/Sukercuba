@@ -1,16 +1,24 @@
 <template>
-  <div class="d-flex justify-space-between">
+  <div class="d-flex justify-space-between align-center">
     <div class="d-flex flex-column">
       <MkUserName :user="note.user" />
-      <span> @{{ acct.toString(note.user) }} </span>
+      <span class="text-subtitle-2">@{{ acct.toString(note.user) }}</span>
     </div>
-    <div>
-      <VIcon :icon="visibilityIcon" />
+    <div class="d-flex flex-column align-end">
+      <VBtn
+        variant="plain"
+        size="small"
+        :append-icon="visibilityIcon"
+        :to="{ name: '/notes/[id]', params: { id: props.note.id } }"
+        @click.stop
+      >
+        <MkTime :time="note.createdAt" />
+      </VBtn>
+      <MkInstanceChip :instance="note.user.instance" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import router from "@/router";
 import type { NoteWithExtension } from "@/stores/note-cache";
 import { acct } from "misskey-js";
 
@@ -34,6 +42,4 @@ const visibilityIcon = computed(() => {
       : "mdi-eye-off-outline";
   }
 });
-
-const { t } = useI18n();
 </script>

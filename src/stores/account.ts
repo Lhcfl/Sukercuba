@@ -1,15 +1,17 @@
 import { defineStore } from "pinia";
 import * as Misskey from "misskey-js";
 import { SiteStore } from "./site-store";
-import type { MeDetailed } from "misskey-js/entities.js";
+import type { MeDetailed, MetaLite } from "misskey-js/entities.js";
 
 export const useAccount = defineStore(
   "account",
   () => {
     const me = ref<MeDetailed>();
+    const meta = ref<MetaLite>();
 
     async function init() {
-      me.value = await api.value.request("i", {});
+      api.value.request("i", {}).then((v) => me.value = v);
+      api.value.request("meta", { detail: true }).then((v) => meta.value = v);
     }
 
     const token = ref("");
@@ -72,6 +74,7 @@ export const useAccount = defineStore(
     return {
       init,
       me,
+      meta,
       token,
       site,
       siteStore,
