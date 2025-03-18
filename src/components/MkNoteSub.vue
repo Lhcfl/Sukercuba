@@ -22,7 +22,16 @@
         :note="appearNote"
         simple
       />
-      <VCardActions v-if="!hideActions">
+      <VCardText
+        v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0"
+        class="py-0"
+      >
+        <MkNoteReactions :note="appearNote" />
+      </VCardText>
+      <VCardActions
+        v-if="!hideActions"
+        class="py-0"
+      >
         <MkNoteActions :note="appearNote" />
       </VCardActions>
     </VCardItem>
@@ -41,6 +50,7 @@ const props = withDefaults(defineProps<{
   newFetch?: boolean;
   hideActions?: boolean,
   disableRoute?: boolean,
+  hideReactions?: boolean,
 }>(), {
   variant: "text",
 });

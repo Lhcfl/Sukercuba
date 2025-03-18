@@ -38,7 +38,7 @@
       </div>
     </VCardItem>
     <VCardText>
-      <p :class="$style.note">
+      <p :class="[$style.note, showMore && $style.showMore]">
         <span v-if="appearNote.files?.length">
           <VIcon icon="mdi-image" />
           x{{ appearNote.files?.length }}
@@ -96,6 +96,10 @@ const avatars = computed(() => showMore.value ? reactions.value : reactions.valu
 <style lang="scss" module>
 .note {
   max-height: 100px;
+  overflow: hidden;
+  &.showMore {
+    max-height: unset;
+  }
 }
 .emoji {
   height: 1.7em;

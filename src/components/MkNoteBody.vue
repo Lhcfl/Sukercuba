@@ -7,7 +7,10 @@
       bg-color="#0000"
       ripple
     >
-      <VExpansionPanel :elevation="0">
+      <VExpansionPanel
+        :elevation="0"
+        @click.stop
+      >
         <VExpansionPanelTitle>
           <template #default="{ expanded }">
             <div class="d-inline-block text-body-2">
@@ -44,12 +47,13 @@
     />
     <VBtn
       v-if="isLongNote"
+      block
+      variant="tonal"
       :class="$style.collapseBtn"
-      @click="collapsed = !collapsed"
+      @click.stop="collapsed = !collapsed"
     >
       展开
     </VBtn>
-    <MkNoteReactions :note="note" />
   </VCardText>
 </template>
 <script setup lang="ts">

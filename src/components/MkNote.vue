@@ -28,7 +28,16 @@
       :detailed
       :simple
     />
-    <VCardActions v-if="!hideActions">
+    <VCardText
+      v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0"
+      class="py-0"
+    >
+      <MkNoteReactions :note="appearNote" />
+    </VCardText>
+    <VCardActions
+      v-if="!hideActions"
+      class="py-0"
+    >
       <MkNoteActions :note="appearNote" />
     </VCardActions>
   </VCard>
@@ -49,6 +58,7 @@ const props = withDefaults(
     detailed?: boolean;
     simple?: boolean;
     disableRoute?: boolean;
+    hideReactions?: boolean,
   }>(),
   {
     variant: "text",
