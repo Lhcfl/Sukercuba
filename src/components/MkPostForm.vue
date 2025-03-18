@@ -13,47 +13,10 @@
         :user="account.me"
       />
       <div>
-        <VMenu>
-          <template #activator="{ props: p }">
-            <VBtn
-              v-bind="p"
-            >
-              <template #prepend>
-                <VIcon :icon="selectedVisibility.icon" />
-              </template>
-              {{ selectedVisibility.title }}
-              <template #append>
-                <VIcon
-                  v-if="draft.localOnly"
-                  class="text-red"
-                  icon="mdi-cloud-cancel-outline"
-                />
-                <VIcon
-                  v-else
-                  icon="mdi-cloud-check-outline"
-                />
-              </template>
-            </VBtn>
-          </template>
-          <VList>
-            <VListItem
-              v-for="visibility in visibilities"
-              :key="visibility.value"
-              :class="draft.visibility === visibility.value && 'text-primary'"
-              :prepend-icon="visibility.icon"
-              :title="visibility.title"
-              :subtitle="visibility.subtitle"
-              @click.stop="draft.visibility = visibility.value"
-            />
-            <VListItem
-              :class="draft.localOnly && 'text-primary'"
-              :prepend-icon="draft.localOnly ? 'mdi-toggle-switch-outline' : 'mdi-toggle-switch-off-outline'"
-              :title="t('_visibility.disableFederation')"
-              :subtitle="t('_visibility.disableFederationDescription')"
-              @click.stop="draft.localOnly = !draft.localOnly"
-            />
-          </VList>
-        </VMenu>
+        <MkVisibilityPicker
+          v-model="draft"
+          :disabled="!!edit"
+        />
         <VBtn icon="mdi-clock-outline" />
         <VBtn
           v-if="allowCancel"
@@ -183,27 +146,15 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const account = useAccount();
-const draft = useDraft({
+const draft = computed(() => useDraft({
   replyId: props.replyId,
   quoteId: props.quoteId,
   edit: props.edit,
-});
-
-const visibilities = computed(() => ([
-  {value: "public", icon: "mdi-earth"},
-  {value: "home", icon: "mdi-home-outline"},
-  {value: "followers", icon: "mdi-lock-outline"},
-  {value: "specified", icon: "mdi-message-lock-outline"}
-] as const).map(v => ({
-  ...v,
-  title: t(`_visibility.${v.value}`),
-  subtitle: t(`_visibility.${v.value}Description`),
-})));
+}));
 
 const loading = ref(false);
 const randomPlaceHolder = ref("abcdef"[Math.floor(Math.random() * 6)]);
 
-const selectedVisibility = computed(() => visibilities.value.find(v => v.value == draft.visibility)!);
 const sendbtn = computed(() =>
   props.edit
     ? { icon: "mdi-square-edit-outline", text: t("edit") }
@@ -214,19 +165,19 @@ const sendbtn = computed(() =>
     : { icon: "mdi-send-outline", text: t("send") }
 );
 
-const submitDisabled = computed(() => !draft.computedText);
+const submitDisabled = computed(() => !draft.value.computedText);
 
 async function submit() {
   try {
     loading.value = true;
 
     const req: NotesCreateRequest = {
-      text: draft.computedText,
-      cw: draft.computedCw,
+      text: draft.value.computedText,
+      cw: draft.value.computedCw,
       replyId: props.replyId,
       renoteId: props.quoteId,
-      visibility: draft.visibility,
-      localOnly: draft.localOnly,
+      visibility: draft.value.visibility,
+      localOnly: draft.value.localOnly,
     };
 
     if (props.edit) {
@@ -243,10 +194,10 @@ async function submit() {
     emit("done");
 
     if (props.edit || props.quoteId || props.replyId) {
-      draft.remove();
+      draft.value.remove();
     } else {
       // Clean draft
-      draft.text = "";
+      draft.value.text = "";
     }
   } catch (err) {
     console.error(err);
