@@ -87,11 +87,13 @@
             prepend-icon="mdi-delete-outline"
             @click.stop="deleteNote"
           >
-            {{ t('delete') }}
             <VProgressCircular
               v-if="deleting"
               indeterminate
             />
+            <span v-else>
+              {{ t('delete') }}
+            </span>
           </VListItem>
         </VList>
       </VMenu>

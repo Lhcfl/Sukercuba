@@ -10,16 +10,10 @@
       :note="appearNote.reply"
       :detailed="false"
     />
-    <VCardItem
+    <MkNoteRenoteBar
       v-if="isPureRenote"
-      class="pb-0"
-    >
-      <span>
-        <VIcon icon="mdi-repeat-variant" />
-        <VAvatar :image="note.user.avatarUrl ?? undefined" />
-        <MkUserName :user="note.user" />
-      </span>
-    </VCardItem>
+      :note
+    />
     <VCardItem>
       <template #prepend>
         <MkAvatar :user="appearNote.user" />
