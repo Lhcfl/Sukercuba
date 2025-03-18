@@ -33,6 +33,8 @@ declare module 'vue' {
     MkTimelines: typeof import('./components/MkTimelines.vue')['default']
     MkUrl: typeof import('./components/MkUrl.vue')['default']
     MkUserName: typeof import('./components/MkUserName.vue')['default']
+    MkUserPageCard: typeof import('./components/MkUserPageCard.vue')['default']
+    MkUserTimeline: typeof import('./components/MkUserTimeline.vue')['default']
     MkVisibilityPicker: typeof import('./components/MkVisibilityPicker.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

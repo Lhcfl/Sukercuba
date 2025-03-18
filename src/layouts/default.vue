@@ -2,7 +2,7 @@
   <AppSidebar />
   <VMain>
     <RouterView v-slot="{ Component }">
-      <KeepAlive>
+      <KeepAlive :max="10">
         <component
           :is="Component"
           :key="componentId"
