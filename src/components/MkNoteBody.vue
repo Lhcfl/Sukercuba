@@ -79,6 +79,10 @@ const noteTextRef = useTemplateRef("noteTextRef");
 const isLongNote = ref(false);
 const collapsed = ref(true);
 
+/** 
+ * 当 noteTextRef 第一次被加载的时候，施加一个 ResizeObserver
+ * 只要检测到一次 long note 就无须再检测
+ */
 watch(noteTextRef, () => {
   const observer = useResizeObserver(noteTextRef, () => {
     const height = noteTextRef.value?.clientHeight;
