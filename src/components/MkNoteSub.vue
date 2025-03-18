@@ -76,6 +76,10 @@ function routeToNote() {
       height: 100%;
       display: block;
     }
+    :global(.v-card-item__content) {
+      overflow-y: visible;
+      overflow: visible;
+    }
     .avatar {
       position: sticky;
       top: 0;

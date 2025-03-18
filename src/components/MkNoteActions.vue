@@ -66,7 +66,7 @@
         </template>
         <VList>
           <VListItem
-            v-if="note.userId == account.me?.id"
+            v-if="isMyNote"
             prepend-icon="mdi-square-edit-outline"
             @click.stop="posting = 'edit'"
           >
@@ -81,12 +81,24 @@
           >
             {{ t('showOnRemote') }}
           </VListItem>
+          <VListItem
+            v-if="isMyNote"
+            class="text-red"
+            prepend-icon="mdi-delete-outline"
+            @click.stop="deleteNote"
+          >
+            {{ t('delete') }}
+            <VProgressCircular
+              v-if="deleting"
+              indeterminate
+            />
+          </VListItem>
         </VList>
       </VMenu>
     </div>
     <MkPostForm
       v-if="posting"
-      variant="plain"
+      variant="outlined"
       :reply-id="posting === 'reply' ? note.id : undefined"
       :quote-id="posting === 'quote' ? note.id : undefined"
       :edit="posting === 'edit' ? note : undefined"
@@ -111,6 +123,9 @@ const account = useAccount();
 const renoting = ref(false);
 const reacting = ref(false);
 const posting = ref<"reply" | "quote" | "edit" | null>(null);
+const deleting = ref(false);
+
+const isMyNote = computed(() => props.note.userId === account.me?.id);
 
 async function renoteOrCancel() {
   try {
@@ -152,6 +167,19 @@ async function undoReact() {
     console.error(err);
   } finally {
     reacting.value = false;
+  }
+}
+
+async function deleteNote() {
+  try {
+    deleting.value = true;
+    await account.api.request("notes/delete", {
+      noteId: props.note.id,
+    });
+  } catch (err) {
+    console.error(err);
+  } finally {
+    deleting.value = false;
   }
 }
 

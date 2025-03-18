@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p v-if="note.text">
+    <p>
       <VBtn
         v-if="note.renoteId && simple"
         variant="plain"
@@ -16,10 +16,12 @@
         @click.stop="routeToNote(note.replyId)"
       />
       <MkMfm
+        v-if="note.text"
         :text="note.text"
         :author="note.user"
         :emoji-urls="note.emojis"
       />
+      <span v-if="note.isHidden">({{ t('private') }})</span>
     </p>
     <MkGallery
       v-if="note.files"
@@ -31,6 +33,7 @@
       :note="note.renote"
       variant="tonal"
       :detailed="false"
+      :never-collapse
     />
   </div>
 </template>
@@ -41,7 +44,10 @@ import type { Note } from "misskey-js/entities.js";
 defineProps<{
   note: Note;
   simple?: boolean;
+  neverCollapse?: boolean;
 }>();
+
+const { t } = useI18n();
 
 function routeToNote(id: string) {
   router.push({ name: "/notes/[id]", params: { id } });

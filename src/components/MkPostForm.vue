@@ -1,6 +1,6 @@
 <template>
   <VCard
-    v-ripple.stop
+    v-ripple.stop="false"
     :variant
     :loading
     :disabled="loading"

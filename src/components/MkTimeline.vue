@@ -1,5 +1,8 @@
 <template>
-  <VInfiniteScroll @load="load">
+  <VInfiniteScroll
+    class="overflow-y-visible"
+    @load="load"
+  >
     <TransitionGroup name="note">
       <div
         v-for="note in computedNotes"

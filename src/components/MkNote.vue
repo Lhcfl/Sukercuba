@@ -27,6 +27,7 @@
       :note="appearNote"
       :detailed
       :simple
+      :never-collapse
     />
     <VCardText
       v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0"
@@ -59,6 +60,8 @@ const props = withDefaults(
     simple?: boolean;
     disableRoute?: boolean;
     hideReactions?: boolean,
+    /** 防止subnote也被折叠 */
+    neverCollapse?: boolean;
   }>(),
   {
     variant: "text",

@@ -40,13 +40,18 @@
     v-else
     :class="$style.cardText"
   >
-    <MkNoteText
-      :simple
-      :note="note"
-      :class="collapsed && $style.collapsed"
-    />
+    <div
+      ref="noteTextRef"
+      :class="!neverCollapse && isLongNote && collapsed && $style.collapsed"
+    >
+      <MkNoteText
+        :simple
+        :note="note"
+        :never-collapse="neverCollapse || isLongNote"
+      />
+    </div>
     <VBtn
-      v-if="isLongNote"
+      v-if="!neverCollapse && isLongNote"
       block
       variant="tonal"
       :class="$style.collapseBtn"
@@ -57,35 +62,49 @@
   </VCardText>
 </template>
 <script setup lang="ts">
+import { useResizeObserver } from '@vueuse/core';
 import type { Note } from 'misskey-js/entities.js';
 
 const { t } = useI18n();
 
-const props = defineProps<{
+defineProps<{
   note: Note;
   detailed?: boolean;
   simple?: boolean;
+  /** 防止subnote也被折叠 */
+  neverCollapse?: boolean;
 }>()
 
-const isLongNote = computed(
-  () =>
-    props.note.text &&
-    (props.note.text.length > 400 ||
-      props.note.text.split("\n").length > 5)
-);
+const noteTextRef = useTemplateRef("noteTextRef");
+const isLongNote = ref(false);
+const collapsed = ref(true);
 
-const collapsed = ref(isLongNote.value);
+watch(noteTextRef, () => {
+  const observer = useResizeObserver(noteTextRef, () => {
+    const height = noteTextRef.value?.clientHeight;
+    console.log(noteTextRef.value?.clientHeight);
+    if (height && height > 200) {
+      isLongNote.value = true;
+      observer.stop();
+    }
+  });
+}, {
+  once: true,
+})
 </script>
 
 <style lang="scss" module>
 .collapsed {
   max-height: 200px;
   overflow: hidden;
+  /* 使用 mask 进行透明渐变 */
+  -webkit-mask-image: linear-gradient(to bottom, black, black 70%, transparent);
+  mask-image: linear-gradient(to bottom, black, black 70%, transparent);
 }
 .collapseBtn {
   margin: auto;
   position: sticky;
-  bottom: 10px;
+  bottom: 1em;
 }
 .cardText {
   padding-bottom: 0;
