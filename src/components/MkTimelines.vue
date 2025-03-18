@@ -32,10 +32,12 @@
 </template>
 
 <script lang="ts" setup>
-import { availableTimelines } from '@/types/timeline';
+import { availableTimelines, type Timeline } from '@/types/timeline';
+const { t } = useI18n()
+
 const tabs = availableTimelines.map(x => ({
-  text: x,
-  value: x
+  text: t('_timelines.' + (x == "hybrid" ? 'social' : x)),
+  value: x + "Timeline" as Timeline,
 }));
 const tab = ref(tabs[0].value);
 </script>

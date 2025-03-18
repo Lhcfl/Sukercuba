@@ -40,7 +40,7 @@ const notes = ref<NoteWithExtension[]>([]);
 const computedNotes = computed(() => notes.value.filter(x => !x.isDeleted));
 
 onMounted(() => {
-  const connection = account.streamApi.useChannel(props.timeline, {
+  const connection = account.streamApi.useChannel(props.timeline as "localTimeline", {
     withFiles: props.withFiles,
     withRenotes: props.withRenotes,
     withReplies: props.withReplies,
@@ -76,6 +76,8 @@ async function load(context: { done: (stat: "ok" | "error" | "empty") => void })
       localTimeline: () => account.api.request("notes/local-timeline", params),
       hybridTimeline: () =>
         account.api.request("notes/hybrid-timeline", params),
+      // fix sharkey
+      bubbleTimeline: () => account.api.request("notes/bubble-timeline" as "notes/hybrid-timeline", params),
     };
 
     const res = await mapedRequest[props.timeline]();

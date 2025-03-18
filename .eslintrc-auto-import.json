@@ -75,6 +75,7 @@
     "Misskey": true,
     "MisskeyApi": true,
     "MisskeyType": true,
-    "MisskeyEnt": true
+    "MisskeyEnt": true,
+    "useI18n": true
   }
 }

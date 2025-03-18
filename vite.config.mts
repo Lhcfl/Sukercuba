@@ -22,6 +22,7 @@ export default defineConfig({
     AutoImport({
       imports: [
         "vue",
+        'vue-i18n',
         {
           "vue-router/auto": ["useRoute", "useRouter"],
         },     

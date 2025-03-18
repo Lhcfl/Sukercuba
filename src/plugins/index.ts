@@ -11,10 +11,12 @@ import router from '../router'
 
 // Types
 import type { App } from 'vue'
+import { initI18n } from './i18n'
 
 export function registerPlugins (app: App) {
   app
     .use(vuetify)
     .use(router)
     .use(pinia)
+    .use(initI18n())
 }

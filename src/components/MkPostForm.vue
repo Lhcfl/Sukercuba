@@ -31,7 +31,7 @@
         density="compact"
         auto-grow
         variant="underlined"
-        label="cw"
+        :label="t('_initialTutorial._postNote._cw.title')"
         hide-details="auto"
       />
       <VTextarea
@@ -39,7 +39,7 @@
         :loading
         :rows="2"
         density="compact"
-        placeholder="在想些什么"
+        :placeholder="t('_postForm._placeholders.' + randomPlaceHolder)"
         variant="underlined"
         flat
         autofocus
@@ -50,7 +50,7 @@
       <VCombobox
         v-if="draft.showTags"
         v-model="draft.appendTags"
-        label="tags"
+        :label="t('tags')"
         variant="underlined"
         :delimiters="[' ']"
         chips
@@ -102,10 +102,9 @@
         <VBtn
           color="primary"
           variant="tonal"
-          :prepend-icon="sendIcon"
+          :prepend-icon="sendbtn.icon"
           :loading
-          text="发送"
-          type="submit"
+          :text="sendbtn.text"
           :disabled="submitDisabled"
           @click.stop="submit"
         />
@@ -121,19 +120,24 @@ import type { NoteWithExtension } from "@/stores/note-cache";
 import type { NotesCreateRequest } from "misskey-js/entities.js";
 import type { VCard } from "vuetify/components";
 
-const props = withDefaults(defineProps<{
-  replyId?: string;
-  quoteId?: string;
-  edit?: NoteWithExtension;
-  allowCancel?: boolean;
-  variant?: VCard["$props"]["variant"];
-}>(), {
-  replyId: undefined,
-  quoteId: undefined,
-  edit: undefined,
-  allowCancel: undefined,
-  variant: 'flat',
-});
+const props = withDefaults(
+  defineProps<{
+    replyId?: string;
+    quoteId?: string;
+    edit?: NoteWithExtension;
+    allowCancel?: boolean;
+    variant?: VCard["$props"]["variant"];
+  }>(),
+  {
+    replyId: undefined,
+    quoteId: undefined,
+    edit: undefined,
+    allowCancel: undefined,
+    variant: "flat",
+  }
+);
+
+const { t } = useI18n();
 
 const emit = defineEmits<{
   done: [];
@@ -147,15 +151,16 @@ const draft = useDraft({
   quoteId: props.quoteId,
   edit: props.edit,
 });
-const sendIcon = computed(() =>
+const sendbtn = computed(() =>
   props.edit
-    ? "mdi-square-edit-outline"
+    ? { icon: "mdi-square-edit-outline", text: t("edit") }
     : props.quoteId
-    ? "mdi-comment-quote-outline"
+    ? { icon: "mdi-comment-quote-outline", text: t("quote") }
     : props.replyId
-    ? "mdi-reply-outline"
-    : "mdi-send-outline"
+    ? { icon: "mdi-reply-outline", text: t("reply") }
+    : { icon: "mdi-send-outline", text: t("send") }
 );
+const randomPlaceHolder = ref("abcdef"[Math.floor(Math.random() * 6)]);
 
 const submitDisabled = computed(() => !draft.computedText);
 

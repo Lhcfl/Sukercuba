@@ -22,7 +22,7 @@
                 />
               </p>
               <p v-if="!expanded">
-                <VChip> 查看更多 </VChip>
+                <VChip>{{ t('showMore') }} ({{ t('_cw.chars', note.text?.length ?? 0) }})</VChip>
               </p>
             </div>
           </template>
@@ -52,12 +52,14 @@
       :class="$style.collapseBtn"
       @click.stop="collapsed = !collapsed"
     >
-      展开
+      {{ collapsed ? t('showMore') : t('showLess') }}
     </VBtn>
   </VCardText>
 </template>
 <script setup lang="ts">
 import type { Note } from 'misskey-js/entities.js';
+
+const { t } = useI18n();
 
 const props = defineProps<{
   note: Note;

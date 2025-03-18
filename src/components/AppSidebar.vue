@@ -6,17 +6,23 @@
         :to="{ name: '/' }"
       />
       <VListItem
-        title="Login"
+        :title="t('login')"
         :to="{ name: '/login' }"
       />
       <VListItem
-        title="Clear Cache"
+        :title="t('clearCache')"
         @click.stop="clearCache"
       />
       <VListItem>
         <VSelect
           v-model="theme.global.name.value"
           :items="themeNames"  
+        />
+      </VListItem>
+      <VListItem>
+        <VSelect
+          v-model="locale"
+          :items="availableLanguages"  
         />
       </VListItem>
     </VList>
@@ -26,6 +32,10 @@
 <script setup lang="ts">
 import { useCustomEmojisData } from '@/stores/custom-emoji-map';
 import { useTheme } from 'vuetify';
+import langs from '@/locales/index.json';
+
+const { t, locale } = useI18n();
+
 const theme = useTheme();
 
 async function clearCache() {
@@ -35,4 +45,5 @@ async function clearCache() {
 
 const themeNames = computed(() => Object.keys(theme.computedThemes.value));
 
+const availableLanguages = [...langs];
 </script>

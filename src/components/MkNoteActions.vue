@@ -70,16 +70,16 @@
             prepend-icon="mdi-square-edit-outline"
             @click.stop="posting = 'edit'"
           >
-            Edit
+            {{ t('edit') }}
           </VListItem>
           <VListItem prepend-icon="mdi-translate">
-            Translate
+            {{ t('translate') }}
           </VListItem>
           <VListItem
             prepend-icon="mdi-remote-desktop"
             @click.stop="openRemote()"
           >
-            Open in remote
+            {{ t('showOnRemote') }}
           </VListItem>
         </VList>
       </VMenu>
@@ -106,6 +106,7 @@ const props = defineProps<{
   note: NoteWithExtension;
 }>();
 
+const { t } = useI18n()
 const account = useAccount();
 const renoting = ref(false);
 const reacting = ref(false);

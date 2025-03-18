@@ -1,8 +1,9 @@
 export const availableTimelines = [
-  "homeTimeline",
-  "localTimeline",
-  "hybridTimeline",
-  "globalTimeline",
+  "home",
+  "local",
+  "hybrid",
+  "global",
+  "bubble",
 ] as const;
 
-export type Timeline = (typeof availableTimelines)[number];
+export type Timeline = `${(typeof availableTimelines)[number]}Timeline`;
