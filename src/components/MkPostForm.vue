@@ -17,10 +17,23 @@
           <template #activator="{ props: p }">
             <VBtn
               v-bind="p"
-              :prepend-icon="selectedVisibility.icon"
-              :append-icon="draft.localOnly ? 'mdi-cloud-cancel-outline' : 'mdi-cloud-check-outline'"
-              :text="selectedVisibility.title"
-            />
+            >
+              <template #prepend>
+                <VIcon :icon="selectedVisibility.icon" />
+              </template>
+              {{ selectedVisibility.title }}
+              <template #append>
+                <VIcon
+                  v-if="draft.localOnly"
+                  class="text-red"
+                  icon="mdi-cloud-cancel-outline"
+                />
+                <VIcon
+                  v-else
+                  icon="mdi-cloud-check-outline"
+                />
+              </template>
+            </VBtn>
           </template>
           <VList>
             <VListItem
@@ -31,6 +44,13 @@
               :title="visibility.title"
               :subtitle="visibility.subtitle"
               @click.stop="draft.visibility = visibility.value"
+            />
+            <VListItem
+              :class="draft.localOnly && 'text-primary'"
+              :prepend-icon="draft.localOnly ? 'mdi-toggle-switch-outline' : 'mdi-toggle-switch-off-outline'"
+              :title="t('_visibility.disableFederation')"
+              :subtitle="t('_visibility.disableFederationDescription')"
+              @click.stop="draft.localOnly = !draft.localOnly"
             />
           </VList>
         </VMenu>
