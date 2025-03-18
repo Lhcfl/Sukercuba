@@ -31,6 +31,8 @@ export function useDraft(opts: {
     const text = ref(opts.edit?.text || '');
     const cw = ref(opts.edit?.cw || '');
     const appendTags = ref<string[]>([]);
+    const visibility = ref<NoteWithExtension["visibility"]>("public");
+    const localOnly = ref(false);
 
     const showCw = ref(!!cw.value);
     const showTags = ref(false);
@@ -61,11 +63,14 @@ export function useDraft(opts: {
       showPreview,
       text,
       cw,
+      localOnly,
+      visibility,
       appendTags,
       computedCw,
       computedTags,
       computedText,
       remove,
+      storeId,
     }
   }, {
     persist: true

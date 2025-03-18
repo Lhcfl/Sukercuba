@@ -13,8 +13,27 @@
         :user="account.me"
       />
       <div>
-        <VBtn icon="mdi-earth" />
-        <VBtn icon="mdi-cloud-check-outline" />
+        <VMenu>
+          <template #activator="{ props: p }">
+            <VBtn
+              v-bind="p"
+              :prepend-icon="selectedVisibility.icon"
+              :append-icon="draft.localOnly ? 'mdi-cloud-cancel-outline' : 'mdi-cloud-check-outline'"
+              :text="selectedVisibility.title"
+            />
+          </template>
+          <VList>
+            <VListItem
+              v-for="visibility in visibilities"
+              :key="visibility.value"
+              :class="draft.visibility === visibility.value && 'text-primary'"
+              :prepend-icon="visibility.icon"
+              :title="visibility.title"
+              :subtitle="visibility.subtitle"
+              @click.stop="draft.visibility = visibility.value"
+            />
+          </VList>
+        </VMenu>
         <VBtn icon="mdi-clock-outline" />
         <VBtn
           v-if="allowCancel"
@@ -137,20 +156,34 @@ const props = withDefaults(
   }
 );
 
-const { t } = useI18n();
-
 const emit = defineEmits<{
   done: [];
   cancel: [];
 }>();
 
+const { t } = useI18n();
 const account = useAccount();
-const loading = ref(false);
 const draft = useDraft({
   replyId: props.replyId,
   quoteId: props.quoteId,
   edit: props.edit,
 });
+
+const visibilities = computed(() => ([
+  {value: "public", icon: "mdi-earth"},
+  {value: "home", icon: "mdi-home-outline"},
+  {value: "followers", icon: "mdi-lock-outline"},
+  {value: "specified", icon: "mdi-message-lock-outline"}
+] as const).map(v => ({
+  ...v,
+  title: t(`_visibility.${v.value}`),
+  subtitle: t(`_visibility.${v.value}Description`),
+})));
+
+const loading = ref(false);
+const randomPlaceHolder = ref("abcdef"[Math.floor(Math.random() * 6)]);
+
+const selectedVisibility = computed(() => visibilities.value.find(v => v.value == draft.visibility)!);
 const sendbtn = computed(() =>
   props.edit
     ? { icon: "mdi-square-edit-outline", text: t("edit") }
@@ -160,7 +193,6 @@ const sendbtn = computed(() =>
     ? { icon: "mdi-reply-outline", text: t("reply") }
     : { icon: "mdi-send-outline", text: t("send") }
 );
-const randomPlaceHolder = ref("abcdef"[Math.floor(Math.random() * 6)]);
 
 const submitDisabled = computed(() => !draft.computedText);
 
@@ -173,6 +205,8 @@ async function submit() {
       cw: draft.computedCw,
       replyId: props.replyId,
       renoteId: props.quoteId,
+      visibility: draft.visibility,
+      localOnly: draft.localOnly,
     };
 
     if (props.edit) {
