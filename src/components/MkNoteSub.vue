@@ -5,36 +5,38 @@
     :variant
     @click.stop="routeToNote"
   >
-    <VCardItem :class="$style.noteMain">
-      <template #prepend>
+    <div class="d-flex">
+      <div
+        class="flex-0-0"
+        :class="$style.avatarContainer"
+      >
         <MkAvatar
           :user="appearNote.user"
           :class="$style.avatar"
         />
-      </template>
-      <VCardItem class="py-0">
-        <div class="d-flex flex-column">
-          <MkUserName :user="appearNote.user" />
-          <span> @{{ Misskey.acct.toString(appearNote.user) }} </span>
-        </div>
-      </VCardItem>
-      <MkNoteBody
-        :note="appearNote"
-        simple
-      />
-      <VCardText
-        v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0"
-        class="py-0"
-      >
-        <MkNoteReactions :note="appearNote" />
-      </VCardText>
-      <VCardActions
-        v-if="!hideActions"
-        class="py-0"
-      >
-        <MkNoteActions :note="appearNote" />
-      </VCardActions>
-    </VCardItem>
+      </div>
+      <div class="flex-1-1">
+        <VCardItem>
+          <MkNoteHeader :note="appearNote" />
+        </VCardItem>
+        <MkNoteBody
+          :note="appearNote"
+          simple
+        />
+        <VCardText
+          v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0"
+          class="py-0"
+        >
+          <MkNoteReactions :note="appearNote" />
+        </VCardText>
+        <VCardActions
+          v-if="!hideActions"
+          class="py-0"
+        >
+          <MkNoteActions :note="appearNote" />
+        </VCardActions>
+      </div>
+    </div>
   </VCard>
 </template>
 
@@ -44,16 +46,19 @@ import type { VCard } from "vuetify/components";
 import { useNoteCache } from "@/stores/note-cache";
 import router from "@/router";
 
-const props = withDefaults(defineProps<{
-  note: Misskey.entities.Note;
-  variant?: VCard["$props"]["variant"];
-  newFetch?: boolean;
-  hideActions?: boolean,
-  disableRoute?: boolean,
-  hideReactions?: boolean,
-}>(), {
-  variant: "text",
-});
+const props = withDefaults(
+  defineProps<{
+    note: Misskey.entities.Note;
+    variant?: VCard["$props"]["variant"];
+    newFetch?: boolean;
+    hideActions?: boolean;
+    disableRoute?: boolean;
+    hideReactions?: boolean;
+  }>(),
+  {
+    variant: "text",
+  }
+);
 
 const noteCache = useNoteCache();
 const note = noteCache.cached(props.note, props.newFetch);
@@ -71,19 +76,20 @@ function routeToNote() {
 <style lang="scss" module>
 .note {
   overflow: visible;
-  .noteMain {
-    :global(.v-card-item__prepend) {
-      height: 100%;
-      display: block;
-    }
-    :global(.v-card-item__content) {
-      overflow-y: visible;
-      overflow: visible;
-    }
-    .avatar {
-      position: sticky;
-      top: 0;
-    }
+  :global(.v-card-item__prepend) {
+    height: 100%;
+    display: block;
+  }
+  :global(.v-card-item__content) {
+    overflow-y: visible;
+    overflow: visible;
+  }
+  .avatarContainer {
+    padding: 1rem 0 0 1rem;
+  }
+  .avatar {
+    position: sticky;
+    top: 0;
   }
 }
 </style>

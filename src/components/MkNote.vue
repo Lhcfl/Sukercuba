@@ -17,11 +17,11 @@
         <MkUserName :user="note.user" />
       </span>
     </VCardItem>
-    <VCardItem :prepend-avatar="appearNote.user.avatarUrl ?? undefined">
-      <div class="d-flex flex-column">
-        <MkUserName :user="appearNote.user" />
-        <span> @{{ Misskey.acct.toString(appearNote.user) }} </span>
-      </div>
+    <VCardItem>
+      <template #prepend>
+        <MkAvatar :user="appearNote.user" />
+      </template>
+      <MkNoteHeader :note="appearNote" />
     </VCardItem>
     <MkNoteBody
       :note="appearNote"
