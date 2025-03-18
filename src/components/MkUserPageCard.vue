@@ -1,5 +1,5 @@
 <template>
-  <VCard>
+  <VCard :class="$style.main">
     <VParallax
       :src="user?.bannerUrl"
     >
@@ -99,6 +99,51 @@
         />
       </p>
       <VDivider />
+      <div class="d-flex justify-space-evenly  mt-2">
+        <VTable
+          :class="$style.fieldTable"
+        >
+          <tbody>
+            <tr
+              v-for="(item, idx) in user.fields"
+              :key="idx"
+            >
+              <td :class="$style.fieldName">
+                <MkMfm
+                  :text="item.name"
+                  :emoji-urls="user.emojis"
+                  :author="user"
+                />
+              </td>
+              <td />
+              <td :class="$style.fieldVal">
+                <MkMfm
+                  :text="item.value"
+                  :emoji-urls="user.emojis"
+                  :author="user"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </VTable>
+      </div>
+    </VCardText>
+    <VCardText>
+      <VDivider />
+      <div class="d-flex justify-space-evenly text-center mt-2">
+        <div class="d-flex flex-column">
+          <span class="text-h5">{{ user.notesCount }}</span>
+          <span class="text-subtitle-2">{{ t('notes') }}</span>
+        </div>
+        <div class="d-flex flex-column">
+          <span class="text-h5">{{ user.followersCount }}</span>
+          <span class="text-subtitle-2">{{ t('followers') }}</span>
+        </div>
+        <div class="d-flex flex-column">
+          <span class="text-h5">{{ user.followingCount }}</span>
+          <span class="text-subtitle-2">{{ t('following') }}</span>
+        </div>
+      </div>
     </VCardText>
   </VCard>
 </template>
@@ -121,10 +166,31 @@ const followText = computed(() => props.user.isLocked ? t('followRequest') : t('
 
 
 <style lang="scss" module>
-.avatarContainer {
-  margin-top: -80px;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+.main {
+  .avatarContainer {
+    margin-top: -80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .fieldTable {
+    width: 500px;
+    --v-table-row-height: 2.5em;
+    tr {
+      margin: 1em;
+    }
+    td {
+      border: none !important;
+    }
+    .fieldName {
+      width: 25%;
+      text-align: right;
+      font-weight: bold;
+    }
+    .fieldVal {
+      width: 65%;
+      text-align: left;
+    }
+  }
 }
 </style>
