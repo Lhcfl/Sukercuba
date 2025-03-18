@@ -56,13 +56,40 @@
           :loading="reacting"
         />
       </template>
-      <VBtn icon="mdi-dots-horizontal" />
+      <VMenu>
+        <template #activator="{ props: p }">
+          <VBtn
+            icon="mdi-dots-horizontal"
+            v-bind="p"
+            @click.stop
+          />
+        </template>
+        <VList>
+          <VListItem
+            v-if="note.userId == account.me?.id"
+            prepend-icon="mdi-square-edit-outline"
+            @click="posting = 'edit'"
+          >
+            Edit
+          </VListItem>
+          <VListItem
+            prepend-icon="mdi-translate"
+          >
+            Translate
+          </VListItem>
+        </VList>
+      </VMenu>
     </div>
     <MkPostForm
       v-if="posting"
+      variant="plain"
       :reply-id="posting === 'reply' ? note.id : undefined"
       :quote-id="posting === 'quote' ? note.id : undefined"
+      :edit="posting === 'edit' ? note : undefined"
+      allow-cancel
+      @click.stop
       @done="posting = null"
+      @cancel="posting = null"
     />
   </div>
 </template>
@@ -78,7 +105,7 @@ const props = defineProps<{
 const account = useAccount();
 const renoting = ref(false);
 const reacting = ref(false);
-const posting = ref<"reply" | "quote" | null>(null);
+const posting = ref<"reply" | "quote" | 'edit' | null>(null);
 
 async function renoteOrCancel() {
   try {

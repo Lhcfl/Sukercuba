@@ -1,14 +1,15 @@
 import { defineStore } from "pinia";
+import type { NoteWithExtension } from "./note-cache";
 
 export function useDraft(opts: {
   id?: string,
   replyId?: string,
   quoteId?: string,
-  editId?: string,
+  edit?: NoteWithExtension,
 } = {}) {
   let storeId = "draft:";
-  if (opts.editId) {
-    storeId += `edit:${opts.editId}:`;
+  if (opts.edit) {
+    storeId += `edit:${opts.edit.id}:`;
   }
   else if (opts.replyId) {
     storeId += `reply:${opts.replyId}:`;
@@ -27,13 +28,13 @@ export function useDraft(opts: {
   }
 
   return defineStore(storeId, () => {
-    const showCw = ref(false);
+    const text = ref(opts.edit?.text || '');
+    const cw = ref(opts.edit?.cw || '');
+    const appendTags = ref<string[]>([]);
+
+    const showCw = ref(!!cw.value);
     const showTags = ref(false);
     const showPreview = ref(false);
-
-    const text = ref("");
-    const cw = ref("");
-    const appendTags = ref<string[]>([]);
 
     const computedCw = computed(() => showCw.value ? cw.value : undefined);
     const computedTags = computed(() => showTags.value ? appendTags.value : []);
@@ -50,6 +51,10 @@ export function useDraft(opts: {
       return ret;
     })
 
+    function remove() {
+      localStorage.removeItem(storeId);
+    }
+
     return {
       showCw,
       showTags,
@@ -60,6 +65,7 @@ export function useDraft(opts: {
       computedCw,
       computedTags,
       computedText,
+      remove,
     }
   }, {
     persist: true

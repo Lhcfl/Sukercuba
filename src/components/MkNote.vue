@@ -66,7 +66,7 @@ const props = withDefaults(
 );
 
 const noteCache = useNoteCache();
-const note = noteCache.cached(props.note, props.newFetch);
+const note = noteCache.cached(props.note);
 const isPureRenote = computed(() => Misskey.note.isPureRenote(note.value));
 const appearNote = computed(() =>
   isPureRenote.value ? note.value.renote! : note.value

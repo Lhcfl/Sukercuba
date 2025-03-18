@@ -1,23 +1,25 @@
 <template>
   <VNavigationDrawer>
-    <VListItem
-      title="Sukerkuba"
-      :to="{ name: '/' }"
-    />
-    <VListItem
-      title="Login"
-      :to="{ name: '/login' }"
-    />
-    <VListItem
-      title="Clear Cache"
-      @click.stop="clearCache"
-    />
-    <VListItem>
-      <VSelect
-        v-model="theme.global.name.value"
-        :items="themeNames"  
+    <VList nav>
+      <VListItem
+        title="Sukerkuba"
+        :to="{ name: '/' }"
       />
-    </VListItem>
+      <VListItem
+        title="Login"
+        :to="{ name: '/login' }"
+      />
+      <VListItem
+        title="Clear Cache"
+        @click.stop="clearCache"
+      />
+      <VListItem>
+        <VSelect
+          v-model="theme.global.name.value"
+          :items="themeNames"  
+        />
+      </VListItem>
+    </VList>
   </VNavigationDrawer>
 </template>
 

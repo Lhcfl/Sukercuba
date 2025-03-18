@@ -1,10 +1,9 @@
 <template>
   <VCard
     v-ripple.stop
-    variant="flat"
+    :variant
     :loading
     :disabled="loading"
-    tile
     @keydown.stop
     @keyup.stop
   >
@@ -17,6 +16,11 @@
         <VBtn icon="mdi-earth" />
         <VBtn icon="mdi-cloud-check-outline" />
         <VBtn icon="mdi-clock-outline" />
+        <VBtn
+          v-if="allowCancel"
+          icon="mdi-close"
+          @click.stop="emit('cancel')"
+        />
       </div>
     </VCardActions>
     <VCardText class="py-0">
@@ -113,39 +117,78 @@
 <script setup lang="ts">
 import { useAccount } from "@/stores/account";
 import { useDraft } from "@/stores/draft";
+import type { NoteWithExtension } from "@/stores/note-cache";
 import type { NotesCreateRequest } from "misskey-js/entities.js";
+import type { VCard } from "vuetify/components";
 
-const props = defineProps<{
-  replyId?: string,
-  quoteId?: string,
-  editId?: string,
-}>();
+const props = withDefaults(defineProps<{
+  replyId?: string;
+  quoteId?: string;
+  edit?: NoteWithExtension;
+  allowCancel?: boolean;
+  variant?: VCard["$props"]["variant"];
+}>(), {
+  replyId: undefined,
+  quoteId: undefined,
+  edit: undefined,
+  allowCancel: undefined,
+  variant: 'flat',
+});
 
 const emit = defineEmits<{
-  done: []
+  done: [];
+  cancel: [];
 }>();
 
 const account = useAccount();
 const loading = ref(false);
-const draft = useDraft(props);
-const sendIcon = computed(() => props.editId ? 'mdi-circle-edit-outline' : props.quoteId ? 'mdi-comment-quote-outline' : props.replyId ? 'mdi-reply-outline' : "mdi-send-outline");
+const draft = useDraft({
+  replyId: props.replyId,
+  quoteId: props.quoteId,
+  edit: props.edit,
+});
+const sendIcon = computed(() =>
+  props.edit
+    ? "mdi-square-edit-outline"
+    : props.quoteId
+    ? "mdi-comment-quote-outline"
+    : props.replyId
+    ? "mdi-reply-outline"
+    : "mdi-send-outline"
+);
+
 const submitDisabled = computed(() => !draft.computedText);
 
 async function submit() {
   try {
     loading.value = true;
-    
+
     const req: NotesCreateRequest = {
       text: draft.computedText,
       cw: draft.computedCw,
       replyId: props.replyId,
       renoteId: props.quoteId,
+    };
+
+    if (props.edit) {
+      // Sharkey and other misskey varient supports edit
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await account.api.request("notes/edit" as any, {
+        editId: props.edit?.id,
+        ...req,
+      });
+    } else {
+      await account.api.request("notes/create", req);
     }
-    await account.api.request("notes/create", req);
-    
+
     emit("done");
-    // Clean draft
-    draft.text = "";
+
+    if (props.edit || props.quoteId || props.replyId) {
+      draft.remove();
+    } else {
+      // Clean draft
+      draft.text = "";
+    }
   } catch (err) {
     console.error(err);
   } finally {
@@ -154,6 +197,7 @@ async function submit() {
 }
 
 function onkeydown(ev: KeyboardEvent) {
-  if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey) && !submitDisabled.value) submit();
+  if (ev.key === "Enter" && (ev.ctrlKey || ev.metaKey) && !submitDisabled.value)
+    submit();
 }
 </script>

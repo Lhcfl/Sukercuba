@@ -117,6 +117,8 @@ export const useNoteCache = defineStore("note-cache", () => {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			case 'updated' as any: {
 				try {
+          console.log({type, id, body});
+
 					const editedNote = await account.api.request('notes/show', {
 						noteId: id,
 					});
@@ -193,6 +195,7 @@ export const useNoteCache = defineStore("note-cache", () => {
       noteCache.set(note.id, storedNote);
       return storedNote;
     } else {
+      update(note, fully);
       return oldNote;
     }
   }
