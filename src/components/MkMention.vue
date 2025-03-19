@@ -1,10 +1,17 @@
 <template>
-  <RouterLink :to>
+  <VChip
+    :to
+    size="small"
+    :prepend-avatar="mentionUser?.data.avatarUrl ?? undefined"
+    @click.stop
+  >
     <span>@{{ username }}</span><span v-if="host">@{{ host }}</span>
-  </RouterLink>
+  </VChip>
 </template>
 
 <script setup lang="ts">
+import { useUserCache } from '@/stores/user-cache';
+
 const props = defineProps<{
   navigationBehaviour?: unknown,
   host?: string | null,
@@ -12,7 +19,10 @@ const props = defineProps<{
   noNavigate?: boolean
 }>();
 
-const to = computed(() => ({
+const userCache = useUserCache();
+const mentionUser = userCache.getCache({ username: props.username, host: props.host ?? null }, false)
+
+const to = computed(() => (props.noNavigate ? undefined : {
   name: '/@[userhandle]' as const,
   params: {
     userhandle: [props.username, props.host].filter((x) => x).join("@"),
