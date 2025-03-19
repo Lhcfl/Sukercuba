@@ -9,6 +9,7 @@
         <VBtn
           v-for="emoji in searched"
           :key="emoji.name"
+          :disabled="emoji.disabled"
           @click.stop="emit('selected', emoji)"
         >
           <MkCustomEmoji :name="emoji.name" />
@@ -34,6 +35,7 @@
               <VBtn
                 v-for="emoji in section.emojis"
                 :key="emoji.name"
+                :disabled="emoji.disabled"
                 @click.stop="emit('selected', emoji)"
               >
                 <MkCustomEmoji :name="emoji.name" />
@@ -48,32 +50,49 @@
 
 <script setup lang="ts">
 import { useCustomEmojisData } from "@/stores/custom-emoji-map";
+import type { NoteWithExtension } from "@/stores/note-cache";
 import { useDebounceFn } from "@vueuse/core";
 import type { EmojiSimple } from "misskey-js/entities.js";
 
+const props = defineProps<{
+  accept?: NoteWithExtension["reactionAcceptance"];
+}>();
+
 const emit = defineEmits<{
-  selected: [emoji: EmojiSimple]
-}>()
+  selected: [emoji: EmojiSimple];
+}>();
 
 const { t } = useI18n();
 const emojis = useCustomEmojisData();
 
 const search = ref("");
-const searched = ref<EmojiSimple[]>([]);
+const searched = ref<ReturnType<typeof attachInfo>[]>([]);
 const sections = ref(getSections());
+
+function attachInfo(e: EmojiSimple) {
+  return {
+    ...e,
+    disabled:
+      e.isSensitive &&
+      (props.accept === "nonSensitiveOnly" ||
+        props.accept === "nonSensitiveOnlyForLocalLikeOnlyForRemote"),
+  };
+}
 
 function getSections() {
   return [...emojis.emojiCategories.entries()]
     .map(([name, emojis]) => ({
       name,
-      emojis: emojis.filter((e) => {
-        if (!search.value) return true;
-        return (
-          e.name.includes(search.value) ||
-          e.aliases.some((alias) => alias.includes(search.value)) ||
-          e.category?.includes(search.value)
-        );
-      }),
+      emojis: emojis
+        .filter((e) => {
+          if (!search.value) return true;
+          return (
+            e.name.includes(search.value) ||
+            e.aliases.some((alias) => alias.includes(search.value)) ||
+            e.category?.includes(search.value)
+          );
+        })
+        .map(attachInfo),
       example: emojis.at(0),
     }))
     .filter((cat) => cat.emojis.length > 0)
@@ -87,7 +106,9 @@ function getSections() {
 const debounceSearch = useDebounceFn(() => {
   searched.value = !search.value
     ? []
-    : emojis.emojiFuse.search(search.value, { limit: 100 }).map((x) => x.item);
+    : emojis.emojiFuse
+        .search(search.value, { limit: 100 })
+        .map((x) => attachInfo(x.item));
   sections.value = getSections();
 }, 150);
 

@@ -52,6 +52,7 @@
           @click.stop="react()"
         />
         <VMenu
+          v-if="note.reactionAcceptance !== 'likeOnly'"
           v-model="showEmojiPicker"
           :close-on-content-click="false"
         >
@@ -62,7 +63,10 @@
               :loading="reacting"
             />
           </template>
-          <MkEmojiPicker @selected="react" />
+          <MkEmojiPicker
+            :accept="note.reactionAcceptance"
+            @selected="react"
+          />
         </VMenu>
       </template>
       <VMenu v-model="showMenu">
