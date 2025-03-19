@@ -7,6 +7,18 @@ type IDBRefStoreRes<T extends Record<string, any>> = {
 };
 
 
+/**
+ * Reactive IndexedDB store, strongly typed
+ * 
+ * We don't actually care about the time to write to IndexDB, 
+ * so we just need to load IndexedDB at the beginning, so that 
+ * IndexedDB can be treated as a synchronous operation, 
+ * just like localstorage.
+ * 
+ * This class is a simple wrapper for IndexDB, using the 
+ * principles of Proxy and WritableComputedRef to automatically 
+ * initiate a write to IndexedDB after access.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class IDBRefStore<T extends Record<string, any>> {
   base: IDBStore;
