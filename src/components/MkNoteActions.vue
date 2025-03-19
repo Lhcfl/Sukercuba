@@ -58,7 +58,7 @@
         >
           <template #activator="{ props: p }">
             <VBtn
-              v-bind="p"  
+              v-bind="p"
               icon="mdi-sticker-emoji"
               :loading="reacting"
             />
@@ -79,20 +79,47 @@
         </template>
         <VList>
           <VListItem
-            v-if="isMyNote"
-            prepend-icon="mdi-square-edit-outline"
-            :title="t('edit')"
-            @click.stop="posting = 'edit'; showMenu = false"
+            prepend-icon="mdi-content-copy"
+            :title="t('copyContent')"
+            @click.stop="copyNoteContent"
           />
           <VListItem
-            prepend-icon="mdi-translate"
-            :title="t('translate')"
-            @click.stop="emit('translate'); showMenu = false"
+            prepend-icon="mdi-link"
+            :title="t('copyLink')"
+            @click.stop="copyLink"
+          />
+          <VListItem
+            prepend-icon="mdi-link"
+            :title="t('copyRemoteLink')"
+            @click.stop="copyRemoteLink"
           />
           <VListItem
             prepend-icon="mdi-remote-desktop"
             :title="t('showOnRemote')"
-            @click.stop="openRemote(); showMenu = false"
+            @click.stop="openRemote"
+          />
+          <VListItem
+            prepend-icon="mdi-share-variant-outline"
+            :title="t('share')"
+            @click.stop="share"
+          />
+          <VListItem
+            prepend-icon="mdi-translate"
+            :title="t('translate')"
+            @click.stop="
+              emit('translate');
+              showMenu = false;
+            "
+          />
+          <VDivider />
+          <VListItem
+            v-if="isMyNote"
+            prepend-icon="mdi-square-edit-outline"
+            :title="t('edit')"
+            @click.stop="
+              posting = 'edit';
+              showMenu = false;
+            "
           />
           <VListItem
             v-if="isMyNote"
@@ -105,7 +132,7 @@
               indeterminate
             />
             <span v-else>
-              {{ t('delete') }}
+              {{ t("delete") }}
             </span>
           </VListItem>
         </VList>
@@ -126,6 +153,7 @@
 </template>
 
 <script setup lang="ts">
+import router from "@/router";
 import { useAccount } from "@/stores/account";
 import type { NoteWithExtension } from "@/stores/note-cache";
 import type { EmojiSimple } from "misskey-js/entities.js";
@@ -135,10 +163,10 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  translate: []
+  translate: [];
 }>();
 
-const { t } = useI18n()
+const { t } = useI18n();
 const account = useAccount();
 const renoting = ref(false);
 const reacting = ref(false);
@@ -207,6 +235,48 @@ async function deleteNote() {
 }
 
 function openRemote() {
-  window.open(props.note.url ?? new URL("/notes/" + props.note.id, account.site));
+  window.open(
+    props.note.url ?? new URL("/notes/" + props.note.id, account.site)
+  );
+  showMenu.value = false;
+}
+
+async function copyNoteContent() {
+  showMenu.value = false;
+  let ctnt = props.note.cw ?? "";
+  if (ctnt) ctnt += "\n-------\n";
+  ctnt += props.note.text;
+  await navigator.clipboard.writeText(ctnt);
+}
+
+function getLocalUrl() {
+  return new URL(
+    router.resolve({
+      name: "/notes/[id]",
+      params: { id: props.note.id },
+    }).fullPath,
+    window.location.origin
+  ).toString();
+}
+
+async function copyLink() {
+  showMenu.value = false;
+  await navigator.clipboard.writeText(getLocalUrl());
+}
+
+async function copyRemoteLink() {
+  showMenu.value = false;
+  await navigator.clipboard.writeText(
+    props.note.url ??
+      new URL(`/notes/${props.note.id}`, account.site).toString()
+  );
+}
+
+async function share() {
+  showMenu.value = false;
+  await navigator.share({
+    url: getLocalUrl(),
+    text: props.note.cw || props.note.text || ""
+  });
 }
 </script>
