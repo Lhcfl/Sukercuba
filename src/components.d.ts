@@ -13,6 +13,7 @@ declare module 'vue' {
     MkCode: typeof import('./components/MkCode.vue')['default']
     MkCustomEmoji: typeof import('./components/MkCustomEmoji.vue')['default']
     MkEmoji: typeof import('./components/MkEmoji.vue')['default']
+    MkEmojiPicker: typeof import('./components/MkEmojiPicker.vue')['default']
     MkGallery: typeof import('./components/MkGallery.vue')['default']
     MkInstanceChip: typeof import('./components/MkInstanceChip.vue')['default']
     MkMention: typeof import('./components/MkMention.vue')['default']

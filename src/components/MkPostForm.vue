@@ -92,7 +92,15 @@
           :color="draft.showTags ? 'primary' : undefined"
           @click.stop="draft.showTags = !draft.showTags"
         />
-        <VBtn icon="mdi-sticker-emoji" />
+        <VMenu :close-on-content-click="false">
+          <template #activator="{ props: p }">
+            <VBtn
+              icon="mdi-sticker-emoji"
+              v-bind="p"
+            />
+          </template>
+          <MkEmojiPicker />
+        </VMenu>
         <VBtn icon="mdi-dots-horizontal" />
       </div>
       <div>
@@ -146,11 +154,13 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const account = useAccount();
-const draft = computed(() => useDraft({
-  replyId: props.replyId,
-  quoteId: props.quoteId,
-  edit: props.edit,
-}));
+const draft = computed(() =>
+  useDraft({
+    replyId: props.replyId,
+    quoteId: props.quoteId,
+    edit: props.edit,
+  })
+);
 
 const loading = ref(false);
 const randomPlaceHolder = ref("abcdef"[Math.floor(Math.random() * 6)]);
