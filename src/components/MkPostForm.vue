@@ -37,6 +37,7 @@
         hide-details="auto"
       />
       <VTextarea
+        ref="textRef"
         v-model="draft.text"
         :loading
         :rows="2"
@@ -99,7 +100,7 @@
               v-bind="p"
             />
           </template>
-          <MkEmojiPicker />
+          <MkEmojiPicker @selected="prependEmoji" />
         </VMenu>
         <VBtn icon="mdi-dots-horizontal" />
       </div>
@@ -127,7 +128,7 @@
 import { useAccount } from "@/stores/account";
 import { useDraft } from "@/stores/draft";
 import type { NoteWithExtension } from "@/stores/note-cache";
-import type { NotesCreateRequest } from "misskey-js/entities.js";
+import type { EmojiSimple, NotesCreateRequest } from "misskey-js/entities.js";
 import type { VCard } from "vuetify/components";
 
 const props = withDefaults(
@@ -162,6 +163,7 @@ const draft = computed(() =>
   })
 );
 
+const textRef = useTemplateRef("textRef");
 const loading = ref(false);
 const randomPlaceHolder = ref("abcdef"[Math.floor(Math.random() * 6)]);
 
@@ -219,5 +221,25 @@ async function submit() {
 function onkeydown(ev: KeyboardEvent) {
   if (ev.key === "Enter" && (ev.ctrlKey || ev.metaKey) && !submitDisabled.value)
     submit();
+}
+
+function prependEmoji(emoji: EmojiSimple) {
+  const textarea = (textRef.value?.$el as HTMLElement).querySelector(
+    "textarea"
+  );
+  if (!textarea) {
+    return;
+  }
+  const selectionSt = textarea.selectionStart;
+  const st = draft.value.text.slice(0, selectionSt);
+  const ed = draft.value.text.slice(textarea.selectionEnd);
+  const emojiCode = `:${emoji.name}:`;
+  draft.value.text = st + emojiCode + ed;
+  setTimeout(() => {
+    textarea.setSelectionRange(
+      selectionSt + emojiCode.length,
+      selectionSt + emojiCode.length
+    );
+  }, 0)
 }
 </script>

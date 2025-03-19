@@ -9,6 +9,7 @@
         <VBtn
           v-for="emoji in searched"
           :key="emoji.name"
+          @click.stop="emit('selected', emoji)"
         >
           <MkCustomEmoji :name="emoji.name" />
         </VBtn>
@@ -33,6 +34,7 @@
               <VBtn
                 v-for="emoji in section.emojis"
                 :key="emoji.name"
+                @click.stop="emit('selected', emoji)"
               >
                 <MkCustomEmoji :name="emoji.name" />
               </VBtn>
@@ -48,6 +50,10 @@
 import { useCustomEmojisData } from "@/stores/custom-emoji-map";
 import { useDebounceFn } from "@vueuse/core";
 import type { EmojiSimple } from "misskey-js/entities.js";
+
+const emit = defineEmits<{
+  selected: [emoji: EmojiSimple]
+}>()
 
 const { t } = useI18n();
 const emojis = useCustomEmojisData();
