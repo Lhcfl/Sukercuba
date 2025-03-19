@@ -124,8 +124,9 @@ const showAcceptRefuse = computed(() =>
 );
 
 const showFollowBack = computed(() =>
+  user.value?.data.isFollowed &&  
   props.notification.type === "follow" && user.value?.detailed
-    ? !user.value.data.isFollowing
+    ? !(user.value.data.isFollowing)
     : false
 );
 
@@ -177,7 +178,7 @@ async function reject() {
 async function breakFollow() {
   sendingBreakFollow.value = true;
   try {
-    await account.api.request("following/delete", {
+    await account.api.request("following/invalidate", {
       userId: props.notification.userId,
     });
     user.value!.data.isFollowed = false;
