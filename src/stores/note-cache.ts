@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import type { Ref } from "vue";
 import { useAccount } from "./account";
 import { isPureRenote } from "misskey-js/note.js";
+import { useUserCache } from "./user-cache";
 
 export type NoteWithExtension = Note & {
   renote?: NoteWithExtension,
@@ -17,6 +18,7 @@ type ActullyStoredNote = Ref<Exclude<NoteWithExtension, 'renote' | 'reply'> & {
 }>;
 
 export const useNoteCache = defineStore("note-cache", () => {
+  const userCache = useUserCache();
   const noteCache = new Map<Note["id"], ActullyStoredNote>();
 
   const account = useAccount();
@@ -170,6 +172,10 @@ export const useNoteCache = defineStore("note-cache", () => {
 
   function cached(note: Note, fully = false): Ref<NoteWithExtension> {
     const oldNote = noteCache.get(note.id);
+
+    if (fully) {
+      userCache.cache(note.user, false);
+    }
 
     if (oldNote == null) {
       const storedNote = ref(note) as ActullyStoredNote;
