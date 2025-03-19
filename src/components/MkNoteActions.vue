@@ -56,7 +56,7 @@
           :loading="reacting"
         />
       </template>
-      <VMenu>
+      <VMenu v-model="showMenu">
         <template #activator="{ props: p }">
           <VBtn
             icon="mdi-dots-horizontal"
@@ -68,19 +68,19 @@
           <VListItem
             v-if="isMyNote"
             prepend-icon="mdi-square-edit-outline"
-            @click.stop="posting = 'edit'"
-          >
-            {{ t('edit') }}
-          </VListItem>
-          <VListItem prepend-icon="mdi-translate">
-            {{ t('translate') }}
-          </VListItem>
+            :title="t('edit')"
+            @click.stop="posting = 'edit'; showMenu = false"
+          />
+          <VListItem
+            prepend-icon="mdi-translate"
+            :title="t('translate')"
+            @click.stop="emit('translate'); showMenu = false"
+          />
           <VListItem
             prepend-icon="mdi-remote-desktop"
-            @click.stop="openRemote()"
-          >
-            {{ t('showOnRemote') }}
-          </VListItem>
+            :title="t('showOnRemote')"
+            @click.stop="openRemote(); showMenu = false"
+          />
           <VListItem
             v-if="isMyNote"
             class="text-red"
@@ -120,12 +120,17 @@ const props = defineProps<{
   note: NoteWithExtension;
 }>();
 
+const emit = defineEmits<{
+  translate: []
+}>();
+
 const { t } = useI18n()
 const account = useAccount();
 const renoting = ref(false);
 const reacting = ref(false);
 const posting = ref<"reply" | "quote" | "edit" | null>(null);
 const deleting = ref(false);
+const showMenu = ref(false);
 
 const isMyNote = computed(() => props.note.userId === account.me?.id);
 
