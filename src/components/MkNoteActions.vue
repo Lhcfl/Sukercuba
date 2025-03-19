@@ -51,10 +51,19 @@
           :loading="reacting"
           @click.stop="react()"
         />
-        <VBtn
-          icon="mdi-sticker-emoji"
-          :loading="reacting"
-        />
+        <VMenu
+          v-model="showEmojiPicker"
+          :close-on-content-click="false"
+        >
+          <template #activator="{ props: p }">
+            <VBtn
+              v-bind="p"  
+              icon="mdi-sticker-emoji"
+              :loading="reacting"
+            />
+          </template>
+          <MkEmojiPicker @selected="react" />
+        </VMenu>
       </template>
       <VMenu v-model="showMenu">
         <template #activator="{ props: p }">
@@ -115,6 +124,7 @@
 <script setup lang="ts">
 import { useAccount } from "@/stores/account";
 import type { NoteWithExtension } from "@/stores/note-cache";
+import type { EmojiSimple } from "misskey-js/entities.js";
 
 const props = defineProps<{
   note: NoteWithExtension;
@@ -131,6 +141,7 @@ const reacting = ref(false);
 const posting = ref<"reply" | "quote" | "edit" | null>(null);
 const deleting = ref(false);
 const showMenu = ref(false);
+const showEmojiPicker = ref(false);
 
 const isMyNote = computed(() => props.note.userId === account.me?.id);
 
@@ -149,10 +160,11 @@ async function renoteOrCancel() {
   }
 }
 
-async function react(reaction?: string) {
+async function react(emoji?: EmojiSimple) {
   try {
     reacting.value = true;
-    reaction ??= "❤️";
+    showEmojiPicker.value = false;
+    const reaction = emoji?.name ? `:${emoji.name}:` : "❤️";
     await account.api.request("notes/reactions/create", {
       noteId: props.note.id,
       reaction,
