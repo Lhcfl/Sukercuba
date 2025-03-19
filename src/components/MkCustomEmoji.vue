@@ -76,10 +76,6 @@ function onClick(ev: MouseEvent) {
   height: 2em;
   vertical-align: middle;
   transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.2);
-  }
 }
 
 .normal {

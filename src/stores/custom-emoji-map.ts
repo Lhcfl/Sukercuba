@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import * as Misskey from "misskey-js";
 import { useAccount } from "./account";
 import type { EmojiSimple } from "misskey-js/entities.js";
 import Fuse from "fuse.js";
@@ -7,25 +6,24 @@ import Fuse from "fuse.js";
 // fetch emojis every hour
 const FETCH_DURATION = 1000 * 60 * 60;
 
-const KEY_EMOJI_LAST_FETCHED_AT = "emojiLastFetch";
-const KEY_EMOJIS = "emojis";
-
 export const useCustomEmojisData = defineStore("emojis", () => {
-  const emojis = shallowRef<Misskey.entities.EmojiSimple[]>([]);
+  const account = useAccount();
+  
+  const emojis = account.siteStore.getRef("emojis");
 
-  const emojiFuse = computed(() => new Fuse(emojis.value, {
+  const emojiFuse = computed(() => new Fuse(emojis.value ?? [], {
     keys: ['name', 'aliases'],
     threshold: 0.1,
     includeScore: true,
   }));
 
   const emojiMap = computed(
-    () => new Map(emojis.value.map((e) => [e.name, e]))
+    () => new Map((emojis.value ?? []).map((e) => [e.name, e]))
   );
 
   const emojiCategories = computed(() => {
     const ret = new Map<string | null, EmojiSimple[]>();
-    for (const e of emojis.value) {
+    for (const e of (emojis.value ?? [])) {
       const arr = ret.get(e.category || null);
       if (arr != null) {
         arr.push(e);
@@ -39,14 +37,9 @@ export const useCustomEmojisData = defineStore("emojis", () => {
   async function init() {
     const account = useAccount();
     const now = Date.now();
-
-    const lastFetchedAt = await account.siteStore.get(
-      KEY_EMOJI_LAST_FETCHED_AT
-    );
-    if (lastFetchedAt && now - lastFetchedAt < FETCH_DURATION) {
-      emojis.value = await account.siteStore.get(KEY_EMOJIS);
-      return;
-    } else {
+    await account.siteStore.init();
+    const lastFetchedAt = account.siteStore.reactive.emojiLastFetch;
+    if (!lastFetchedAt || now - lastFetchedAt > FETCH_DURATION) {
       update();
     }
   }
@@ -58,10 +51,7 @@ export const useCustomEmojisData = defineStore("emojis", () => {
     emojis.value = res.emojis.sort((a, b) => {
       return a.name < b.name ? -1 : 1;
     });
-    await account.siteStore.setMany([
-      [KEY_EMOJI_LAST_FETCHED_AT, now],
-      [KEY_EMOJIS, emojis.value],
-    ]);
+    account.siteStore.reactive.emojiLastFetch = now;
   }
 
   return {

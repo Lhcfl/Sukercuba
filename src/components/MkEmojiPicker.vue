@@ -2,15 +2,28 @@
   <VCard :class="$style.main">
     <VTextField
       v-model="search"
+      autofocus
       :label="t('enterEmoji')"
     />
     <div :class="$style.emojiPanels">
+      <VItemGroup>
+        <VBtn
+          v-for="emoji in recentlyUsedEmojis"
+          :key="emoji.name"
+          variant="flat"
+          :disabled="emoji.disabled"
+          @click.stop="clickEmoji(emoji)"
+        >
+          <MkCustomEmoji :name="emoji.name" />
+        </VBtn>
+      </VItemGroup>
       <VItemGroup v-if="searched">
         <VBtn
           v-for="emoji in searched"
           :key="emoji.name"
+          variant="flat"
           :disabled="emoji.disabled"
-          @click.stop="emit('selected', emoji)"
+          @click.stop="clickEmoji(emoji)"
         >
           <MkCustomEmoji :name="emoji.name" />
         </VBtn>
@@ -35,8 +48,9 @@
               <VBtn
                 v-for="emoji in section.emojis"
                 :key="emoji.name"
+                variant="flat"
                 :disabled="emoji.disabled"
-                @click.stop="emit('selected', emoji)"
+                @click.stop="clickEmoji(emoji)"
               >
                 <MkCustomEmoji :name="emoji.name" />
               </VBtn>
@@ -49,6 +63,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAccount } from "@/stores/account";
 import { useCustomEmojisData } from "@/stores/custom-emoji-map";
 import type { NoteWithExtension } from "@/stores/note-cache";
 import { useDebounceFn } from "@vueuse/core";
@@ -64,10 +79,22 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const emojis = useCustomEmojisData();
+const account = useAccount();
+
+const recentlyUsedEmojis = computed(() =>
+  (account.accountStore.reactive.recentlyUsedEmojis ?? []).map(attachInfo)
+);
 
 const search = ref("");
 const searched = ref<ReturnType<typeof attachInfo>[]>([]);
 const sections = ref(getSections());
+
+function clickEmoji(e: EmojiSimple) {
+  account.accountStore.reactive.recentlyUsedEmojis = [e]
+    .concat(recentlyUsedEmojis.value.filter((x) => x.name != e.name))
+    .slice(0, 60);
+  emit("selected", e);
+}
 
 function attachInfo(e: EmojiSimple) {
   return {
@@ -115,8 +142,6 @@ const debounceSearch = useDebounceFn(() => {
 watch(search, () => {
   debounceSearch();
 });
-
-console.log({ emojis });
 </script>
 
 <style lang="scss" module>

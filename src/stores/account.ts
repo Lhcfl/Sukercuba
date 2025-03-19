@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import * as Misskey from "misskey-js";
-import { SiteStore } from "./site-store";
 import type { MeDetailed, MetaLite } from "misskey-js/entities.js";
+import { createSiteStore } from "./site-store";
+import { createUserStore } from "./user-store";
 
 export const useAccount = defineStore(
   "account",
@@ -17,7 +18,8 @@ export const useAccount = defineStore(
     const token = ref("");
     const site = ref("");
 
-    const siteStore = computed(() => new SiteStore(site.value));
+    const accountStore = computed(() => createUserStore(token.value));
+    const siteStore = computed(() => createSiteStore(site.value));
 
     const api = computed(
       () =>
@@ -80,6 +82,7 @@ export const useAccount = defineStore(
       siteStore,
       api,
       streamApi,
+      accountStore,
       apiGet: misskeyApiGet,
     };
   },
