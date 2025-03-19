@@ -10,6 +10,11 @@
     :note="notification.note"
     new-fetch
   />
+  <MkNotificationFollow
+    v-else-if="notification.type === 'follow' || notification.type === 'receiveFollowRequest' || notification.type === 'followRequestAccepted'"
+    variant="flat"
+    :notification
+  />
   <VCard v-else>
     <VCardTitle>
       {{ notification.type }}

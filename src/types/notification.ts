@@ -8,7 +8,7 @@ export const NoteEventNotificationTypes = [
   "renote:grouped",
 ] as const;
 
-export type ExtractNotifications<T extends readonly string[]> = Extract<
+export type ExtractNotifications<T extends readonly Notification["type"][]> = Extract<
   Notification,
   { type: T[number] }
 >;

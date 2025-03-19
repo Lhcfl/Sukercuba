@@ -27,6 +27,7 @@ declare module 'vue' {
     MkNoteSub: typeof import('./components/MkNoteSub.vue')['default']
     MkNoteText: typeof import('./components/MkNoteText.vue')['default']
     MkNotification: typeof import('./components/MkNotification.vue')['default']
+    MkNotificationFollow: typeof import('./components/MkNotificationFollow.vue')['default']
     MkNotificationNoteEvent: typeof import('./components/MkNotificationNoteEvent.vue')['default']
     MkNotifications: typeof import('./components/MkNotifications.vue')['default']
     MkPostForm: typeof import('./components/MkPostForm.vue')['default']
