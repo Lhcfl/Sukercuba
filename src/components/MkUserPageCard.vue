@@ -48,9 +48,10 @@
               {{ followText }}
             </VBtn>
           </template>
-          <VBtn
-            icon="mdi-dots-horizontal"
-          />
+          <VBtn>
+            <VIcon icon="mdi-dots-vertical" />
+            <MkUserMenu :user />
+          </VBtn>
         </VBtnGroup>
       </VCardText>
     </VParallax>

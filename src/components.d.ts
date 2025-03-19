@@ -34,6 +34,7 @@ declare module 'vue' {
     MkTimeline: typeof import('./components/MkTimeline.vue')['default']
     MkTimelines: typeof import('./components/MkTimelines.vue')['default']
     MkUrl: typeof import('./components/MkUrl.vue')['default']
+    MkUserMenu: typeof import('./components/MkUserMenu.vue')['default']
     MkUserName: typeof import('./components/MkUserName.vue')['default']
     MkUserPageCard: typeof import('./components/MkUserPageCard.vue')['default']
     MkUserTimeline: typeof import('./components/MkUserTimeline.vue')['default']
