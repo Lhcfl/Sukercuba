@@ -34,6 +34,8 @@
       variant="tonal"
       :detailed="false"
       :never-collapse
+      hide-reactions
+      simple
     />
   </div>
 </template>

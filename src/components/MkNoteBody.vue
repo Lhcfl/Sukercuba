@@ -109,9 +109,6 @@ watch(noteTextRef, () => {
   position: sticky;
   bottom: 1em;
 }
-.cardText {
-  padding-bottom: 0;
-}
 .cwCardText {
   padding: 0;
   :global(.v-expansion-panel-text__wrapper) {

@@ -1,5 +1,9 @@
 <template>
-  <VTooltip :eager="false">
+  <VTooltip
+    v-model="showTip"
+    :eager="false"
+    :open-delay="1000"
+  >
     <template #activator="{ props: bind }">
       <VAvatar
         v-bind="bind"
@@ -25,9 +29,18 @@ const props = defineProps<{
   size?: string | number;
 }>();
 
+const showTip = ref(false);
+
+onDeactivated(() => {
+  showTip.value = false;
+});
+
 function routeToUser() {
-  router.push({ name: '/@[userhandle]', params: {
-    userhandle: acct.toString(props.user!)
-  }})
+  router.push({
+    name: "/@[userhandle]",
+    params: {
+      userhandle: acct.toString(props.user!),
+    },
+  });
 }
 </script>
