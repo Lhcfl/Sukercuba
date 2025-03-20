@@ -1,5 +1,5 @@
 <template>
-  <VTooltip>
+  <VTooltip :eager="false">
     <template #activator="{ props: bind }">
       <VAvatar
         v-bind="bind"
@@ -8,12 +8,10 @@
         @click.stop="routeToUser"
       />
     </template>
-    <VLazy>
-      <MkUserPageCard
-        v-if="user"
-        :user="user"
-      />
-    </VLazy>
+    <MkUserPageCard
+      v-if="user"
+      :user="user"
+    />
   </VTooltip>
 </template>
 

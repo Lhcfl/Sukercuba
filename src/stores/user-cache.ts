@@ -66,12 +66,12 @@ export const useUserCache = defineStore("user-cache", () => {
     } = {}
   ): Ref<CacheUserType | undefined> {
     const cached = getCacheByQuery(query);
-    fetchUser(
+    nextTick(() => fetchUser(
       query,
       cached.value == null ||
         params.fetch ||
         (!cached.value?.detailed && params.detailed)
-    );
+    ));
     return cached;
   }
 
