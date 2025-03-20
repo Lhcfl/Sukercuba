@@ -24,5 +24,5 @@ const [username, host] = route.params.userhandle.split("@") as [
 ];
 
 const userCache = useUserCache();
-const data = userCache.getCache({ username, host: host ?? null }, true, true);
+const data = userCache.getCache({ username, host: host ?? null }, { detailed: true, fetch: true });
 </script>

@@ -6,116 +6,174 @@ import { acct } from "misskey-js";
 import { isAPIError, type APIError } from "misskey-js/api.js";
 
 type CacheUserDetailed = {
-  error: false,
-  apiError?: APIError,
+  error: false;
+  apiError?: APIError;
   detailed: true;
   data: UserDetailed;
   cachedAt: Date;
 };
 type CacheUserLight = {
-  error: false,
-  apiError?: APIError,
+  error: false;
+  apiError?: APIError;
   detailed: false;
   data: User;
   cachedAt: Date;
 };
 type CachedUserError = {
-  error: true,
-  apiError?: APIError,
-  detailed: undefined,
-  data: undefined,
+  error: true;
+  apiError?: APIError;
+  detailed: undefined;
+  data: undefined;
   cachedAt: Date;
-}
+};
 
 type CacheUserType = CacheUserDetailed | CacheUserLight | CachedUserError;
 const CACHE_DURATION = 1000 * 60 * 60;
 
-type UserQuery =
-  | { id: string }
-  | { username: string; host: string | null };
+type isUserDetailed<T extends User> = T extends UserDetailed ? true : false;
+
+type UserQuery = { id: string } | { username: string; host: string | null };
+
+function debugLog(...args: unknown[]) {
+  if (import.meta.env.DEV) {
+    console.log(...args);
+  }
+}
 
 export const useUserCache = defineStore("user-cache", () => {
   const userCache = new Map<string, Ref<CacheUserType | undefined>>();
+  const isFetching = new Map<string, boolean>();
+
   const account = useAccount();
 
+  function getCacheKey(query: UserQuery) {
+    return "id" in query ? query.id : acct.toString(query);
+  }
+
   function getCacheByQuery(query: UserQuery): Ref<CacheUserType | undefined> {
-    const key = "id" in query ? query.id : acct.toString(query);
+    const key = getCacheKey(query);
     const r = userCache.has(key);
     if (!r) userCache.set(key, ref());
-    return userCache.get(key)!
+    return userCache.get(key)!;
   }
 
   function getCache(
     query: UserQuery,
-    detailed?: true,
-    forceUpdate?: true,
-  ): Ref<CacheUserDetailed | undefined>;
-  function getCache(
-    query: UserQuery,
-    detailed?: false
-  ): Ref<CacheUserLight | undefined>;
-  function getCache(
-    query: UserQuery,
-    detailed: boolean = false,
-    forceUpdate: boolean = false,
+    params: {
+      detailed?: boolean;
+      /** 无论如何都 fetch */
+      fetch?: boolean;
+    } = {}
   ): Ref<CacheUserType | undefined> {
     const cached = getCacheByQuery(query);
-    const now = new Date();
-    if (
-      forceUpdate ||
+    fetchUser(
+      query,
       cached.value == null ||
-      cached.value.error ||
-      (detailed && !cached.value.detailed) ||
-      (now.getTime() - cached.value.cachedAt.getTime() > CACHE_DURATION)
-    ) {
-      account.api
-        .request("users/show", "id" in query ? { userId: query.id } : query as { username: string; host: string | null })
-        .then((data) => {
-          cached.value = {
-            error: false,
-            detailed: true,
-            data,
-            cachedAt: now,
-          }
-        }).catch((err) => {
-          cached.value = {
-            error: true,
-            apiError: isAPIError(err) ? err : undefined,
-            detailed: undefined,
-            data: undefined,
-            cachedAt: now,
-          }
-        });
-    }
+        params.fetch ||
+        (!cached.value?.detailed && params.detailed)
+    );
     return cached;
   }
 
-  function cache(user: UserDetailed, fully?: true): Ref<CacheUserType>;
-  function cache(user: User, fully?: false): Ref<CacheUserType>;
-  function cache(user: User, fully: boolean = false): Ref<CacheUserType> {
+  async function fetchUser(query: UserQuery, force?: boolean) {
+    const cached = getCacheByQuery(query);
+    const now = new Date();
+
+    const key = getCacheKey(query);
+    if (isFetching.get(key)) {
+      return;
+    }
+
+    if (
+      force ||
+      cached.value == null ||
+      cached.value.error ||
+      now.getTime() - cached.value.cachedAt.getTime() > CACHE_DURATION
+    ) {
+      try {
+        debugLog("fetcing the user", query);
+        isFetching.set(key, true);
+        const data = await account.api.request(
+          "users/show",
+          "id" in query
+            ? { userId: query.id }
+            : (query as { username: string; host: string | null })
+        );
+
+        cached.value = {
+          error: false,
+          detailed: true,
+          data,
+          cachedAt: now,
+        };
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        cached.value = {
+          error: true,
+          apiError: isAPIError(err) ? err : undefined,
+          detailed: undefined,
+          data: undefined,
+          cachedAt: now,
+        };
+      } finally {
+        isFetching.delete(key);
+      }
+    }
+  }
+
+  function isDetailed(user: User): user is UserDetailed {
+    return (user as UserDetailed).fields != null;
+  }
+
+  function updateUser(ref: Ref<CacheUserType>, user: User) {
+    ref.value.data ??= user;
+    for (const k of Object.keys(user)) {
+      (ref.value.data as Record<string, unknown>)[k] = (
+        user as Record<string, unknown>
+      )[k];
+    }
+  }
+
+  function cache<U extends User, Updateable extends isUserDetailed<U>>(
+    user: U,
+    params: {
+      /** patch the user */
+      update?: Updateable;
+      /** get a detailed user if is a lite user */
+      detailed?: boolean;
+    } = {}
+  ): Ref<U extends UserDetailed ? CacheUserDetailed : CacheUserType> {
     const cached = getCacheByQuery(user);
     const now = new Date();
-    if (fully) {
+
+    debugLog("cache the user", user);
+
+    if (!isDetailed(user) && !cached.value?.detailed && params.detailed) {
+      fetchUser(user, true);
+    }
+    if (params.update) {
       cached.value = {
         error: false,
         detailed: true,
         data: user as UserDetailed,
         cachedAt: now,
-      }
+      };
     } else {
-      cached.value ??= {
-        error: false,
-        detailed: false,
-        data: user,
-        cachedAt: now,
-      };
-      cached.value.cachedAt = now;
-      cached.value.data = {
-        ...cached.value.data,
-        ...user,
-      };
+      if (cached.value == null) {
+        cached.value = {
+          error: false,
+          detailed: isDetailed(user),
+          data: user,
+          cachedAt: now,
+        } as CacheUserType;
+      } else {
+        cached.value.cachedAt = now;
+        updateUser(cached as Ref<CacheUserType>, user);
+      }
     }
-    return cached as Ref<CacheUserType>;
+
+    return cached as never;
   }
 
   return {

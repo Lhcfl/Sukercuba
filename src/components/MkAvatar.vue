@@ -1,14 +1,20 @@
 <template>
-  <VAvatar
-    v-if="!user"
-    :size
-  />
-  <VAvatar
-    v-else
-    :image="user.avatarUrl ?? undefined"
-    :size
-    @click.stop="routeToUser"
-  />
+  <VTooltip>
+    <template #activator="{ props: bind }">
+      <VAvatar
+        v-bind="bind"
+        :image="user?.avatarUrl ?? undefined"
+        :size
+        @click.stop="routeToUser"
+      />
+    </template>
+    <VLazy>
+      <MkUserPageCard
+        v-if="user"
+        :user="user"
+      />
+    </VLazy>
+  </VTooltip>
 </template>
 
 <script setup lang="ts">
@@ -17,7 +23,7 @@ import { acct } from "misskey-js";
 import type { User } from "misskey-js/entities.js";
 
 const props = defineProps<{
-  user?: User;
+  user: User;
   size?: string | number;
 }>();
 

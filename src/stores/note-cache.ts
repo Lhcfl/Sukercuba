@@ -177,7 +177,7 @@ export const useNoteCache = defineStore("note-cache", () => {
       /**
        * we can also cache the user for the note
        */
-      userCache.cache(note.user, false);
+      userCache.cache(note.user);
     }
 
     if (oldNote == null) {

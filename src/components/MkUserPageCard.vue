@@ -1,5 +1,8 @@
 <template>
-  <VCard :class="$style.main">
+  <VCard
+    :class="$style.main"
+    :loading
+  >
     <VParallax
       :src="user?.bannerUrl"
     >
@@ -50,7 +53,10 @@
           </template>
           <VBtn>
             <VIcon icon="mdi-dots-vertical" />
-            <MkUserMenu :user />
+            <MkUserMenu
+              v-if="detailedUser?.detailed"
+              :user="detailedUser.data"
+            />
           </VBtn>
         </VBtnGroup>
       </VCardText>
@@ -99,6 +105,8 @@
           :author="user"
         />
       </p>
+    </VCardText>
+    <VCardText v-if="Object.keys(user.fields ?? {}).length > 0">
       <VDivider />
       <div class="d-flex justify-space-evenly  mt-2">
         <VTable
@@ -151,17 +159,20 @@
 
 <script setup lang="ts">
 import { useAccount } from '@/stores/account';
-import type { UserDetailed } from 'misskey-js/entities.js';
+import { useUserCache } from '@/stores/user-cache';
+import type { User, UserDetailed } from 'misskey-js/entities.js';
 
 const props = defineProps<{
-  user: UserDetailed,
+  user: Partial<UserDetailed> & User,
 }>();
 
 const { t } = useI18n();
 const account = useAccount();
-
+const userCache = useUserCache();
+const detailedUser = userCache.cache(props.user, { detailed: true });
+const user = computed(() => detailedUser.value.detailed ? detailedUser.value.data : props.user);
+const loading = computed(() => !detailedUser.value.detailed);
 const isMe = computed(() => account.me?.id == props.user.id);
-
 const followText = computed(() => props.user.isLocked ? t('followRequest') : t('follow'));
 </script>
 

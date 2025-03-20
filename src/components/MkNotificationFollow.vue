@@ -39,7 +39,7 @@
       class="py-0"
     >
       <VBtn
-        v-if="user?.data.hasPendingFollowRequestFromYou"
+        v-if="userDetailed?.hasPendingFollowRequestFromYou"
         class="bg-primary"
         prepend-icon="mdi-clock-outline"
         :text="t('followRequestPending')"
@@ -62,7 +62,11 @@
         @click.stop="breakFollow"
       />
     </VCardActions>
-    <VCardText v-if="notification.type === 'followRequestAccepted' && notification.message">
+    <VCardText
+      v-if="
+        notification.type === 'followRequestAccepted' && notification.message
+      "
+    >
       <VAlert
         class="text-secondary"
         density="compact"
@@ -95,9 +99,14 @@ const props = defineProps<{
 const { t } = useI18n();
 
 const account = useAccount();
-const userCache = useUserCache();
-userCache.cache(props.notification.user, false);
-const user = userCache.getCache(props.notification.user, true);
+const userCache = useUserCache().cache(props.notification.user, {
+  detailed: true,
+});
+const userDetailed = computed(() =>
+  userCache.value.detailed
+    ? userCache.value.data
+    : undefined
+);
 
 const sendingFollow = ref(false);
 const sendingBreakFollow = ref(false);
@@ -117,16 +126,15 @@ const message = computed(
 
 const showAcceptRefuse = computed(() =>
   !rejected.value &&
-  props.notification.type === "receiveFollowRequest" &&
-  user.value?.detailed
-    ? !(user.value.data.isFollowed || user.value.data.isBlocking)
+  props.notification.type === "receiveFollowRequest"
+    ? !(userDetailed.value?.isFollowed || userDetailed.value?.isBlocking)
     : false
 );
 
 const showFollowBack = computed(() =>
-  user.value?.data.isFollowed &&  
-  props.notification.type === "follow" && user.value?.detailed
-    ? !(user.value.data.isFollowing)
+  userDetailed.value?.isFollowed &&
+  props.notification.type === "follow"
+    ? !userDetailed.value?.isFollowing
     : false
 );
 
@@ -143,7 +151,7 @@ async function follow() {
     await account.api.request("following/create", {
       userId: props.notification.userId,
     });
-    user.value!.data.isFollowing = true;
+    userDetailed.value!.isFollowing = true;
   } catch (err) {
     console.error(err);
   } finally {
@@ -156,7 +164,7 @@ async function accept() {
     await account.api.request("following/requests/accept", {
       userId: props.notification.userId,
     });
-    user.value!.data.isFollowed = true;
+    userDetailed.value!.isFollowed = true;
   } catch (err) {
     console.error(err);
   } finally {
@@ -181,7 +189,7 @@ async function breakFollow() {
     await account.api.request("following/invalidate", {
       userId: props.notification.userId,
     });
-    user.value!.data.isFollowed = false;
+    userDetailed.value!.isFollowed = false;
   } catch (err) {
     console.error(err);
   } finally {
@@ -194,7 +202,7 @@ async function cancelFollowRequest() {
     await account.api.request("following/requests/cancel", {
       userId: props.notification.userId,
     });
-    user.value!.data.hasPendingFollowRequestFromYou = false;
+    userDetailed.value!.hasPendingFollowRequestFromYou = false;
   } catch (err) {
     console.error(err);
   } finally {

@@ -2,7 +2,7 @@
   <VChip
     :to
     size="small"
-    :prepend-avatar="mentionUser?.data.avatarUrl ?? undefined"
+    :prepend-avatar="mentionUser?.data?.avatarUrl ?? undefined"
     @click.stop
   >
     <span>@{{ username }}</span><span v-if="host">@{{ host }}</span>
@@ -20,7 +20,7 @@ const props = defineProps<{
 }>();
 
 const userCache = useUserCache();
-const mentionUser = userCache.getCache({ username: props.username, host: props.host ?? null }, false)
+const mentionUser = userCache.getCache({ username: props.username, host: props.host ?? null });
 
 const to = computed(() => (props.noNavigate ? undefined : {
   name: '/@[userhandle]' as const,
