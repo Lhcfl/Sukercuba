@@ -2,8 +2,10 @@
   <VCard
     :class="$style.main"
     :loading
+    :width
   >
     <VParallax
+      :class="$style.parallax"
       :src="user?.bannerUrl"
     >
       <VCardText class="d-flex h-100 justify-space-between justify-end">
@@ -164,6 +166,7 @@ import type { User, UserDetailed } from 'misskey-js/entities.js';
 
 const props = defineProps<{
   user: Partial<UserDetailed> & User,
+  width?: number,
 }>();
 
 const { t } = useI18n();
@@ -174,11 +177,15 @@ const user = computed(() => detailedUser.value.detailed ? detailedUser.value.dat
 const loading = computed(() => !detailedUser.value.detailed);
 const isMe = computed(() => account.me?.id == props.user.id);
 const followText = computed(() => props.user.isLocked ? t('followRequest') : t('follow'));
+const parallaxMaxH = computed(() => (props.width ? props.width * 0.6 : 500) + 'px');
 </script>
 
 
 <style lang="scss" module>
 .main {
+  .parallax {
+    max-height: v-bind("parallaxMaxH");
+  }
   .avatarContainer {
     margin-top: -80px;
     display: flex;

@@ -2,7 +2,9 @@
   <VTooltip
     v-model="showTip"
     :eager="false"
-    :open-delay="1000"
+    :open-delay="600"
+    :close-delay="1000"
+    :content-class="['pa-0', 'elevation-4', $style.tooltipUserCard]"
   >
     <template #activator="{ props: bind }">
       <VAvatar
@@ -15,6 +17,8 @@
     <MkUserPageCard
       v-if="user"
       :user="user"
+      :width="400"
+      variant="flat"
     />
   </VTooltip>
 </template>
@@ -44,3 +48,10 @@ function routeToUser() {
   });
 }
 </script>
+
+<style lang="scss" module>
+.tooltipUserCard {
+  max-height: 600px;
+  overflow-y: auto;
+}
+</style>
