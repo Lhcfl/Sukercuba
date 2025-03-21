@@ -84,6 +84,7 @@
 <script lang="ts" setup>
 import router from "@/router";
 import { useAccount } from "@/stores/account";
+import { usePopupMessage } from "@/stores/popup-message";
 import { useUserCache } from "@/stores/user-cache";
 import type { ExtractNotifications } from "@/types/notification";
 import { acct } from "misskey-js";
@@ -103,9 +104,7 @@ const userCache = useUserCache().cache(props.notification.user, {
   detailed: true,
 });
 const userDetailed = computed(() =>
-  userCache.value.detailed
-    ? userCache.value.data
-    : undefined
+  userCache.value.detailed ? userCache.value.data : undefined
 );
 
 const sendingFollow = ref(false);
@@ -125,15 +124,13 @@ const message = computed(
 );
 
 const showAcceptRefuse = computed(() =>
-  !rejected.value &&
-  props.notification.type === "receiveFollowRequest"
+  !rejected.value && props.notification.type === "receiveFollowRequest"
     ? !(userDetailed.value?.isFollowed || userDetailed.value?.isBlocking)
     : false
 );
 
 const showFollowBack = computed(() =>
-  userDetailed.value?.isFollowed &&
-  props.notification.type === "follow"
+  userDetailed.value?.isFollowed && props.notification.type === "follow"
     ? !userDetailed.value?.isFollowing
     : false
 );
@@ -154,6 +151,10 @@ async function follow() {
     userDetailed.value!.isFollowing = true;
   } catch (err) {
     console.error(err);
+    usePopupMessage().push({
+      type: "error",
+      message: (err as { message: string }).message,
+    });
   } finally {
     sendingFollow.value = false;
   }
@@ -167,6 +168,10 @@ async function accept() {
     userDetailed.value!.isFollowed = true;
   } catch (err) {
     console.error(err);
+    usePopupMessage().push({
+      type: "error",
+      message: (err as { message: string }).message,
+    });
   } finally {
     sendingAccept.value = false;
   }
@@ -179,6 +184,10 @@ async function reject() {
     });
   } catch (err) {
     console.error(err);
+    usePopupMessage().push({
+      type: "error",
+      message: (err as { message: string }).message,
+    });
   } finally {
     sendingReject.value = false;
   }
@@ -192,6 +201,10 @@ async function breakFollow() {
     userDetailed.value!.isFollowed = false;
   } catch (err) {
     console.error(err);
+    usePopupMessage().push({
+      type: "error",
+      message: (err as { message: string }).message,
+    });
   } finally {
     sendingBreakFollow.value = false;
   }
@@ -205,6 +218,10 @@ async function cancelFollowRequest() {
     userDetailed.value!.hasPendingFollowRequestFromYou = false;
   } catch (err) {
     console.error(err);
+    usePopupMessage().push({
+      type: "error",
+      message: (err as { message: string }).message,
+    });
   } finally {
     sendingCancelFollowRequest.value = false;
   }

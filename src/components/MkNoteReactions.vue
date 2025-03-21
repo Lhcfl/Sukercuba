@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import { useAccount } from '@/stores/account';
+import { usePopupMessage } from '@/stores/popup-message';
 import type { Note } from 'misskey-js/entities.js';
 const props = defineProps<{
   note: Note,
@@ -58,6 +59,7 @@ async function react(reaction: string) {
     });
   } catch (err) {
     console.error(err);
+    usePopupMessage().push({ type: "error", message: (err as { message: string }).message });
   } finally {
     reacting.value = undefined;
   }
@@ -71,6 +73,7 @@ async function undoReact() {
     });
   } catch (err) {
     console.error(err);
+    usePopupMessage().push({ type: "error", message: (err as { message: string }).message });
   } finally {
     reacting.value = undefined;
   }

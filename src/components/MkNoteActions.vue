@@ -156,6 +156,8 @@
 import router from "@/router";
 import { useAccount } from "@/stores/account";
 import type { NoteWithExtension } from "@/stores/note-cache";
+import { usePopupMessage } from "@/stores/popup-message";
+import { isAPIError } from "misskey-js/api.js";
 import type { EmojiSimple } from "misskey-js/entities.js";
 
 const props = defineProps<{
@@ -168,6 +170,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const account = useAccount();
+const popupMessages = usePopupMessage();
 const renoting = ref(false);
 const reacting = ref(false);
 const posting = ref<"reply" | "quote" | "edit" | null>(null);
@@ -176,6 +179,18 @@ const showMenu = ref(false);
 const showEmojiPicker = ref(false);
 
 const isMyNote = computed(() => props.note.userId === account.me?.id);
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function popupError(err: any) {
+  console.error(err);
+  if (isAPIError(err)) {
+    popupMessages.push({ type:"error", "message": err.message });
+  } else {
+    if (err instanceof Error) {
+      popupMessages.push({ type:"error", "message": err.message });
+    }
+  }
+}
 
 async function renoteOrCancel() {
   try {
@@ -186,7 +201,7 @@ async function renoteOrCancel() {
       await account.api.request("notes/create", { renoteId: props.note.id });
     }
   } catch (err) {
-    console.error(err);
+    popupError(err);
   } finally {
     renoting.value = false;
   }
@@ -202,7 +217,7 @@ async function react(emoji?: EmojiSimple) {
       reaction,
     });
   } catch (err) {
-    console.error(err);
+    popupError(err);
   } finally {
     reacting.value = false;
   }
@@ -215,7 +230,7 @@ async function undoReact() {
       noteId: props.note.id,
     });
   } catch (err) {
-    console.error(err);
+    popupError(err);
   } finally {
     reacting.value = false;
   }
@@ -228,7 +243,7 @@ async function deleteNote() {
       noteId: props.note.id,
     });
   } catch (err) {
-    console.error(err);
+    popupError(err);
   } finally {
     deleting.value = false;
   }

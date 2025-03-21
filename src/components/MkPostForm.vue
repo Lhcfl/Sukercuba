@@ -128,6 +128,8 @@
 import { useAccount } from "@/stores/account";
 import { useDraft } from "@/stores/draft";
 import type { NoteWithExtension } from "@/stores/note-cache";
+import { usePopupMessage } from "@/stores/popup-message";
+import { isAPIError } from "misskey-js/api.js";
 import type { EmojiSimple, NotesCreateRequest } from "misskey-js/entities.js";
 import type { VCard } from "vuetify/components";
 
@@ -166,6 +168,7 @@ const draft = computed(() =>
 const textRef = useTemplateRef("textRef");
 const loading = ref(false);
 const randomPlaceHolder = ref("abcdef"[Math.floor(Math.random() * 6)]);
+const popupMessages = usePopupMessage();
 
 const sendbtn = computed(() =>
   props.edit
@@ -211,8 +214,16 @@ async function submit() {
       // Clean draft
       draft.value.text = "";
     }
-  } catch (err) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err : any) {
     console.error(err);
+    if (isAPIError(err)) {
+      popupMessages.push({ type:"error", "message": err.message });
+    } else {
+      if (err instanceof Error) {
+        popupMessages.push({ type:"error", "message": err.message });
+      }
+    }
   } finally {
     loading.value = false;
   }

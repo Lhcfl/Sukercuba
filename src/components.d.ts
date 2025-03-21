@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppPopupMessageContainer: typeof import('./components/AppPopupMessageContainer.vue')['default']
     AppSidebar: typeof import('./components/AppSidebar.vue')['default']
     MkAnyEmoji: typeof import('./components/MkAnyEmoji.vue')['default']
     MkAvatar: typeof import('./components/MkAvatar.vue')['default']
