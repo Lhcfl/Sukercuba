@@ -16,7 +16,7 @@ import { useAccount } from "@/stores/account";
 import type { NoteWithExtension } from "@/stores/note-cache";
 
 const props = defineProps<{
-  instance: NoteWithExtension["user"]["instance"];
+  instance?: NoteWithExtension["user"]["instance"];
 }>();
 
 const account = useAccount();
