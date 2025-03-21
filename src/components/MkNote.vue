@@ -28,6 +28,7 @@
     />
     <VCardText
       v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0"
+      class="py-0"
     >
       <MkNoteReactions :note="appearNote" />
     </VCardText>

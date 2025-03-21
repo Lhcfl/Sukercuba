@@ -2,8 +2,20 @@
   <VNavigationDrawer>
     <VList nav>
       <VListItem
-        title="Sukerkuba"
+        :title="t('home')"
         :to="{ name: '/' }"
+      />
+      <VListItem
+        :title="t('followRequests')"
+      />
+      <VListItem
+        :title="t('search')"
+      />
+      <VListItem
+        :title="t('favorites')"
+      />
+      <VListItem
+        :title="t('clips')"
       />
       <VListItem
         :title="t('login')"
