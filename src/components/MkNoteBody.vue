@@ -62,13 +62,13 @@
   </VCardText>
 </template>
 <script setup lang="ts">
+import type { NoteWithExtension } from '@/stores/note-cache';
 import { useResizeObserver } from '@vueuse/core';
-import type { Note } from 'misskey-js/entities.js';
 
 const { t } = useI18n();
 
 defineProps<{
-  note: Note;
+  note: NoteWithExtension;
   detailed?: boolean;
   simple?: boolean;
   /** 防止subnote也被折叠 */

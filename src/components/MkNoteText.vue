@@ -46,10 +46,10 @@
 </template>
 <script setup lang="ts">
 import router from "@/router";
-import type { Note } from "misskey-js/entities.js";
+import type { NoteWithExtension } from "@/stores/note-cache";
 
 defineProps<{
-  note: Note;
+  note: NoteWithExtension;
   simple?: boolean;
   neverCollapse?: boolean;
 }>();
