@@ -33,6 +33,7 @@ declare module 'vue' {
     MkNotificationFollow: typeof import('./components/MkNotificationFollow.vue')['default']
     MkNotificationNoteEvent: typeof import('./components/MkNotificationNoteEvent.vue')['default']
     MkNotifications: typeof import('./components/MkNotifications.vue')['default']
+    MkPollEditor: typeof import('./components/MkPollEditor.vue')['default']
     MkPostForm: typeof import('./components/MkPostForm.vue')['default']
     MkTime: typeof import('./components/MkTime.vue')['default']
     MkTimeline: typeof import('./components/MkTimeline.vue')['default']

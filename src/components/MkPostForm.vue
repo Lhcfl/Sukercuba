@@ -70,6 +70,10 @@
         </template>
       </VCombobox>
     </VCardText>
+    <MkPollEditor
+      v-if="draft.showPoll"
+      v-model="draft.poll"
+    />
     <VCardText v-if="draft.showPreview">
       <p v-if="draft.computedCw">
         <MkMfm :text="draft.computedCw" />
@@ -82,7 +86,11 @@
     <VCardActions class="d-flex justify-space-between">
       <div>
         <VBtn icon="mdi-image-outline" />
-        <VBtn icon="mdi-poll" />
+        <VBtn
+          icon="mdi-poll"
+          :color="draft.showPoll ? 'primary' : undefined"
+          @click.stop="draft.showPoll = !draft.showPoll"
+        />
         <VBtn
           icon="mdi-eye-off-outline"
           :color="draft.showCw ? 'primary' : undefined"
@@ -193,6 +201,7 @@ async function submit() {
       renoteId: props.quoteId,
       visibility: draft.value.visibility,
       localOnly: draft.value.localOnly,
+      poll: draft.value.showPoll ? draft.value.poll : undefined,
     };
 
     if (props.edit) {
@@ -213,6 +222,7 @@ async function submit() {
     } else {
       // Clean draft
       draft.value.text = "";
+      draft.value.poll = { choices: [] };
     }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err : any) {

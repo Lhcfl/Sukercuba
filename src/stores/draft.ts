@@ -1,6 +1,13 @@
 import { defineStore } from "pinia";
 import type { NoteWithExtension } from "./note-cache";
 
+export type DraftPoll = {
+  choices: string[];
+  multiple?: boolean;
+  expiresAt?: number | null;
+  expiredAfter?: number | null;
+};
+
 export function useDraft(opts: {
   id?: string,
   replyId?: string,
@@ -33,10 +40,12 @@ export function useDraft(opts: {
     const appendTags = ref<string[]>([]);
     const visibility = ref<NoteWithExtension["visibility"]>("public");
     const localOnly = ref(false);
+    const poll = ref<DraftPoll>({ choices: [], expiredAfter: 3 * 86400 * 1000 });
 
     const showCw = ref(!!cw.value);
     const showTags = ref(false);
     const showPreview = ref(false);
+    const showPoll = ref(false);
 
     const computedCw = computed(() => showCw.value ? cw.value : undefined);
     const computedTags = computed(() => showTags.value ? appendTags.value : []);
@@ -61,6 +70,8 @@ export function useDraft(opts: {
       showCw,
       showTags,
       showPreview,
+      showPoll,
+      poll,
       text,
       cw,
       localOnly,
