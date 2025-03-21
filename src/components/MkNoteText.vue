@@ -23,6 +23,11 @@
       />
       <span v-if="note.isHidden">({{ t('private') }})</span>
     </p>
+    <MkNotePoll
+      v-if="note.poll"
+      :note
+      :poll="note.poll"
+    />
     <MkGallery
       v-if="note.files"
       :images="note.files"

@@ -188,15 +188,18 @@ const sendbtn = computed(() =>
     : { icon: "mdi-send-outline", text: t("send") }
 );
 
-const submitDisabled = computed(() => !draft.value.computedText);
+const submitDisabled = computed(() => 
+  !draft.value.computedText &&
+  !draft.value.pollAvailable
+);
 
 async function submit() {
   try {
     loading.value = true;
-
+    draft.value.poll.choices = draft.value.poll.choices.filter(x => x);
     const req: NotesCreateRequest = {
-      text: draft.value.computedText,
-      cw: draft.value.computedCw,
+      text: draft.value.computedText || null,
+      cw: draft.value.computedCw || null,
       replyId: props.replyId,
       renoteId: props.quoteId,
       visibility: draft.value.visibility,

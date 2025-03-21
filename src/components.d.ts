@@ -24,6 +24,7 @@ declare module 'vue' {
     MkNoteActions: typeof import('./components/MkNoteActions.vue')['default']
     MkNoteBody: typeof import('./components/MkNoteBody.vue')['default']
     MkNoteHeader: typeof import('./components/MkNoteHeader.vue')['default']
+    MkNotePoll: typeof import('./components/MkNotePoll.vue')['default']
     MkNoteReactions: typeof import('./components/MkNoteReactions.vue')['default']
     MkNoteRenoteBar: typeof import('./components/MkNoteRenoteBar.vue')['default']
     MkNotesList: typeof import('./components/MkNotesList.vue')['default']

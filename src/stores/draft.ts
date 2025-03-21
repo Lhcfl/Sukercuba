@@ -61,6 +61,7 @@ export function useDraft(opts: {
       }
       return ret;
     })
+    const pollAvailable = computed(() => showPoll.value && poll.value.choices.length >= 2)
 
     function remove() {
       localStorage.removeItem(storeId);
@@ -80,6 +81,7 @@ export function useDraft(opts: {
       computedCw,
       computedTags,
       computedText,
+      pollAvailable,
       remove,
       storeId,
     }
