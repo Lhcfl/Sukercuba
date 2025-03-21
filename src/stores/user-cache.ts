@@ -4,6 +4,7 @@ import type { Ref } from "vue";
 import { useAccount } from "./account";
 import { acct } from "misskey-js";
 import { isAPIError, type APIError } from "misskey-js/api.js";
+import { usePopupMessage } from "./popup-message";
 
 type CachedUserDetailed = {
   error: false;
@@ -213,3 +214,117 @@ export const useUserCache = defineStore("user-cache", () => {
     patchUser,
   };
 });
+
+export class UserApi {
+  account: ReturnType<typeof useAccount>;
+  userCache: ReturnType<typeof useUserCache>;
+  user: User;
+
+  constructor(user: User) {
+    this.account = useAccount();
+    this.userCache = useUserCache();
+    this.user = user;
+  }
+
+  handleRequestError(err: unknown) {
+    console.error(err);
+    usePopupMessage().push({
+      type: "error",
+      message: (err as { message: string }).message,
+    });
+  }
+
+  async follow(ing: Ref<boolean>) {
+    ing.value = true;
+    try {
+      await this.account.api.request("following/create", {
+        userId: this.user.id,
+      });
+      this.userCache.getCache(this.user, { fetch: true });
+    } catch (err) {
+      this.handleRequestError(err);
+    } finally {
+      ing.value = false;
+    }
+  }
+  
+  async accept(ing: Ref<boolean>) {
+    ing.value = true;
+    try {
+      await this.account.api.request("following/requests/accept", {
+        userId: this.user.id,
+      });
+      this.userCache.patchUser(this.user.id, { isFollowed: true, hasPendingFollowRequestToYou: false });
+    } catch (err) {
+      this.handleRequestError(err)
+    } finally {
+      ing.value = false;
+    }
+  }
+  async reject(ing: Ref<boolean>) {
+    ing.value = true;
+    try {
+      await this.account.api.request("following/requests/reject", {
+        userId: this.user.id,
+      });
+      this.userCache.patchUser(this.user.id, { hasPendingFollowRequestToYou: false });
+    } catch (err) {
+      this.handleRequestError(err);
+    } finally {
+      ing.value = false;
+    }
+  }
+  async cancelFollowRequest(ing: Ref<boolean>) {
+    ing.value = true;
+    try {
+      await this.account.api.request("following/requests/cancel", {
+        userId: this.user.id,
+      });
+      this.userCache.patchUser(this.user.id, { hasPendingFollowRequestFromYou: false });
+    } catch (err) {
+      this.handleRequestError(err);
+    } finally {
+      ing.value = false;
+    }
+  }
+  async unfollow(ing: Ref<boolean>) {
+    ing.value = true;
+    try {
+      await this.account.api.request("following/delete", {
+        userId: this.user.id,
+      });
+      this.userCache.patchUser(this.user.id, { isFollowing: false });
+    } catch (err) {
+      this.handleRequestError(err);
+    } finally {
+      ing.value = false;
+    }
+  }
+  async unblock(ing: Ref<boolean>) {
+    ing.value = true;
+    try {
+      await this.account.api.request("blocking/delete", {
+        userId: this.user.id,
+      });
+      this.userCache.patchUser(this.user.id, { isBlocking: false });
+    } catch (err) {
+      this.handleRequestError(err);
+    } finally {
+      ing.value = false;
+    }
+  }
+
+  async breakFollow(ing: Ref<boolean>) {
+    ing.value = true;
+    try {
+      await this.account.api.request("following/invalidate", {
+        userId: this.user.id,
+      });
+      this.userCache.patchUser(this.user.id, { isFollowed: false });
+    } catch (err) {
+      this.handleRequestError(err);
+    } finally {
+      ing.value = false;
+    }
+  }
+}

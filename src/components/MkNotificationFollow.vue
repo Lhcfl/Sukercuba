@@ -83,9 +83,7 @@
 
 <script lang="ts" setup>
 import router from "@/router";
-import { useAccount } from "@/stores/account";
-import { usePopupMessage } from "@/stores/popup-message";
-import { useUserCache } from "@/stores/user-cache";
+import { UserApi, useUserCache } from "@/stores/user-cache";
 import type { ExtractNotifications } from "@/types/notification";
 import { acct } from "misskey-js";
 import type { VCard } from "vuetify/components";
@@ -98,9 +96,6 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
-
-const account = useAccount();
-const userCache = useUserCache();
 const cached = useUserCache().cache(props.notification.user, {
   detailed: true,
 });
@@ -143,95 +138,12 @@ function routeToUser() {
   });
 }
 
-async function follow() {
-  sendingFollow.value = true;
-  try {
-    await account.api.request("following/create", {
-      userId: props.notification.userId,
-    });
-    userCache.getCache(props.notification.user, { fetch: true });
-  } catch (err) {
-    console.error(err);
-    usePopupMessage().push({
-      type: "error",
-      message: (err as { message: string }).message,
-    });
-  } finally {
-    sendingFollow.value = false;
-  }
-}
-async function accept() {
-  sendingAccept.value = true;
-  try {
-    await account.api.request("following/requests/accept", {
-      userId: props.notification.userId,
-    });
-    userCache.patchUser(props.notification.userId, { isFollowed: true });
-  } catch (err) {
-    console.error(err);
-    usePopupMessage().push({
-      type: "error",
-      message: (err as { message: string }).message,
-    });
-  } finally {
-    sendingAccept.value = false;
-  }
-}
-async function reject() {
-  sendingReject.value = true;
-  try {
-    await account.api.request("following/requests/reject", {
-      userId: props.notification.userId,
-    });
-    userCache.patchUser(props.notification.userId, {
-      hasPendingFollowRequestToYou: false,
-    });
-  } catch (err) {
-    console.error(err);
-    usePopupMessage().push({
-      type: "error",
-      message: (err as { message: string }).message,
-    });
-  } finally {
-    sendingReject.value = false;
-  }
-}
-async function breakFollow() {
-  sendingBreakFollow.value = true;
-  try {
-    await account.api.request("following/invalidate", {
-      userId: props.notification.userId,
-    });
-    userCache.patchUser(props.notification.userId, { isFollowed: false });
-  } catch (err) {
-    console.error(err);
-    usePopupMessage().push({
-      type: "error",
-      message: (err as { message: string }).message,
-    });
-  } finally {
-    sendingBreakFollow.value = false;
-  }
-}
-async function cancelFollowRequest() {
-  sendingCancelFollowRequest.value = true;
-  try {
-    await account.api.request("following/requests/cancel", {
-      userId: props.notification.userId,
-    });
-    userCache.patchUser(props.notification.userId, {
-      hasPendingFollowRequestFromYou: false,
-    });
-  } catch (err) {
-    console.error(err);
-    usePopupMessage().push({
-      type: "error",
-      message: (err as { message: string }).message,
-    });
-  } finally {
-    sendingCancelFollowRequest.value = false;
-  }
-}
+const userApi = computed(() => new UserApi(props.notification.user));
+const accept = () => userApi.value.accept(sendingAccept);
+const reject = () => userApi.value.reject(sendingReject);
+const follow = () => userApi.value.follow(sendingFollow);
+const cancelFollowRequest = () => userApi.value.cancelFollowRequest(sendingCancelFollowRequest);
+const breakFollow = () => userApi.value.breakFollow(sendingBreakFollow);
 </script>
 
 <style lang="scss" module>

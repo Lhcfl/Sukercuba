@@ -196,8 +196,7 @@
 
 <script setup lang="ts">
 import { useAccount } from '@/stores/account';
-import { usePopupMessage } from '@/stores/popup-message';
-import { useUserCache } from '@/stores/user-cache';
+import { UserApi, useUserCache } from '@/stores/user-cache';
 import type { User, UserDetailed } from 'misskey-js/entities.js';
 
 const props = defineProps<{
@@ -217,96 +216,14 @@ const parallaxMaxH = computed(() => (props.width ? props.width * 0.6 : 500) + 'p
 const followLoading = ref(false);
 const sendingAccept = ref(false);
 const sendingReject = ref(false);
+const userApi = computed(() => new UserApi(props.user));
 
-function handleRequestError(err: unknown) {
-  console.error(err);
-  usePopupMessage().push({
-    type: "error",
-    message: (err as { message: string }).message,
-  });
-}
-
-async function follow() {
-  followLoading.value = true;
-  try {
-    await account.api.request("following/create", {
-      userId: props.user.id,
-    });
-    userCache.getCache(props.user, { fetch: true });
-  } catch (err) {
-    handleRequestError(err);
-  } finally {
-    followLoading.value = false;
-  }
-}
-
-async function accept() {
-  sendingAccept.value = true;
-  try {
-    await account.api.request("following/requests/accept", {
-      userId: props.user.id,
-    });
-    userCache.patchUser(props.user.id, { isFollowed: true, hasPendingFollowRequestFromYou: false });
-  } catch (err) {
-    handleRequestError(err)
-  } finally {
-    sendingAccept.value = false;
-  }
-}
-async function reject() {
-  sendingReject.value = true;
-  try {
-    await account.api.request("following/requests/reject", {
-      userId: props.user.id,
-    });
-    userCache.patchUser(props.user.id, { hasPendingFollowRequestToYou: false });
-  } catch (err) {
-    handleRequestError(err);
-  } finally {
-    sendingReject.value = false;
-  }
-}
-async function cancelFollowRequest() {
-  followLoading.value = true;
-  try {
-    await account.api.request("following/requests/cancel", {
-      userId: props.user.id,
-    });
-    userCache.patchUser(props.user.id, { hasPendingFollowRequestFromYou: false });
-  } catch (err) {
-    handleRequestError(err);
-  } finally {
-    followLoading.value = false;
-  }
-}
-async function unfollow() {
-  followLoading.value = true;
-  try {
-    await account.api.request("following/delete", {
-      userId: props.user.id,
-    });
-    userCache.patchUser(props.user.id, { isFollowing: false });
-  } catch (err) {
-    console.error(err);
-    handleRequestError(err);
-  } finally {
-    followLoading.value = false;
-  }
-}
-async function unblock() {
-  followLoading.value = true;
-  try {
-    await account.api.request("blocking/delete", {
-      userId: props.user.id,
-    });
-    userCache.patchUser(props.user.id, { isBlocking: false });
-  } catch (err) {
-    console.error(err);
-    handleRequestError(err);
-  } finally {
-    followLoading.value = false;
-  }
-}
+const accept = () => userApi.value.accept(sendingAccept);
+const reject = () => userApi.value.reject(sendingReject);
+const unblock = () => userApi.value.unblock(followLoading);
+const unfollow = () => userApi.value.unfollow(followLoading);
+const follow = () => userApi.value.follow(followLoading);
+const cancelFollowRequest = () => userApi.value.cancelFollowRequest(followLoading);
 </script>
 
 
