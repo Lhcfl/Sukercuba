@@ -1,28 +1,24 @@
 <template>
-  <VChipGroup
-    v-model="myReaction"
-    selected-class="text-primary"
-    column
-  >
-    <VChip
+  <VItemGroup>
+    <VBtn
       v-for="[reaction, count] in reactions"
       :key="reaction"
       :value="reaction"
-      @click.stop
+      :loading="reacting == reaction"
+      :color="myReaction == reaction ? 'primary' : undefined"
+      variant="tonal"
+      rounded
+      @click.stop="myReaction == reaction ? undoReact() : react(reaction)"
     >
       <MkAnyEmoji
         :name="reaction"
         :urls="emojiUrls"
       />
-      <VProgressCircular
-        v-if="reacting == reaction"
-        indeterminate
-      />
-      <span v-else>
+      <span>
         {{ count }}
       </span>
-    </VChip>
-  </VChipGroup>
+    </VBtn>
+  </VItemGroup>
 </template>
 
 <script setup lang="ts">
@@ -37,18 +33,7 @@ const account = useAccount();
 const reactions = computed(() => Object.entries(props.note.reactions));
 const emojiUrls = computed(() => props.note.reactionEmojis ?? {});
 const reacting = ref<string | null>();
-
-const myReaction = computed({
-  get: () => props.note.myReaction,
-  set: (v?: string) => {
-    if (v == null) {
-      undoReact()
-    } else {
-      react(v);
-    }
-    console.log(v);
-  }
-})
+const myReaction = computed(() => props.note.myReaction)
 
 async function react(reaction: string) {
   try {
