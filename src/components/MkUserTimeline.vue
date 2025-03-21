@@ -1,22 +1,8 @@
 <template>
-  <VInfiniteScroll
-    class="overflow-y-visible"
-    @load="load"
-  >
-    <TransitionGroup name="note">
-      <div
-        v-for="note in computedNotes"
-        :key="note.id"
-      >
-        <MkNote
-          :note
-          variant="flat"
-          tile
-        />
-        <VDivider />
-      </div>
-    </TransitionGroup>
-  </VInfiniteScroll>
+  <MkNotesList
+    v-model="notes"
+    :next="load"
+  />
 </template>
 <script lang="ts" setup>
 import { useAccount } from "@/stores/account";
@@ -24,7 +10,7 @@ import { useNoteCache, type NoteWithExtension } from "@/stores/note-cache";
 
 const props = withDefaults(
   defineProps<{
-    userId: string,
+    userId: string;
     withRenotes?: boolean;
     withReplies?: boolean;
     withFiles?: boolean;
@@ -41,7 +27,6 @@ const props = withDefaults(
 const account = useAccount();
 const noteCache = useNoteCache();
 const notes = ref<NoteWithExtension[]>([]);
-const computedNotes = computed(() => notes.value.filter(x => !x.isDeleted));
 
 onMounted(() => {
   const connection = account.streamApi.useChannel("homeTimeline", {
@@ -64,24 +49,18 @@ watch(props, () => {
   notes.value = [];
 });
 
-async function load(context: { done: (stat: "ok" | "error" | "empty") => void }) {
-  try {
-    const params = {
-      untilId: notes.value.at(-1)?.id,
-      userId: props.userId,
-      withFiles: props.withFiles,
-      withRenotes: props.withRenotes,
-      withReplies: props.withReplies,
-      withChannelNotes: props.withChannelNotes,
-    };
+async function load(notes: NoteWithExtension[]) {
+  const params = {
+    untilId: notes.at(-1)?.id,
+    userId: props.userId,
+    withFiles: props.withFiles,
+    withRenotes: props.withRenotes,
+    withReplies: props.withReplies,
+    withChannelNotes: props.withChannelNotes,
+    limit: 50,
+  };
 
-    const res = await account.api.request("users/notes", params);
-    const cachedRes = res.map(note => noteCache.cached(note, true).value);
-
-    notes.value.push(...cachedRes);
-    context.done(cachedRes.length === 0 ? "empty" : "ok");
-  } catch {
-    context.done("error");
-  }
+  const res = await account.api.request("users/notes", params);
+  return res.map((note) => noteCache.cached(note, true).value);
 }
 </script>

@@ -16,6 +16,7 @@ import MkMention from "./MkMention.vue";
 import MkCode from "./MkCode.vue";
 import MkCustomEmoji from "./MkCustomEmoji.vue";
 import MkEmoji from "./MkEmoji.vue";
+import MkHashtag from "./MkHashtag.vue";
 
 function safeParseFloat(str: unknown): number | null {
   if (typeof str !== "string" || str === "") return null;
@@ -60,7 +61,7 @@ const props = withDefaults(defineProps<MfmProps>(), {
   rootScale: undefined,
   nyaize: "respect",
   parsedNodes: undefined,
-  linkNavigationBehavior: undefined
+  linkNavigationBehavior: undefined,
 });
 const emit = defineEmits<{
   clickEv: [clickEv: string];
@@ -666,30 +667,15 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
         }
 
         case "hashtag": {
-          if (props.stpvInline) {
-            return [
-              h(
-                "span",
-                { style: "color:var(--hashtag);" },
-                `#${token.props.hashtag}`
-              ),
-            ];
-          }
           return [
             h(
               "bdi",
-              h(
-                MkUrl,
-                {
-                  key: Math.random(),
-                  url: props.isNote
-                    ? `/tags/${encodeURIComponent(token.props.hashtag)}`
-                    : `/user-tags/${encodeURIComponent(token.props.hashtag)}`,
-                  style: "color:var(--MI_THEME-hashtag);",
-                  behavior: props.linkNavigationBehavior,
-                },
-                `#${token.props.hashtag}`
-              )
+              h(MkHashtag, {
+                key: Math.random(),
+                tag: token.props.hashtag,
+                kind: props.isNote ? "note" : "user",
+                noNavigate: props.stpvInline,
+              })
             ),
           ];
         }

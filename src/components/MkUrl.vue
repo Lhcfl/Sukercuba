@@ -3,6 +3,7 @@
     v-if="selfSite"
     :class="$style.url"
     :to="url"
+    @click.stop
   >
     <slot>
       {{ url }}
@@ -12,6 +13,7 @@
     v-else
     :class="$style.url"
     :href="url"
+    @click.stop
   >
     <slot>
       {{ url }}
@@ -34,9 +36,9 @@ const selfSite = computed(() => props.url.startsWith('/'));
   color: rgb(var(--v-theme-primary));
   word-break: break-all;
   text-decoration: none;
-  transition: color 0.3s;
+  transition: all 0.3s;
   &:hover {
-    color: rgb(var(--v-theme-secondary));
+    text-decoration: underline;
   }
 }
 </style>
