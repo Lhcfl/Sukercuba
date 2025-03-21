@@ -156,6 +156,16 @@ export const useUserCache = defineStore("user-cache", () => {
     }
   }
 
+  function patchUser(id: string, user: Partial<User>) {
+    const ref = userCache.get(id);
+    if (ref?.value?.data == null) return;
+    for (const k of Object.keys(user)) {
+      (ref.value.data as Record<string, unknown>)[k] = (
+        user as Record<string, unknown>
+      )[k];
+    }
+  }
+
   function cache<U extends User, Updateable extends isUserDetailed<U>>(
     user: U,
     params: {
@@ -200,5 +210,6 @@ export const useUserCache = defineStore("user-cache", () => {
   return {
     cache,
     getCache,
+    patchUser,
   };
 });

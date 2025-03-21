@@ -4,6 +4,26 @@
     :loading
     :width
   >
+    <VCardActions v-if="user.hasPendingFollowRequestToYou">
+      <span>
+        {{ t("receiveFollowRequest") }}
+      </span>
+      <VSpacer />
+      <VBtn
+        class="text-secondary"
+        prepend-icon="mdi-check-circle-outline"
+        :text="t('accept')"
+        :loading="sendingAccept"
+        @click.stop="accept"
+      />
+      <VBtn
+        class="text-red"
+        prepend-icon="mdi-close-circle-outline"
+        :loading="sendingReject"
+        :text="t('reject')"
+        @click.stop="reject"
+      />
+    </VCardActions>
     <VParallax
       :class="$style.parallax"
       :src="user?.bannerUrl"
@@ -36,6 +56,8 @@
               v-if="user.isFollowing"
               prepend-icon="mdi-minus"
               color="primary"
+              :loading="followLoading"
+              @click.stop="unfollow"
             >
               {{ t('youFollowing') }}
             </VBtn>
@@ -43,12 +65,25 @@
               v-else-if="user.isBlocking"
               prepend-icon="mdi-cancel"
               color="black"
+              :loading="followLoading"
+              @click.stop="unblock"
             >
               {{ t('blocked') }}
             </VBtn>
             <VBtn
+              v-else-if="user.hasPendingFollowRequestFromYou"
+              prepend-icon="mdi-clock-outline"
+              :loading="followLoading"
+              color="secondary"
+              @click.stop="cancelFollowRequest"
+            >
+              {{ t('followRequestPending') }}
+            </VBtn>
+            <VBtn
               v-else
               prepend-icon="mdi-plus"
+              :loading="followLoading"
+              @click.stop="follow"
             >
               {{ followText }}
             </VBtn>
@@ -161,6 +196,7 @@
 
 <script setup lang="ts">
 import { useAccount } from '@/stores/account';
+import { usePopupMessage } from '@/stores/popup-message';
 import { useUserCache } from '@/stores/user-cache';
 import type { User, UserDetailed } from 'misskey-js/entities.js';
 
@@ -172,12 +208,105 @@ const props = defineProps<{
 const { t } = useI18n();
 const account = useAccount();
 const userCache = useUserCache();
-const detailedUser = userCache.cache(props.user, { detailed: true });
+const detailedUser = computed(() => userCache.cache(props.user, { detailed: true }).value);
 const user = computed(() => detailedUser.value.detailed ? detailedUser.value.data : props.user);
 const loading = computed(() => !detailedUser.value.detailed);
 const isMe = computed(() => account.me?.id == props.user.id);
 const followText = computed(() => props.user.isLocked ? t('followRequest') : t('follow'));
 const parallaxMaxH = computed(() => (props.width ? props.width * 0.6 : 500) + 'px');
+const followLoading = ref(false);
+const sendingAccept = ref(false);
+const sendingReject = ref(false);
+
+function handleRequestError(err: unknown) {
+  console.error(err);
+  usePopupMessage().push({
+    type: "error",
+    message: (err as { message: string }).message,
+  });
+}
+
+async function follow() {
+  followLoading.value = true;
+  try {
+    await account.api.request("following/create", {
+      userId: props.user.id,
+    });
+    userCache.getCache(props.user, { fetch: true });
+  } catch (err) {
+    handleRequestError(err);
+  } finally {
+    followLoading.value = false;
+  }
+}
+
+async function accept() {
+  sendingAccept.value = true;
+  try {
+    await account.api.request("following/requests/accept", {
+      userId: props.user.id,
+    });
+    userCache.patchUser(props.user.id, { isFollowed: true, hasPendingFollowRequestFromYou: false });
+  } catch (err) {
+    handleRequestError(err)
+  } finally {
+    sendingAccept.value = false;
+  }
+}
+async function reject() {
+  sendingReject.value = true;
+  try {
+    await account.api.request("following/requests/reject", {
+      userId: props.user.id,
+    });
+    userCache.patchUser(props.user.id, { hasPendingFollowRequestToYou: false });
+  } catch (err) {
+    handleRequestError(err);
+  } finally {
+    sendingReject.value = false;
+  }
+}
+async function cancelFollowRequest() {
+  followLoading.value = true;
+  try {
+    await account.api.request("following/requests/cancel", {
+      userId: props.user.id,
+    });
+    userCache.patchUser(props.user.id, { hasPendingFollowRequestFromYou: false });
+  } catch (err) {
+    handleRequestError(err);
+  } finally {
+    followLoading.value = false;
+  }
+}
+async function unfollow() {
+  followLoading.value = true;
+  try {
+    await account.api.request("following/delete", {
+      userId: props.user.id,
+    });
+    userCache.patchUser(props.user.id, { isFollowing: false });
+  } catch (err) {
+    console.error(err);
+    handleRequestError(err);
+  } finally {
+    followLoading.value = false;
+  }
+}
+async function unblock() {
+  followLoading.value = true;
+  try {
+    await account.api.request("blocking/delete", {
+      userId: props.user.id,
+    });
+    userCache.patchUser(props.user.id, { isBlocking: false });
+  } catch (err) {
+    console.error(err);
+    handleRequestError(err);
+  } finally {
+    followLoading.value = false;
+  }
+}
 </script>
 
 

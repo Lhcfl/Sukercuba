@@ -21,14 +21,14 @@
     <VCardActions v-if="showAcceptRefuse">
       <VBtn
         class="text-secondary"
-        prepend-icon="mdi:check-circle-outline"
+        prepend-icon="mdi-check-circle-outline"
         :text="t('accept')"
         :loading="sendingAccept"
         @click.stop="accept"
       />
       <VBtn
         class="text-red"
-        prepend-icon="mdi:close-circle-outline"
+        prepend-icon="mdi-close-circle-outline"
         :loading="sendingReject"
         :text="t('reject')"
         @click.stop="reject"
@@ -100,11 +100,12 @@ const props = defineProps<{
 const { t } = useI18n();
 
 const account = useAccount();
-const userCache = useUserCache().cache(props.notification.user, {
+const userCache = useUserCache();
+const cached = useUserCache().cache(props.notification.user, {
   detailed: true,
 });
 const userDetailed = computed(() =>
-  userCache.value.detailed ? userCache.value.data : undefined
+  cached.value.detailed ? cached.value.data : undefined
 );
 
 const sendingFollow = ref(false);
@@ -148,7 +149,7 @@ async function follow() {
     await account.api.request("following/create", {
       userId: props.notification.userId,
     });
-    userDetailed.value!.isFollowing = true;
+    userCache.getCache(props.notification.user, { fetch: true });
   } catch (err) {
     console.error(err);
     usePopupMessage().push({
@@ -165,7 +166,7 @@ async function accept() {
     await account.api.request("following/requests/accept", {
       userId: props.notification.userId,
     });
-    userDetailed.value!.isFollowed = true;
+    userCache.patchUser(props.notification.userId, { isFollowed: true });
   } catch (err) {
     console.error(err);
     usePopupMessage().push({
@@ -181,6 +182,9 @@ async function reject() {
   try {
     await account.api.request("following/requests/reject", {
       userId: props.notification.userId,
+    });
+    userCache.patchUser(props.notification.userId, {
+      hasPendingFollowRequestToYou: false,
     });
   } catch (err) {
     console.error(err);
@@ -198,7 +202,7 @@ async function breakFollow() {
     await account.api.request("following/invalidate", {
       userId: props.notification.userId,
     });
-    userDetailed.value!.isFollowed = false;
+    userCache.patchUser(props.notification.userId, { isFollowed: false });
   } catch (err) {
     console.error(err);
     usePopupMessage().push({
@@ -215,7 +219,9 @@ async function cancelFollowRequest() {
     await account.api.request("following/requests/cancel", {
       userId: props.notification.userId,
     });
-    userDetailed.value!.hasPendingFollowRequestFromYou = false;
+    userCache.patchUser(props.notification.userId, {
+      hasPendingFollowRequestFromYou: false,
+    });
   } catch (err) {
     console.error(err);
     usePopupMessage().push({
