@@ -9,6 +9,7 @@
   </div>
   <div v-else>
     <VInfiniteScroll
+      v-if="note.replyId"
       side="start"
       @load="preConversation"
     >

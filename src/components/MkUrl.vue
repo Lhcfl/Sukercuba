@@ -1,6 +1,7 @@
 <template>
   <RouterLink
     v-if="selfSite"
+    :class="$style.url"
     :to="url"
   >
     <slot>
@@ -9,6 +10,7 @@
   </RouterLink>
   <a
     v-else
+    :class="$style.url"
     :href="url"
   >
     <slot>
@@ -26,3 +28,15 @@ const props = defineProps<{
 
 const selfSite = computed(() => props.url.startsWith('/'));
 </script>
+
+<style lang="scss" module>
+.url {
+  color: rgb(var(--v-theme-primary));
+  word-break: break-all;
+  text-decoration: none;
+  transition: color 0.3s;
+  &:hover {
+    color: rgb(var(--v-theme-secondary));
+  }
+}
+</style>
