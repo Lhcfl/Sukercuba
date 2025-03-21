@@ -5,14 +5,14 @@ import { useAccount } from "./account";
 import { acct } from "misskey-js";
 import { isAPIError, type APIError } from "misskey-js/api.js";
 
-type CacheUserDetailed = {
+type CachedUserDetailed = {
   error: false;
   apiError?: APIError;
   detailed: true;
   data: UserDetailed;
   cachedAt: Date;
 };
-type CacheUserLight = {
+type CachedUserLight = {
   error: false;
   apiError?: APIError;
   detailed: false;
@@ -27,7 +27,7 @@ type CachedUserError = {
   cachedAt: Date;
 };
 
-type CacheUserType = CacheUserDetailed | CacheUserLight | CachedUserError;
+type CachedUserType = CachedUserDetailed | CachedUserLight | CachedUserError;
 const CACHE_DURATION = 1000 * 60 * 60;
 
 type isUserDetailed<T extends User> = T extends UserDetailed ? true : false;
@@ -41,16 +41,35 @@ function debugLog(...args: unknown[]) {
 }
 
 export const useUserCache = defineStore("user-cache", () => {
-  const userCache = new Map<string, Ref<CacheUserType | undefined>>();
+  const userCache = new Map<string, Ref<CachedUserType | undefined>>();
   const isFetching = new Map<string, boolean>();
 
   const account = useAccount();
+
+  if (account.me) {
+    // for user me, always set yourself.
+    const me = computed({
+      get: () =>
+        ({
+          error: false,
+          detailed: true,
+          data: account.me,
+          cachedAt: new Date(),
+        } as CachedUserDetailed),
+      set: (u) => {
+        debugLog("Warning: don't set user me.", u);
+        // do nothing
+      },
+    })
+    userCache.set(account.me.id, me);
+    userCache.set(acct.toString(account.me), me);
+  }
 
   function getCacheKey(query: UserQuery) {
     return "id" in query ? query.id : acct.toString(query);
   }
 
-  function getCacheByQuery(query: UserQuery): Ref<CacheUserType | undefined> {
+  function getCacheByQuery(query: UserQuery): Ref<CachedUserType | undefined> {
     const key = getCacheKey(query);
     const r = userCache.has(key);
     if (!r) userCache.set(key, ref());
@@ -64,14 +83,16 @@ export const useUserCache = defineStore("user-cache", () => {
       /** 无论如何都 fetch */
       fetch?: boolean;
     } = {}
-  ): Ref<CacheUserType | undefined> {
+  ): Ref<CachedUserType | undefined> {
     const cached = getCacheByQuery(query);
-    nextTick(() => fetchUser(
-      query,
-      cached.value == null ||
-        params.fetch ||
-        (!cached.value?.detailed && params.detailed)
-    ));
+    nextTick(() =>
+      fetchUser(
+        query,
+        cached.value == null ||
+          params.fetch ||
+          (!cached.value?.detailed && params.detailed)
+      )
+    );
     return cached;
   }
 
@@ -126,7 +147,7 @@ export const useUserCache = defineStore("user-cache", () => {
     return (user as UserDetailed).fields != null;
   }
 
-  function updateUser(ref: Ref<CacheUserType>, user: User) {
+  function updateUser(ref: Ref<CachedUserType>, user: User) {
     ref.value.data ??= user;
     for (const k of Object.keys(user)) {
       (ref.value.data as Record<string, unknown>)[k] = (
@@ -143,7 +164,7 @@ export const useUserCache = defineStore("user-cache", () => {
       /** get a detailed user if is a lite user */
       detailed?: boolean;
     } = {}
-  ): Ref<U extends UserDetailed ? CacheUserDetailed : CacheUserType> {
+  ): Ref<U extends UserDetailed ? CachedUserDetailed : CachedUserType> {
     const cached = getCacheByQuery(user);
     const now = new Date();
 
@@ -166,10 +187,10 @@ export const useUserCache = defineStore("user-cache", () => {
           detailed: isDetailed(user),
           data: user,
           cachedAt: now,
-        } as CacheUserType;
+        } as CachedUserType;
       } else {
         cached.value.cachedAt = now;
-        updateUser(cached as Ref<CacheUserType>, user);
+        updateUser(cached as Ref<CachedUserType>, user);
       }
     }
 
