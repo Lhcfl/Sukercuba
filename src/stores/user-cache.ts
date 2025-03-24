@@ -5,6 +5,7 @@ import { useAccount } from "./account";
 import { acct } from "misskey-js";
 import { isAPIError, type APIError } from "misskey-js/api.js";
 import { usePopupMessage } from "./popup-message";
+import { getI18n } from "@/plugins/i18n";
 
 type CachedUserDetailed = {
   error: false;
@@ -288,6 +289,11 @@ export class UserApi {
     }
   }
   async unfollow(ing: Ref<boolean>) {
+    const i18n = getI18n().global;
+    const { ok } = await usePopupMessage().push({ type: 'info', message: i18n.t('unfollowConfirm', { name: this.user.name ?? this.user.username }) });
+    if (!ok) {
+      return;
+    }
     ing.value = true;
     try {
       await this.account.api.request("following/delete", {

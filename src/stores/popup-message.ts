@@ -1,25 +1,34 @@
 import { defineStore } from "pinia";
 import type { VNode } from "vue";
 
-type PopupMessage = {
+type PopupMessage = ({
+  okcancel?: false,
+} | {
+  okcancel: true,
+}) & {
   type: "error" | "warn" | "info" | "success",
   message?: string,
   vnodes?: VNode[],
   mfm?: string,
-  callback?: () => void;
+  okText?: string,
+  cancelText?: string,
+}
+
+type MsgReturn = { ok?: boolean };
+
+type InfoAttachedPopupMessage = PopupMessage & {
+  callback: (arg0: MsgReturn) => void,
+  resolved?: boolean,
 }
 
 export const usePopupMessage = defineStore("popupMessages", () => {
-  const messages = ref<(PopupMessage & { resolved?: boolean })[]>([]);
+  const messages = ref<InfoAttachedPopupMessage[]>([]);
   
   function push(m: PopupMessage) {
-    messages.value.push(m);
-    return new Promise<void>((r) => {
-      const old_cb = m.callback;
-      m.callback = () => {
-        old_cb?.();
-        r();
-      }
+    const msg = m as InfoAttachedPopupMessage;
+    messages.value.push(msg);
+    return new Promise<MsgReturn>((r) => {
+      msg.callback = r;
     });
   }
 
@@ -28,3 +37,7 @@ export const usePopupMessage = defineStore("popupMessages", () => {
     push,
   }
 });
+
+if (import.meta.env.DEV) {
+  Object.assign(window, { usePopupMessage });
+}

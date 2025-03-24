@@ -2,6 +2,7 @@
   <VDialog
     :model-value="show"
     max-width="500"
+    persistent
   >
     <VCard v-if="message">
       <VCardText v-if="message.message">
@@ -17,8 +18,13 @@
       <v-card-actions>
         <v-spacer />
         <v-btn
-          :text="t('gotIt')"
-          @click="close"
+          :text="message.okText ?? t('gotIt')"
+          @click="close(true)"
+        />
+        <v-btn
+          v-if="message.okcancel"
+          :text="message.cancelText ?? t('cancel')"
+          @click="close(false)"
         />
       </v-card-actions>
     </VCard>
@@ -32,8 +38,8 @@ const { t } = useI18n();
 const message = computed(() => popupMessages.messages.at(0));
 const show = computed(() => message.value && !message.value.resolved);
 
-function close() {
-  message.value!.callback?.();
+function close(ok: boolean) {
+  message.value!.callback({ ok });
   message.value!.resolved = true;
   setTimeout(() => {
     popupMessages.messages.shift();
