@@ -43,12 +43,12 @@
 <script lang="ts" setup>
 import * as Misskey from "misskey-js";
 import type { VCard } from "vuetify/components";
-import { useNoteCache } from "@/stores/note-cache";
 import router from "@/router";
+import type { NoteWithExtension } from "@/stores/note-cache";
 
 const props = withDefaults(
   defineProps<{
-    note: Misskey.entities.Note;
+    note: NoteWithExtension;
     variant?: VCard["$props"]["variant"];
     newFetch?: boolean;
     hideActions?: boolean;
@@ -60,11 +60,9 @@ const props = withDefaults(
   }
 );
 
-const noteCache = useNoteCache();
-const note = noteCache.cached(props.note, props.newFetch);
-const isPureRenote = computed(() => Misskey.note.isPureRenote(note.value));
+const isPureRenote = computed(() => Misskey.note.isPureRenote(props.note));
 const appearNote = computed(() =>
-  isPureRenote.value ? note.value.renote! : note.value
+  isPureRenote.value ? props.note.renote! : props.note
 );
 
 function routeToNote() {

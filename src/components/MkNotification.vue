@@ -7,8 +7,7 @@
   <MkNote
     v-else-if="notification.type === 'mention' || notification.type === 'quote' || notification.type === 'reply'"
     variant="flat"
-    :note="notification.note"
-    new-fetch
+    :note="note!"
   />
   <MkNotificationFollow
     v-else-if="notification.type === 'follow' || notification.type === 'receiveFollowRequest' || notification.type === 'followRequestAccepted'"
@@ -26,15 +25,21 @@
 </template>
 
 <script lang="ts" setup>
+import { useNoteCache } from "@/stores/note-cache";
 import { NoteEventNotificationTypes, type ExtractNotifications } from "@/types/notification";
 import type { Notification } from "misskey-js/entities.js";
-defineProps<{
+const props = defineProps<{
   notification: Notification;
 }>()
 
 function isNoteEventNotification(n: Notification): n is ExtractNotifications<typeof NoteEventNotificationTypes> {
   return (NoteEventNotificationTypes as readonly string[]).includes(n.type)
 }
+
+const noteCache = useNoteCache();
+
+/** Notifications will always return detailed note */
+const note = computed(() => 'note' in props.notification ? noteCache.cached(props.notification.note, true).value : undefined)
 </script>
 
 <style lang="scss" module>

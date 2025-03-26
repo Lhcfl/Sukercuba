@@ -42,6 +42,9 @@ function debugLog(...args: unknown[]) {
   }
 }
 
+/**
+ * Use singleton mode to ensure that each user will be retrieved only once for the same period of time.
+ */
 export const useUserCache = defineStore("user-cache", () => {
   const userCache = new Map<string, Ref<CachedUserType | undefined>>();
   const isFetching = new Map<string, boolean>();

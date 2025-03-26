@@ -17,6 +17,9 @@ type ActullyStoredNote = Ref<Exclude<NoteWithExtension, 'renote' | 'reply'> & {
   reply?: Ref<NoteWithExtension>,
 }>;
 
+/**
+ * Use singleton mode to ensure that each note will be retrieved only once for the same period of time.
+ */
 export const useNoteCache = defineStore("note-cache", () => {
   const userCache = useUserCache();
   const noteCache = new Map<Note["id"], ActullyStoredNote>();
