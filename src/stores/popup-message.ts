@@ -21,6 +21,14 @@ type InfoAttachedPopupMessage = PopupMessage & {
   resolved?: boolean,
 }
 
+/**
+ * Queue a popup message dialog.
+ * 
+ * Warning: Modals are bad for user experience. It disables all other actions, 
+ * thereby forcing users to interact with it.
+ * 
+ * Modals should only be used to alert the user to important events.
+ */
 export const usePopupMessage = defineStore("popupMessages", () => {
   const messages = ref<InfoAttachedPopupMessage[]>([]);
   
