@@ -7,12 +7,9 @@ type SnackMessage = {
 }
 
 /**
- * Queue a popup message dialog.
+ * Global snackbar queue messages provider.
  * 
- * Warning: Modals are bad for user experience. It disables all other actions, 
- * thereby forcing users to interact with it.
- * 
- * Modals should only be used to alert the user to important events.
+ * @see https://vuetifyjs.com/en/components/snackbar-queue/#usage
  */
 export const useSnackbarQueue = defineStore("snackbar-queue", () => {
   const messages = ref<SnackMessage[]>([]);
