@@ -10,6 +10,7 @@
     <VCardActions class="d-flex justify-space-between">
       <MkAvatar
         v-if="account.me"
+        no-tooltip
         :user="account.me"
       />
       <div>

@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppPopupMessageContainer: typeof import('./components/AppPopupMessageContainer.vue')['default']
     AppSidebar: typeof import('./components/AppSidebar.vue')['default']
+    AppSnackbarQueueContainer: typeof import('./components/AppSnackbarQueueContainer.vue')['default']
     MkAnyEmoji: typeof import('./components/MkAnyEmoji.vue')['default']
     MkAvatar: typeof import('./components/MkAvatar.vue')['default']
     MkCode: typeof import('./components/MkCode.vue')['default']
@@ -36,6 +37,8 @@ declare module 'vue' {
     MkNotifications: typeof import('./components/MkNotifications.vue')['default']
     MkPollEditor: typeof import('./components/MkPollEditor.vue')['default']
     MkPostForm: typeof import('./components/MkPostForm.vue')['default']
+    MkSearchNote: typeof import('./components/MkSearchNote.vue')['default']
+    MkSearchUser: typeof import('./components/MkSearchUser.vue')['default']
     MkTime: typeof import('./components/MkTime.vue')['default']
     MkTimeline: typeof import('./components/MkTimeline.vue')['default']
     MkTimelines: typeof import('./components/MkTimelines.vue')['default']

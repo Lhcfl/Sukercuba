@@ -9,6 +9,7 @@
         :title="t('followRequests')"
       />
       <VListItem
+        :to="{ name: '/search' }"
         :title="t('search')"
       />
       <VListItem

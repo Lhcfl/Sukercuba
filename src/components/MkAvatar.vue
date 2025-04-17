@@ -5,6 +5,7 @@
     :open-delay="600"
     :close-delay="1000"
     :content-class="['pa-0', 'elevation-4', $style.tooltipUserCard]"
+    :open-on-hover="!noTooltip"
   >
     <template #activator="{ props: bind }">
       <VAvatar
@@ -31,6 +32,7 @@ import type { User } from "misskey-js/entities.js";
 const props = defineProps<{
   user: User;
   size?: string | number;
+  noTooltip?: boolean;
 }>();
 
 const showTip = ref(false);

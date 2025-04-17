@@ -2,6 +2,7 @@
   <v-app>
     <router-view />
     <AppPopupMessageContainer />
+    <AppSnackbarQueueContainer />
   </v-app>
 </template>
 
