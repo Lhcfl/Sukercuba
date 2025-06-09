@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "test": "echo \"No tests specified\" && exit 0",
+    "prepare": "husky"
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
@@ -22,6 +24,7 @@
     "misskey-js": "2025.3.2-beta.2",
     "pinia-plugin-persistedstate": "^4.2.0",
     "roboto-fontface": "*",
+    "twemoji": "^14.0.2",
     "vite-plugin-vue-devtools": "^7.7.2",
     "vue": "^3.4.31",
     "vue-i18n": "^11.1.2",
@@ -36,6 +39,8 @@
     "@vue/tsconfig": "^0.5.1",
     "eslint": "^9.14.0",
     "eslint-plugin-vue": "^9.30.0",
+    "gitmoji-cli": "^9.7.0",
+    "husky": "^9.1.7",
     "js-yaml": "^4.1.0",
     "npm-run-all2": "^7.0.1",
     "pinia": "^2.1.7",
