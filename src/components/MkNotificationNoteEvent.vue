@@ -12,13 +12,14 @@
         <div
           v-for="(pair, index) in avatars"
           :key="index"
+          :class="$style.avatar"
         >
           <MkAvatar
             :user="pair.user"
           />
           <MkAnyEmoji
             v-if="pair.reaction"
-            :class="$style.emoji"
+            :class="$style.reaction"
             :name="pair.reaction"
             :urls="appearNote.reactionEmojis"
           />
@@ -102,19 +103,18 @@ const avatars = computed(() => showMore.value ? reactions.value : reactions.valu
     max-height: unset;
   }
 }
-.emoji {
-  height: 1.7em;
-  width: 1.7em;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.avatar {
+  height: 45px;
+  width: 45px;
+}
+
+.reaction {
+  scale: 0.7;
+  position: absolute;
+  transform: translate(-40px, 20px);
   background-color: rgb(var(--v-theme-background));
-  border-radius: 100px;
-  padding: 2px;
-  margin-left: -1.3em;
-  transform: translateY(0.5em);
-  margin-right: 0.5em;
-  position: relative;
-  left: 0;
+  border-radius: 50%;
+  padding: 5px;
+  z-index: 1;
 }
 </style>

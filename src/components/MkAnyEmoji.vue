@@ -1,13 +1,16 @@
 <template>
-  <MkCustomEmoji
-    v-if="isCustom"
-    v-bind="props"
-    :url
-  />
-  <MkEmoji
-    v-else
-    :emoji="name"
-  />
+  <span class="mk-any-emoji">
+    <MkCustomEmoji
+      v-if="isCustom"
+      v-bind="props"
+      :url
+    />
+    <MkEmoji
+      v-else
+      v-bind="props"
+      :emoji="name"
+    />
+  </span>
 </template>
 
 <script setup lang="ts">
