@@ -3,12 +3,14 @@
     <div class="d-flex align-center">
       <VBtn
         v-if="note.repliesCount == 0"
+        variant="plain"
         icon="mdi-reply"
         :color="posting === 'reply' ? 'primary' : undefined"
         @click.stop="posting = posting === 'reply' ? null : 'reply'"
       />
       <VBtn
         v-else
+        variant="plain"
         prepend-icon="mdi-reply"
         rounded
         size="large"
@@ -18,6 +20,7 @@
       />
       <VBtn
         v-if="note.renoteCount == 0"
+        variant="plain"
         icon="mdi-repeat-variant"
         :loading="renoting"
         :color="note.renotedByMe ? 'primary' : undefined"
@@ -25,6 +28,7 @@
       />
       <VBtn
         v-else
+        variant="plain"
         prepend-icon="mdi-repeat-variant"
         rounded
         :loading="renoting"
@@ -34,12 +38,14 @@
         @click.stop="renoteOrCancel"
       />
       <VBtn
+        variant="plain"
         icon="mdi-format-quote-close-outline"
         :color="posting === 'quote' ? 'primary' : undefined"
         @click.stop="posting = posting === 'quote' ? null : 'quote'"
       />
       <VBtn
         v-if="note.myReaction"
+        variant="plain"
         icon="mdi-minus"
         color="primary"
         :loading="reacting"
@@ -47,6 +53,7 @@
       />
       <template v-else>
         <VBtn
+          variant="plain"
           icon="mdi-heart-outline"
           :loading="reacting"
           @click.stop="react()"
@@ -58,6 +65,7 @@
         >
           <template #activator="{ props: p }">
             <VBtn
+              variant="plain"
               v-bind="p"
               icon="mdi-sticker-emoji"
               :loading="reacting"
@@ -72,6 +80,7 @@
       <VMenu v-model="showMenu">
         <template #activator="{ props: p }">
           <VBtn
+            variant="plain"
             icon="mdi-dots-horizontal"
             v-bind="p"
             @click.stop
