@@ -55,7 +55,6 @@
 </template>
 
 <script lang="ts" setup>
-import router from "@/router";
 import type { ExtractNotifications, NoteEventNotificationTypes } from "@/types/notification";
 import type { VCard } from "vuetify/components";
 
@@ -63,6 +62,8 @@ const props = defineProps<{
   notification: ExtractNotifications<typeof NoteEventNotificationTypes>;
   variant?: VCard["$props"]["variant"]
 }>()
+
+const router = useRouter();
 
 const icon = computed(() => ({
   renote: "mdi-repeat-variant",

@@ -8,8 +8,6 @@
 </template>
 
 <script lang="ts" setup>
-import router from "@/router";
-
 const props = withDefaults(
   defineProps<{
     tag: string;
@@ -21,6 +19,8 @@ const props = withDefaults(
     noNavigate: false,
   }
 );
+
+const router = useRouter();
 
 const url = computed(() =>
   props.kind == "note"

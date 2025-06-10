@@ -10,8 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import { useUserCache } from '@/stores/user-cache';
-
 const props = defineProps<{
   navigationBehaviour?: unknown,
   host?: string | null,

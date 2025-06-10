@@ -6,12 +6,19 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const IDBRefStore: typeof import('./stores/idb-ref-store')['IDBRefStore']
+  const IDBStore: typeof import('./stores/store')['IDBStore']
   const Misskey: typeof import('misskey-js')
   const MisskeyApi: typeof import('misskey-js')['api']
   const MisskeyEnt: typeof import('misskey-js')['entities']
   const MisskeyType: typeof import('misskey-js')['entities']
+  const SiteStore: typeof import('./stores/store')['SiteStore']
+  const UserApi: typeof import('./stores/user-cache')['UserApi']
+  const UserStore: typeof import('./stores/store')['UserStore']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']
+  const createSiteStore: typeof import('./stores/site-store')['createSiteStore']
+  const createUserStore: typeof import('./stores/user-store')['createUserStore']
   const customRef: typeof import('vue')['customRef']
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
@@ -50,23 +57,32 @@ declare global {
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
+  const stores: typeof import('./stores/index')['default']
   const toRaw: typeof import('vue')['toRaw']
   const toRef: typeof import('vue')['toRef']
   const toRefs: typeof import('vue')['toRefs']
   const toValue: typeof import('vue')['toValue']
   const triggerRef: typeof import('vue')['triggerRef']
   const unref: typeof import('vue')['unref']
+  const useAccount: typeof import('./stores/account')['useAccount']
+  const useAppStore: typeof import('./stores/app')['useAppStore']
   const useAttrs: typeof import('vue')['useAttrs']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
+  const useCustomEmojisData: typeof import('./stores/custom-emoji-map')['useCustomEmojisData']
+  const useDraft: typeof import('./stores/draft')['useDraft']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useId: typeof import('vue')['useId']
   const useLink: typeof import('vue-router')['useLink']
   const useModel: typeof import('vue')['useModel']
+  const useNoteCache: typeof import('./stores/note-cache')['useNoteCache']
+  const usePopupMessage: typeof import('./stores/popup-message')['usePopupMessage']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
+  const useSnackbarQueue: typeof import('./stores/snackbar-queue')['useSnackbarQueue']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
+  const useUserCache: typeof import('./stores/user-cache')['useUserCache']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -77,6 +93,15 @@ declare global {
   // @ts-ignore
   export type { Component, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
+  // @ts-ignore
+  export type { IDBRefStore } from './stores/idb-ref-store'
+  import('./stores/idb-ref-store')
+  // @ts-ignore
+  export type { IDBStore, SiteStore, UserStore } from './stores/store'
+  import('./stores/store')
+  // @ts-ignore
+  export type { UserApi } from './stores/user-cache'
+  import('./stores/user-cache')
 }
 // for vue template auto import
 import { UnwrapRef } from 'vue'
@@ -84,8 +109,15 @@ declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly IDBRefStore: UnwrapRef<typeof import('./stores/idb-ref-store')['IDBRefStore']>
+    readonly IDBStore: UnwrapRef<typeof import('./stores/store')['IDBStore']>
+    readonly SiteStore: UnwrapRef<typeof import('./stores/store')['SiteStore']>
+    readonly UserApi: UnwrapRef<typeof import('./stores/user-cache')['UserApi']>
+    readonly UserStore: UnwrapRef<typeof import('./stores/store')['UserStore']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
+    readonly createSiteStore: UnwrapRef<typeof import('./stores/site-store')['createSiteStore']>
+    readonly createUserStore: UnwrapRef<typeof import('./stores/user-store')['createUserStore']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
@@ -122,22 +154,31 @@ declare module 'vue' {
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
+    readonly stores: UnwrapRef<typeof import('./stores/index')['default']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
+    readonly useAccount: UnwrapRef<typeof import('./stores/account')['useAccount']>
+    readonly useAppStore: UnwrapRef<typeof import('./stores/app')['useAppStore']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
+    readonly useCustomEmojisData: UnwrapRef<typeof import('./stores/custom-emoji-map')['useCustomEmojisData']>
+    readonly useDraft: UnwrapRef<typeof import('./stores/draft')['useDraft']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
+    readonly useNoteCache: UnwrapRef<typeof import('./stores/note-cache')['useNoteCache']>
+    readonly usePopupMessage: UnwrapRef<typeof import('./stores/popup-message')['usePopupMessage']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useSnackbarQueue: UnwrapRef<typeof import('./stores/snackbar-queue')['useSnackbarQueue']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
+    readonly useUserCache: UnwrapRef<typeof import('./stores/user-cache')['useUserCache']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

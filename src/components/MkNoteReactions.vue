@@ -22,8 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAccount } from '@/stores/account';
-import { usePopupMessage } from '@/stores/popup-message';
 import type { Note } from 'misskey-js/entities.js';
 const props = defineProps<{
   note: Note,

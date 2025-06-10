@@ -134,10 +134,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAccount } from "@/stores/account";
-import { useDraft } from "@/stores/draft";
 import type { NoteWithExtension } from "@/stores/note-cache";
-import { usePopupMessage } from "@/stores/popup-message";
 import { isAPIError } from "misskey-js/api.js";
 import type { EmojiSimple, NotesCreateRequest } from "misskey-js/entities.js";
 import type { VCard } from "vuetify/components";

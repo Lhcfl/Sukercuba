@@ -48,8 +48,6 @@
 </template>
 
 <script setup lang="ts">
-import type { useDraft } from "@/stores/draft";
-
 const draft = defineModel<ReturnType<typeof useDraft>>({ required: true });
 
 defineProps<{

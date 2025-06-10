@@ -82,8 +82,6 @@
 </template>
 
 <script lang="ts" setup>
-import router from "@/router";
-import { UserApi, useUserCache } from "@/stores/user-cache";
 import type { ExtractNotifications } from "@/types/notification";
 import { acct } from "misskey-js";
 import type { VCard } from "vuetify/components";
@@ -96,6 +94,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
+const router = useRouter();
 const cached = useUserCache().cache(props.notification.user, {
   detailed: true,
 });

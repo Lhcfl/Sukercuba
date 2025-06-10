@@ -32,7 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-import { usePopupMessage } from '@/stores/popup-message';
 const popupMessages = usePopupMessage();
 const { t } = useI18n();
 const message = computed(() => popupMessages.messages.at(0));

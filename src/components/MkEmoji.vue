@@ -4,7 +4,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAccount } from '@/stores/account';
 import Twemoji from 'twemoji';
 
 const props = defineProps<{

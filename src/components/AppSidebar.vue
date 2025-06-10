@@ -43,7 +43,6 @@
 </template>
 
 <script setup lang="ts">
-import { useCustomEmojisData } from '@/stores/custom-emoji-map';
 import { useTheme } from 'vuetify';
 import langs from '@/locales/index.json';
 

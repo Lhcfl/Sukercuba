@@ -25,12 +25,13 @@ export default defineConfig({
         'vue-i18n',
         {
           "vue-router/auto": ["useRoute", "useRouter"],
-        },     
+        },
       ],
       dts: "src/auto-imports.d.ts",
       eslintrc: {
         enabled: true,
       },
+      dirs: ["src/components/**", "src/stores/*"],
       vueTemplate: true,
     }),
     Components({

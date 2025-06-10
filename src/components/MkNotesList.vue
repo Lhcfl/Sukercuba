@@ -21,7 +21,6 @@
 </template>
 <script lang="ts" setup>
 import type { NoteWithExtension } from "@/stores/note-cache";
-import { useSnackbarQueue } from "@/stores/snackbar-queue";
 import type { APIError } from "misskey-js/api.js";
 
 const props = defineProps<{

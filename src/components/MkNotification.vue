@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useNoteCache } from "@/stores/note-cache";
 import { NoteEventNotificationTypes, type ExtractNotifications } from "@/types/notification";
 import type { Notification } from "misskey-js/entities.js";
 const props = defineProps<{

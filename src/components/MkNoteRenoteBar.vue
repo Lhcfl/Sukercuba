@@ -45,8 +45,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useAccount } from "@/stores/account";
-import { usePopupMessage } from "@/stores/popup-message";
 import * as Misskey from "misskey-js";
 
 const props = defineProps<{

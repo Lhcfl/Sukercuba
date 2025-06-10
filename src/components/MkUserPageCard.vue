@@ -195,8 +195,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAccount } from '@/stores/account';
-import { UserApi, useUserCache } from '@/stores/user-cache';
 import type { User, UserDetailed } from 'misskey-js/entities.js';
 
 const props = defineProps<{

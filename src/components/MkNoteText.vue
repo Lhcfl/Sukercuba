@@ -45,7 +45,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import router from "@/router";
 import type { NoteWithExtension } from "@/stores/note-cache";
 
 defineProps<{
@@ -55,6 +54,7 @@ defineProps<{
 }>();
 
 const { t } = useI18n();
+const router = useRouter();
 
 function routeToNote(id: string) {
   router.push({ name: "/notes/[id]", params: { id } });

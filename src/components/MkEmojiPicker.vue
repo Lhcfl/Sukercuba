@@ -63,8 +63,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAccount } from "@/stores/account";
-import { useCustomEmojisData } from "@/stores/custom-emoji-map";
 import type { NoteWithExtension } from "@/stores/note-cache";
 import { useDebounceFn } from "@vueuse/core";
 import type { EmojiSimple } from "misskey-js/entities.js";

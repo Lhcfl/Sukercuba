@@ -153,10 +153,7 @@
 </template>
 
 <script setup lang="ts">
-import router from "@/router";
-import { useAccount } from "@/stores/account";
 import type { NoteWithExtension } from "@/stores/note-cache";
-import { usePopupMessage } from "@/stores/popup-message";
 import { isAPIError } from "misskey-js/api.js";
 import type { EmojiSimple } from "misskey-js/entities.js";
 
@@ -169,6 +166,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const router = useRouter();
 const account = useAccount();
 const popupMessages = usePopupMessage();
 const renoting = ref(false);

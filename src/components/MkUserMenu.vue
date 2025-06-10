@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAccount } from '@/stores/account';
 import type { UserDetailed } from 'misskey-js/entities.js';
 
 const props = defineProps<{

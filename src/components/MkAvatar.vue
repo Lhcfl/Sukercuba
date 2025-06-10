@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import router from "@/router";
 import { acct } from "misskey-js";
 import type { User } from "misskey-js/entities.js";
 
@@ -34,6 +33,8 @@ const props = defineProps<{
   size?: string | number;
   noTooltip?: boolean;
 }>();
+
+const router = useRouter();
 
 const showTip = ref(false);
 

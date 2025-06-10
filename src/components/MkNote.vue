@@ -45,7 +45,6 @@
 import * as Misskey from "misskey-js";
 import type { VCard } from "vuetify/components";
 import type { NoteWithExtension } from "@/stores/note-cache";
-import router from "@/router";
 
 const props = withDefaults(
   defineProps<{
@@ -64,6 +63,8 @@ const props = withDefaults(
     variant: "text",
   }
 );
+
+const router = useRouter();
 
 const isPureRenote = computed(() => Misskey.note.isPureRenote(props.note));
 const appearNote = computed(() =>

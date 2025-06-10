@@ -12,7 +12,6 @@
   </VChip>
 </template>
 <script setup lang="ts">
-import { useAccount } from "@/stores/account";
 import type { NoteWithExtension } from "@/stores/note-cache";
 
 const props = defineProps<{

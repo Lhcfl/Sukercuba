@@ -76,6 +76,22 @@
     "MisskeyApi": true,
     "MisskeyType": true,
     "MisskeyEnt": true,
-    "useI18n": true
+    "useI18n": true,
+    "IDBRefStore": true,
+    "IDBStore": true,
+    "SiteStore": true,
+    "UserApi": true,
+    "UserStore": true,
+    "createSiteStore": true,
+    "createUserStore": true,
+    "stores": true,
+    "useAccount": true,
+    "useAppStore": true,
+    "useCustomEmojisData": true,
+    "useDraft": true,
+    "useNoteCache": true,
+    "usePopupMessage": true,
+    "useSnackbarQueue": true,
+    "useUserCache": true
   }
 }

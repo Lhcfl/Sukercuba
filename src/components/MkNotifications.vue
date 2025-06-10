@@ -13,7 +13,6 @@
   </VInfiniteScroll>
 </template>
 <script lang="ts" setup>
-import { useAccount } from "@/stores/account";
 import type { Notification } from "misskey-js/entities.js";
 const account = useAccount();
 
