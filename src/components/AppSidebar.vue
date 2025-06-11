@@ -38,6 +38,13 @@
           :items="availableLanguages"  
         />
       </VListItem>
+      <VListItem>
+        <VSlider
+          v-model="prefer.noteGap"
+          :max="16"
+          :step="1"
+        />
+      </VListItem>
     </VList>
   </VNavigationDrawer>
 </template>
@@ -49,6 +56,8 @@ import langs from '@/locales/index.json';
 const { t, locale } = useI18n();
 
 const theme = useTheme();
+
+const prefer = usePreferences();
 
 async function clearCache() {
   await useCustomEmojisData().update();

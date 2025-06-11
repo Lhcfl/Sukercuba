@@ -77,6 +77,7 @@ declare global {
   const useModel: typeof import('vue')['useModel']
   const useNoteCache: typeof import('./stores/note-cache')['useNoteCache']
   const usePopupMessage: typeof import('./stores/popup-message')['usePopupMessage']
+  const usePreferences: typeof import('./stores/preference')['usePreferences']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
@@ -173,6 +174,7 @@ declare module 'vue' {
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
     readonly useNoteCache: UnwrapRef<typeof import('./stores/note-cache')['useNoteCache']>
     readonly usePopupMessage: UnwrapRef<typeof import('./stores/popup-message')['usePopupMessage']>
+    readonly usePreferences: UnwrapRef<typeof import('./stores/preference')['usePreferences']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>

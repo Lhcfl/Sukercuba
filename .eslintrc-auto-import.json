@@ -92,6 +92,7 @@
     "useNoteCache": true,
     "usePopupMessage": true,
     "useSnackbarQueue": true,
-    "useUserCache": true
+    "useUserCache": true,
+    "usePreferences": true
   }
 }

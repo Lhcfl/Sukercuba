@@ -58,13 +58,16 @@ const props = withDefaults(
     hideReactions?: boolean,
     /** 防止subnote也被折叠 */
     neverCollapse?: boolean;
+    gap?: number;
   }>(),
   {
-    variant: "text",
+    gap: 0,
   }
 );
 
 const router = useRouter();
+
+const variant = computed(() => props.variant || props.gap == 0 ? "text" : "elevated");
 
 const isPureRenote = computed(() => Misskey.note.isPureRenote(props.note));
 const appearNote = computed(() =>
@@ -80,6 +83,9 @@ function routeToNote() {
 <style lang="scss" module>
 .note {
   overflow: visible;
+  margin: 
+    v-bind("`${gap}px`")
+    v-bind("`${gap * 2}px`");
 
   :global(.v-card-item__content) {
     overflow: visible;

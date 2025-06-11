@@ -11,10 +11,10 @@
       >
         <MkNote
           :note
-          variant="flat"
+          :gap="perfer.noteGap"
           tile
         />
-        <VDivider />
+        <VDivider v-if="perfer.noteGap === 0" />
       </div>
     </TransitionGroup>
   </VInfiniteScroll>
@@ -28,6 +28,8 @@ const props = defineProps<{
   pre?: (notes: NoteWithExtension[]) => Promise<NoteWithExtension[]>;
   next?: (notes: NoteWithExtension[]) => Promise<NoteWithExtension[]>;
 }>();
+
+const perfer = usePreferences();
 
 const notes = defineModel<NoteWithExtension[]>({ default: [] });
 const computedNotes = computed(() => notes.value.filter((x) => !x.isDeleted));
