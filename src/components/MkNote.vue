@@ -61,6 +61,7 @@ const props = withDefaults(
     gap?: number;
   }>(),
   {
+    variant: undefined,
     gap: 0,
   }
 );
