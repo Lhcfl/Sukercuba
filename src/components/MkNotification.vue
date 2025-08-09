@@ -25,11 +25,12 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  NoteEventNotificationTypes,
-  type ExtractNotifications,
-} from "@/types/notification";
 import type { Notification } from "misskey-js/entities.js";
+import {
+  type ExtractNotifications,
+  NoteEventNotificationTypes,
+} from "@/types/notification";
+
 const props = defineProps<{
   notification: Notification;
 }>();

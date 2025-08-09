@@ -82,9 +82,9 @@
 </template>
 
 <script lang="ts" setup>
-import type { ExtractNotifications } from "@/types/notification";
 import { acct } from "misskey-js";
 import type { VCard } from "vuetify/components";
+import type { ExtractNotifications } from "@/types/notification";
 
 const props = defineProps<{
   notification: ExtractNotifications<

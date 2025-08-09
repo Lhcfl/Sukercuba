@@ -1,19 +1,13 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "typescript"
-  ],
+  "plugins": ["typescript"],
   "categories": {
     "correctness": "off"
   },
   "env": {
     "builtin": true
   },
-  "ignorePatterns": [
-    "**/dist/**",
-    "**/dist-ssr/**",
-    "**/coverage/**"
-  ],
+  "ignorePatterns": ["**/dist/**", "**/dist-ssr/**", "**/coverage/**"],
   "rules": {
     "@typescript-eslint/ban-ts-comment": "error",
     "no-array-constructor": "error",
@@ -44,13 +38,7 @@
   },
   "overrides": [
     {
-      "files": [
-        "**/*.ts",
-        "**/*.tsx",
-        "**/*.mts",
-        "**/*.cts",
-        "**/*.vue"
-      ],
+      "files": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts", "**/*.vue"],
       "rules": {
         "no-class-assign": "off",
         "no-const-assign": "off",

@@ -1,11 +1,11 @@
+import { acct } from "misskey-js";
+import { type APIError, isAPIError } from "misskey-js/api.js";
 import type { User, UserDetailed } from "misskey-js/entities.js";
 import { defineStore } from "pinia";
 import type { Ref } from "vue";
-import { useAccount } from "./account";
-import { acct } from "misskey-js";
-import { isAPIError, type APIError } from "misskey-js/api.js";
-import { usePopupMessage } from "./popup-message";
 import { getI18n } from "@/plugins/i18n";
+import { useAccount } from "./account";
+import { usePopupMessage } from "./popup-message";
 
 type CachedUserDetailed = {
   error: false;

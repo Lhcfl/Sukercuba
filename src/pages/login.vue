@@ -31,8 +31,8 @@ meta:
 </template>
 
 <script lang="ts" setup>
-import { useAccount } from "@/stores/account";
 import { permissions } from "misskey-js";
+import { useAccount } from "@/stores/account";
 
 const { t } = useI18n();
 const account = useAccount();

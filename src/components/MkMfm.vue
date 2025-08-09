@@ -8,15 +8,15 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { type VNode, h } from "vue";
 import * as mfm from "mfm-js";
 import * as Misskey from "misskey-js";
-import MkUrl from "./MkUrl.vue";
-import MkMention from "./MkMention.vue";
+import { h, type VNode } from "vue";
 import MkCode from "./MkCode.vue";
 import MkCustomEmoji from "./MkCustomEmoji.vue";
 import MkEmoji from "./MkEmoji.vue";
 import MkHashtag from "./MkHashtag.vue";
+import MkMention from "./MkMention.vue";
+import MkUrl from "./MkUrl.vue";
 
 function safeParseFloat(str: unknown): number | null {
   if (typeof str !== "string" || str === "") return null;

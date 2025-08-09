@@ -1,7 +1,7 @@
+import Fuse from "fuse.js";
+import type { EmojiSimple } from "misskey-js/entities.js";
 import { defineStore } from "pinia";
 import { useAccount } from "./account";
-import type { EmojiSimple } from "misskey-js/entities.js";
-import Fuse from "fuse.js";
 
 // fetch emojis every hour
 const FETCH_DURATION = 1000 * 60 * 60;

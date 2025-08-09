@@ -93,7 +93,7 @@ export const useNoteCache = defineStore("note-cache", () => {
         const choice = (body as unknown as { choice: number }).choice;
         if (choice == null) return;
 
-        const choices = [...note.value.poll?.choices ?? []];
+        const choices = [...(note.value.poll?.choices ?? [])];
         choices[choice] = {
           ...choices[choice],
           votes: choices[choice].votes + 1,

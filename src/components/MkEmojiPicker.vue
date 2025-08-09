@@ -63,9 +63,9 @@
 </template>
 
 <script setup lang="ts">
-import type { NoteWithExtension } from "@/stores/note-cache";
 import { useDebounceFn } from "@vueuse/core";
 import type { EmojiSimple } from "misskey-js/entities.js";
+import type { NoteWithExtension } from "@/stores/note-cache";
 
 const props = defineProps<{
   accept?: NoteWithExtension["reactionAcceptance"];

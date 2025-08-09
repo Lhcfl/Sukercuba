@@ -23,6 +23,7 @@
 
 <script setup lang="ts">
 import type { Note } from "misskey-js/entities.js";
+
 const props = defineProps<{
   note: Note;
 }>();

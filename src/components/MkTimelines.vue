@@ -16,11 +16,12 @@
 
 <script lang="ts" setup>
 import { availableTimelines, type Timeline } from "@/types/timeline";
+
 const { t } = useI18n();
 
 const tabs = availableTimelines.map((x) => ({
   text: t(`_timelines.${x === "hybrid" ? "social" : x}`),
-  value: (`${x}Timeline`) as Timeline,
+  value: `${x}Timeline` as Timeline,
 }));
 const tab = ref(tabs[0].value);
 </script>

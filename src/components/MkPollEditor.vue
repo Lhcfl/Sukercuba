@@ -87,6 +87,7 @@
 
 <script setup lang="ts">
 import type { DraftPoll } from "@/stores/draft";
+
 const poll = defineModel<DraftPoll>({ required: true });
 
 onMounted(() => {

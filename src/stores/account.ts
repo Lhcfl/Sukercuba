@@ -1,6 +1,6 @@
-import { defineStore } from "pinia";
 import * as Misskey from "misskey-js";
 import type { MeDetailed, MetaLite } from "misskey-js/entities.js";
+import { defineStore } from "pinia";
 import { createSiteStore } from "./site-store";
 import { createUserStore } from "./user-store";
 

@@ -1,19 +1,14 @@
 <template>
   <VInfiniteScroll @load="load">
-    <div
-      v-for="notification in notifications"
-      :key="notification.id"
-    >
-      <MkNotification
-        tile
-        :notification
-      />
+    <div v-for="notification in notifications" :key="notification.id">
+      <MkNotification tile :notification />
       <VDivider />
     </div>
   </VInfiniteScroll>
 </template>
 <script lang="ts" setup>
 import type { Notification } from "misskey-js/entities.js";
+
 const account = useAccount();
 
 const notifications = ref<Notification[]>([]);

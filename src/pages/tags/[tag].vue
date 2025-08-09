@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import { useAccount } from "@/stores/account";
-import { useNoteCache, type NoteWithExtension } from "@/stores/note-cache";
+import { type NoteWithExtension, useNoteCache } from "@/stores/note-cache";
 
 const route = useRoute<"/tags/[tag]">();
 const account = useAccount();

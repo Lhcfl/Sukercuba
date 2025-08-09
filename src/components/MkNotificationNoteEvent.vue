@@ -56,11 +56,11 @@
 </template>
 
 <script lang="ts" setup>
+import type { VCard } from "vuetify/components";
 import type {
   ExtractNotifications,
   NoteEventNotificationTypes,
 } from "@/types/notification";
-import type { VCard } from "vuetify/components";
 
 const props = defineProps<{
   notification: ExtractNotifications<typeof NoteEventNotificationTypes>;

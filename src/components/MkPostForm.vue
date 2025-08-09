@@ -134,10 +134,10 @@
 </template>
 
 <script setup lang="ts">
-import type { NoteWithExtension } from "@/stores/note-cache";
 import { isAPIError } from "misskey-js/api.js";
 import type { EmojiSimple, NotesCreateRequest } from "misskey-js/entities.js";
 import type { VCard } from "vuetify/components";
+import type { NoteWithExtension } from "@/stores/note-cache";
 
 const props = withDefaults(
   defineProps<{

@@ -21,8 +21,8 @@
   </VInfiniteScroll>
 </template>
 <script lang="ts" setup>
-import type { NoteWithExtension } from "@/stores/note-cache";
 import type { APIError } from "misskey-js/api.js";
+import type { NoteWithExtension } from "@/stores/note-cache";
 
 const props = defineProps<{
   side?: "start" | "end" | "both";

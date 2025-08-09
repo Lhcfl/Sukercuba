@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+
 type SnackMessage = {
   color?: string;
   timeout?: number;

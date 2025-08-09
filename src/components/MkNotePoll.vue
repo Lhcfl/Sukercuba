@@ -49,6 +49,7 @@
 
 <script setup lang="ts">
 import type { NoteWithExtension } from "@/stores/note-cache";
+
 const props = defineProps<{
   note: NoteWithExtension;
   poll: NonNullable<NoteWithExtension["poll"]>;

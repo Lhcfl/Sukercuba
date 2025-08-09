@@ -1,4 +1,4 @@
-import { watch, type WritableComputedRef } from "vue";
+import { type WritableComputedRef, watch } from "vue";
 import { createI18n } from "vue-i18n";
 import en from "@/locales/en-US.json";
 import zh from "@/locales/zh-CN.json";
