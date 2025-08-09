@@ -19,6 +19,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { acct } from "misskey-js";
 import type { NoteWithExtension } from "@/stores/note-cache";
 
 const props = defineProps<{
