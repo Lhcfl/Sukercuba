@@ -1,6 +1,5 @@
 <template>
-  <mk-timeline timeline="homeTimeline"></mk-timeline>
-  <button @click="num++">{{ num }} test miao</button>
+  <button p="2" flex="~ col" @click="num++">{{ num }} test miao</button>
 </template>
 
 <script setup lang="ts">

@@ -29,6 +29,7 @@ const parsed = computed(() =>
   height: 2em;
   vertical-align: middle;
   transition: transform 0.2s ease;
+  display: inline;
 }
 
 .normal {

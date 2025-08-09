@@ -1,0 +1,3 @@
+<template>
+  <MkNotifications></MkNotifications>
+</template>

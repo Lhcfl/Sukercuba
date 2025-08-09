@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppBottomNavigation: typeof import('./components/AppBottomNavigation.vue')['default']
     AppPopupMessageContainer: typeof import('./components/AppPopupMessageContainer.vue')['default']
     AppSidebar: typeof import('./components/AppSidebar.vue')['default']
     AppSnackbarQueueContainer: typeof import('./components/AppSnackbarQueueContainer.vue')['default']
@@ -50,6 +51,7 @@ declare module 'vue' {
     MkUserPageCard: typeof import('./components/MkUserPageCard.vue')['default']
     MkUserTimeline: typeof import('./components/MkUserTimeline.vue')['default']
     MkVisibilityPicker: typeof import('./components/MkVisibilityPicker.vue')['default']
+    MobileBottomNavigation: typeof import('./components/MobileBottomNavigation.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

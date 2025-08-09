@@ -23,6 +23,7 @@ declare module 'vue-router/auto-routes' {
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/login-redirect': RouteRecordInfo<'/login-redirect', '/login-redirect', Record<never, never>, Record<never, never>>,
     '/notes/[id]': RouteRecordInfo<'/notes/[id]', '/notes/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/notifications': RouteRecordInfo<'/notifications', '/notifications', Record<never, never>, Record<never, never>>,
     '/search': RouteRecordInfo<'/search', '/search', Record<never, never>, Record<never, never>>,
     '/tags/[tag]': RouteRecordInfo<'/tags/[tag]', '/tags/:tag', { tag: ParamValue<true> }, { tag: ParamValue<false> }>,
     '/test': RouteRecordInfo<'/test', '/test', Record<never, never>, Record<never, never>>,
@@ -57,6 +58,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/notes/[id].vue': {
       routes: '/notes/[id]'
+      views: never
+    }
+    'src/pages/notifications.vue': {
+      routes: '/notifications'
       views: never
     }
     'src/pages/search.vue': {

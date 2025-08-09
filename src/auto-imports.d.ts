@@ -71,6 +71,7 @@ declare global {
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useId: typeof import('vue')['useId']
   const useModel: typeof import('vue')['useModel']
+  const useNavigations: typeof import('./services/navigations')['useNavigations']
   const useNoteCache: typeof import('./stores/note-cache')['useNoteCache']
   const usePopupMessage: typeof import('./stores/popup-message')['usePopupMessage']
   const usePreferences: typeof import('./stores/preference')['usePreferences']
@@ -105,6 +106,9 @@ declare global {
   // @ts-ignore
   export type { UserApi } from './stores/user-cache'
   import('./stores/user-cache')
+  // @ts-ignore
+  export type { NavigationItem } from './services/navigations'
+  import('./services/navigations')
 }
 
 // for vue template auto import
@@ -177,6 +181,7 @@ declare module 'vue' {
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
+    readonly useNavigations: UnwrapRef<typeof import('./services/navigations')['useNavigations']>
     readonly useNoteCache: UnwrapRef<typeof import('./stores/note-cache')['useNoteCache']>
     readonly usePopupMessage: UnwrapRef<typeof import('./stores/popup-message')['usePopupMessage']>
     readonly usePreferences: UnwrapRef<typeof import('./stores/preference')['usePreferences']>

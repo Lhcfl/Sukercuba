@@ -3,20 +3,14 @@
   <VMain>
     <RouterView v-slot="{ Component }">
       <KeepAlive :max="10">
-        <component
-          :is="Component"
-          :key="componentId"
-        />
+        <component :is="Component" :key="componentId" />
       </KeepAlive>
     </RouterView>
   </VMain>
-  <VNavigationDrawer
-    mobile-breakpoint="md"
-    location="right"
-    :width="400"
-  >
+  <VNavigationDrawer mobile-breakpoint="md" location="right" :width="400">
     <MkNotifications />
   </VNavigationDrawer>
+  <AppBottomNavigation />
 </template>
 
 <script lang="ts" setup>
