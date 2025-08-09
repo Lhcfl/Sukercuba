@@ -102,14 +102,14 @@ const expireKinds = computed(() =>
   (["infinite", "after", "at"] as const).map((x) => ({
     title: t(`_poll.${x}`),
     value: x,
-  }))
+  })),
 );
 
 const afterKinds = computed(() =>
   ["day", "hour", "minute", "second"].map((x) => ({
     title: t(`_time.${x}`),
     value: x,
-  }))
+  })),
 );
 
 const after = ref<"day" | "hour" | "minute" | "second">("day");
@@ -119,13 +119,13 @@ const expireKind = computed({
     poll.value.expiredAfter != null
       ? "after"
       : poll.value.expiresAt != null
-      ? "at"
-      : "infinite",
+        ? "at"
+        : "infinite",
   set: (v: "infinite" | "after" | "at") => {
-    if (v == "after") {
+    if (v === "after") {
       poll.value.expiredAfter = 3 * 86400 * 1000;
       poll.value.expiresAt = undefined;
-    } else if (v == "infinite") {
+    } else if (v === "infinite") {
       poll.value.expiredAfter = undefined;
       poll.value.expiresAt = undefined;
     } else {

@@ -17,14 +17,14 @@ const props = withDefaults(
   {
     kind: "user",
     noNavigate: false,
-  }
+  },
 );
 
 const router = useRouter();
 
 const url = computed(() =>
-  props.kind == "note"
+  props.kind === "note"
     ? router.resolve({ name: "/tags/[tag]", params: { tag: props.tag } }).href
-    : ""
+    : "",
 );
 </script>

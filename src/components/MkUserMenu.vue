@@ -21,14 +21,14 @@
 </template>
 
 <script setup lang="ts">
-import type { UserDetailed } from 'misskey-js/entities.js';
+import type { UserDetailed } from "misskey-js/entities.js";
 
 const props = defineProps<{
-  user: UserDetailed,
+  user: UserDetailed;
 }>();
 
 const { t } = useI18n();
 const account = useAccount();
 
-const isMe = computed(() => account.me?.id == props.user.id);
+const isMe = computed(() => account.me?.id === props.user.id);
 </script>

@@ -38,7 +38,7 @@ onMounted(async () => {
       new URL(`/api/miauth/${session}/check`, account.site),
       {
         method: "POST",
-      }
+      },
     ).then((x) => x.json());
     account.token = resp.token;
     account.me = resp.user;

@@ -4,23 +4,23 @@
 </template>
 
 <script setup lang="ts">
-import Twemoji from 'twemoji';
+import Twemoji from "twemoji";
 
 const props = defineProps<{
-  emoji: string,
-  menu?: boolean,
+  emoji: string;
+  menu?: boolean;
 }>();
 
 const account = useAccount();
 
-const parsed = computed(() => 
-  // Twemoji.parse(props.emoji)  
+const parsed = computed(() =>
+  // Twemoji.parse(props.emoji)
   Twemoji.parse(props.emoji, {
     base: account.site,
-    ext: '.svg',
-    folder: '/twemoji',
-    className: useCssModule().root
-  })
+    ext: ".svg",
+    folder: "/twemoji",
+    className: useCssModule().root,
+  }),
 );
 </script>
 

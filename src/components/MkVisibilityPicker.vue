@@ -51,7 +51,7 @@
 const draft = defineModel<ReturnType<typeof useDraft>>({ required: true });
 
 defineProps<{
-  disabled?: boolean
+  disabled?: boolean;
 }>();
 
 const { t } = useI18n();
@@ -68,10 +68,10 @@ const visibilities = computed(() =>
     ...v,
     title: t(`_visibility.${v.value}`),
     subtitle: t(`_visibility.${v.value}Description`),
-  }))
+  })),
 );
 
 const selectedVisibility = computed(
-  () => visibilities.value.find((v) => v.value == draft.value.visibility)!
+  () => visibilities.value.find((v) => v.value === draft.value.visibility)!,
 );
 </script>

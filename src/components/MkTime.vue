@@ -39,7 +39,7 @@ const props = withDefaults(
   {
     origin: null,
     mode: "relative",
-  }
+  },
 );
 
 function getDateSafe(n: Date | string | number) {
@@ -56,11 +56,11 @@ function getDateSafe(n: Date | string | number) {
 }
 
 const _time = computed(() =>
-  props.time == null ? NaN : getDateSafe(props.time).getTime()
+  props.time == null ? NaN : getDateSafe(props.time).getTime(),
 );
 const invalid = computed(() => Number.isNaN(_time.value));
 const absolute = computed(() =>
-  !invalid.value ? dateTimeFormat.format(_time.value) : t("_ago.invalid")
+  !invalid.value ? dateTimeFormat.format(_time.value) : t("_ago.invalid"),
 );
 const realNow = ref(Date.now());
 const now = computed(() => props.origin?.getTime() ?? realNow.value);
@@ -73,36 +73,46 @@ const relative = computed<string>(() => {
   return ago.value >= 31536000
     ? t("_ago.yearsAgo", { n: Math.round(ago.value / 31536000).toString() })
     : ago.value >= 2592000
-    ? t("_ago.monthsAgo", { n: Math.round(ago.value / 2592000).toString() })
-    : ago.value >= 604800
-    ? t("_ago.weeksAgo", { n: Math.round(ago.value / 604800).toString() })
-    : ago.value >= 86400
-    ? t("_ago.daysAgo", { n: Math.round(ago.value / 86400).toString() })
-    : ago.value >= 3600
-    ? t("_ago.hoursAgo", { n: Math.round(ago.value / 3600).toString() })
-    : ago.value >= 60
-    ? t("_ago.minutesAgo", { n: (~~(ago.value / 60)).toString() })
-    : ago.value >= 10
-    ? t("_ago.secondsAgo", { n: (~~(ago.value % 60)).toString() })
-    : ago.value >= -3
-    ? t("_ago.justNow")
-    : ago.value < -31536000
-    ? t("_timeIn.years", {
-        n: Math.round(-ago.value / 31536000).toString(),
-      })
-    : ago.value < -2592000
-    ? t("_timeIn.months", {
-        n: Math.round(-ago.value / 2592000).toString(),
-      })
-    : ago.value < -604800
-    ? t("_timeIn.weeks", { n: Math.round(-ago.value / 604800).toString() })
-    : ago.value < -86400
-    ? t("_timeIn.days", { n: Math.round(-ago.value / 86400).toString() })
-    : ago.value < -3600
-    ? t("_timeIn.hours", { n: Math.round(-ago.value / 3600).toString() })
-    : ago.value < -60
-    ? t("_timeIn.minutes", { n: (~~(-ago.value / 60)).toString() })
-    : t("_timeIn.seconds", { n: (~~(-ago.value % 60)).toString() });
+      ? t("_ago.monthsAgo", { n: Math.round(ago.value / 2592000).toString() })
+      : ago.value >= 604800
+        ? t("_ago.weeksAgo", { n: Math.round(ago.value / 604800).toString() })
+        : ago.value >= 86400
+          ? t("_ago.daysAgo", { n: Math.round(ago.value / 86400).toString() })
+          : ago.value >= 3600
+            ? t("_ago.hoursAgo", { n: Math.round(ago.value / 3600).toString() })
+            : ago.value >= 60
+              ? t("_ago.minutesAgo", { n: (~~(ago.value / 60)).toString() })
+              : ago.value >= 10
+                ? t("_ago.secondsAgo", { n: (~~(ago.value % 60)).toString() })
+                : ago.value >= -3
+                  ? t("_ago.justNow")
+                  : ago.value < -31536000
+                    ? t("_timeIn.years", {
+                        n: Math.round(-ago.value / 31536000).toString(),
+                      })
+                    : ago.value < -2592000
+                      ? t("_timeIn.months", {
+                          n: Math.round(-ago.value / 2592000).toString(),
+                        })
+                      : ago.value < -604800
+                        ? t("_timeIn.weeks", {
+                            n: Math.round(-ago.value / 604800).toString(),
+                          })
+                        : ago.value < -86400
+                          ? t("_timeIn.days", {
+                              n: Math.round(-ago.value / 86400).toString(),
+                            })
+                          : ago.value < -3600
+                            ? t("_timeIn.hours", {
+                                n: Math.round(-ago.value / 3600).toString(),
+                              })
+                            : ago.value < -60
+                              ? t("_timeIn.minutes", {
+                                  n: (~~(-ago.value / 60)).toString(),
+                                })
+                              : t("_timeIn.seconds", {
+                                  n: (~~(-ago.value % 60)).toString(),
+                                });
 });
 
 let tickId: number;

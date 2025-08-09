@@ -1,21 +1,23 @@
 import type { EmojiSimple, Note } from "misskey-js/entities.js";
+import { isPureRenote } from "misskey-js/note.js";
 import { defineStore } from "pinia";
 import type { Ref } from "vue";
 import { useAccount } from "./account";
-import { isPureRenote } from "misskey-js/note.js";
 import { useUserCache } from "./user-cache";
 
 export type NoteWithExtension = Note & {
-  renote?: NoteWithExtension,
-  reply?: NoteWithExtension,
+  renote?: NoteWithExtension;
+  reply?: NoteWithExtension;
   renotedByMe?: boolean;
   isDeleted?: boolean;
-}
+};
 
-type ActullyStoredNote = Ref<Exclude<NoteWithExtension, 'renote' | 'reply'> & {
-  renote?: Ref<NoteWithExtension>,
-  reply?: Ref<NoteWithExtension>,
-}>;
+type ActullyStoredNote = Ref<
+  Exclude<NoteWithExtension, "renote" | "reply"> & {
+    renote?: Ref<NoteWithExtension>;
+    reply?: Ref<NoteWithExtension>;
+  }
+>;
 
 /**
  * Use singleton mode to ensure that each note will be retrieved only once for the same period of time.
@@ -26,36 +28,40 @@ export const useNoteCache = defineStore("note-cache", () => {
 
   const account = useAccount();
 
-  account.streamApi.on('noteUpdated', async ({ type, id, body}) => {
+  account.streamApi.on("noteUpdated", async ({ type, id, body }) => {
     const note = noteCache.get(id);
     const me = account.me;
 
-    switch(type) {
+    switch (type) {
       // fix sharkey
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      case 'replied' as any: {
-				try {
+      case "replied" as any: {
+        try {
           // notes/show may throw if the current user can't see the note
-					const replyNote = await account.api.request('notes/show', {
-						noteId: (body as unknown as { id: string }).id,
-					});
+          const replyNote = await account.api.request("notes/show", {
+            noteId: (body as unknown as { id: string }).id,
+          });
 
-					cached(replyNote);
-				} catch { /* empty */ }
-				break;
-			}
+          cached(replyNote);
+        } catch {
+          /* empty */
+        }
+        break;
+      }
 
       case "reacted": {
-        if (note == null) { return; }
+        if (note == null) {
+          return;
+        }
 
-        const emoji = body.emoji as string | EmojiSimple | null
+        const emoji = body.emoji as string | EmojiSimple | null;
 
-        if (typeof emoji === 'object' && emoji != null && 'url' in emoji) {
+        if (typeof emoji === "object" && emoji != null && "url" in emoji) {
           note.value.reactionEmojis[emoji.name] = emoji.url;
         }
 
         note.value.reactions[body.reaction] ??= 0;
-        note.value.reactions[body.reaction] ++;
+        note.value.reactions[body.reaction]++;
 
         if (body.userId === me?.id) {
           note.value.myReaction = body.reaction;
@@ -63,10 +69,12 @@ export const useNoteCache = defineStore("note-cache", () => {
         break;
       }
       case "unreacted": {
-        if (note == null) { return; }
+        if (note == null) {
+          return;
+        }
         note.value.reactions[body.reaction] ??= 1;
-        note.value.reactions[body.reaction] --;
-        if (note.value.reactions[body.reaction] == 0) {
+        note.value.reactions[body.reaction]--;
+        if (note.value.reactions[body.reaction] === 0) {
           delete note.value.reactions[body.reaction];
         }
 
@@ -76,64 +84,80 @@ export const useNoteCache = defineStore("note-cache", () => {
         break;
       }
 
-      case 'pollVoted': {
-        if (note == null) { return; }
+      case "pollVoted": {
+        if (note == null) {
+          return;
+        }
 
         // sharkey have poll
-				const choice = (body as unknown as { choice: number }).choice;
+        const choice = (body as unknown as { choice: number }).choice;
         if (choice == null) return;
 
-				const choices = [...note.value.poll!.choices];
-				choices[choice] = {
-					...choices[choice],
-					votes: choices[choice].votes + 1,
-					...(me && (body.userId === me.id) ? {
-						isVoted: true,
-					} : {}),
-				};
+        const choices = [...note.value.poll?.choices ?? []];
+        choices[choice] = {
+          ...choices[choice],
+          votes: choices[choice].votes + 1,
+          ...(me && body.userId === me.id
+            ? {
+                isVoted: true,
+              }
+            : {}),
+        };
 
-				note.value.poll!.choices = choices;
-				break;
-			}
+        note.value.poll!.choices = choices;
+        break;
+      }
 
-			case 'deleted': {
-        if (note == null) { return; }
-				
-        deleteNote(note.value.id, note.value.userId == me?.id && isPureRenote(note.value));
-				break;
-			}
+      case "deleted": {
+        if (note == null) {
+          return;
+        }
+
+        deleteNote(
+          note.value.id,
+          note.value.userId === me?.id && isPureRenote(note.value),
+        );
+        break;
+      }
 
       // fix sharkey stelpolva
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-			case 'madePrivate' as any: {
-        if (note == null) { return; }
-				
+      case "madePrivate" as any: {
+        if (note == null) {
+          return;
+        }
+
         if (me?.id === note.value.userId) {
-					note.value.visibility = 'specified';
-				} else {
-					// perform delete
-					note.value.isDeleted = true;
-          deleteNote(note.value.id, note.value.userId == me?.id && isPureRenote(note.value));
-				}
-				break;
-			}
+          note.value.visibility = "specified";
+        } else {
+          // perform delete
+          note.value.isDeleted = true;
+          deleteNote(
+            note.value.id,
+            note.value.userId === me?.id && isPureRenote(note.value),
+          );
+        }
+        break;
+      }
 
       // fix sharkey
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			case 'updated' as any: {
-				try {
-          console.log({type, id, body});
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      case "updated" as any: {
+        try {
+          console.log({ type, id, body });
 
-					const editedNote = await account.api.request('notes/show', {
-						noteId: id,
-					});
+          const editedNote = await account.api.request("notes/show", {
+            noteId: id,
+          });
 
-					cached(editedNote, true);
-				} catch { /* empty */ }
-				break;
-			}
+          cached(editedNote, true);
+        } catch {
+          /* empty */
+        }
+        break;
+      }
     }
-  })
+  });
 
   function deleteNote(noteId: Note["id"], isMe?: boolean) {
     const note = noteCache.get(noteId);
@@ -148,13 +172,12 @@ export const useNoteCache = defineStore("note-cache", () => {
     }
   }
 
-  function update(
-    note: Partial<Note> & { id: Note["id"] },
-    fully = false
-  ) {
+  function update(note: Partial<Note> & { id: Note["id"] }, fully = false) {
     const oldNote = noteCache.get(note.id);
 
-    if (!oldNote) { return; }
+    if (!oldNote) {
+      return;
+    }
 
     const updateKeys = new Set([
       ...Object.keys(note),
@@ -165,12 +188,14 @@ export const useNoteCache = defineStore("note-cache", () => {
     updateKeys.delete("renote");
     updateKeys.delete("id");
 
-    for (const key of [...updateKeys]) {
-      (oldNote.value as Record<string, unknown>)[key] = (note as Record<string, unknown>)[key];
+    for (const key of updateKeys) {
+      (oldNote.value as Record<string, unknown>)[key] = (
+        note as Record<string, unknown>
+      )[key];
     }
 
-    if (note.reply) update(note.reply)
-    if (note.renote) update(note.renote)
+    if (note.reply) update(note.reply);
+    if (note.renote) update(note.renote);
   }
 
   function cached(note: Note, fully = false): Ref<NoteWithExtension> {
@@ -195,12 +220,12 @@ export const useNoteCache = defineStore("note-cache", () => {
         storedNote.value.renote = storedRenote as never;
         if (fully) {
           storedRenote.value.renoteCount++;
-          if (storedNote.value.userId == account.me?.id) {
+          if (storedNote.value.userId === account.me?.id) {
             storedRenote.value.renotedByMe = true;
           }
         }
       }
-      
+
       // subscribe the note
       account.streamApi.send("sr", { id: storedNote.value.id });
 

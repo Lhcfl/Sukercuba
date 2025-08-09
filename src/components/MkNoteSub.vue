@@ -55,14 +55,14 @@ const props = withDefaults(
   }>(),
   {
     variant: "text",
-  }
+  },
 );
 
 const router = useRouter();
 
 const isPureRenote = computed(() => Misskey.note.isPureRenote(props.note));
 const appearNote = computed(() =>
-  isPureRenote.value ? props.note.renote! : props.note
+  isPureRenote.value ? props.note.renote! : props.note,
 );
 
 function routeToNote() {

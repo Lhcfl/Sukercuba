@@ -43,13 +43,13 @@ const customEmojiName = computed(() =>
   (props.name[0] === ":"
     ? props.name.substring(1, props.name.length - 1)
     : props.name
-  ).replace("@.", "")
+  ).replace("@.", ""),
 );
 const isLocal = computed(
   () =>
     !props.host &&
     (customEmojiName.value.endsWith("@.") ||
-      !customEmojiName.value.includes("@"))
+      !customEmojiName.value.includes("@")),
 );
 
 const url = computed(() => {

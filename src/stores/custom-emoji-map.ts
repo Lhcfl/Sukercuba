@@ -8,22 +8,25 @@ const FETCH_DURATION = 1000 * 60 * 60;
 
 export const useCustomEmojisData = defineStore("emojis", () => {
   const account = useAccount();
-  
+
   const emojis = account.siteStore.getRef("emojis");
 
-  const emojiFuse = computed(() => new Fuse(emojis.value ?? [], {
-    keys: ['name', 'aliases'],
-    threshold: 0.1,
-    includeScore: true,
-  }));
+  const emojiFuse = computed(
+    () =>
+      new Fuse(emojis.value ?? [], {
+        keys: ["name", "aliases"],
+        threshold: 0.1,
+        includeScore: true,
+      }),
+  );
 
   const emojiMap = computed(
-    () => new Map((emojis.value ?? []).map((e) => [e.name, e]))
+    () => new Map((emojis.value ?? []).map((e) => [e.name, e])),
   );
 
   const emojiCategories = computed(() => {
     const ret = new Map<string | null, EmojiSimple[]>();
-    for (const e of (emojis.value ?? [])) {
+    for (const e of emojis.value ?? []) {
       const arr = ret.get(e.category || null);
       if (arr != null) {
         arr.push(e);

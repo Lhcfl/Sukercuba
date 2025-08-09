@@ -20,7 +20,7 @@ const props = withDefaults(
     withRenotes: true,
     withFiles: false,
     withChannelNotes: true,
-  }
+  },
 );
 
 const account = useAccount();

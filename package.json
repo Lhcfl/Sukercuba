@@ -10,8 +10,8 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --fix",
-    "lint:test": "eslint .",
+    "lint": "oxlint && biome lint && biome format",
+    "lint:test": "oxlint --fix && biome format --write && biome lint --write",
     "test": "pnpm lint:test && pnpm type-check",
     "prepare": "husky"
   },
@@ -32,6 +32,7 @@
     "vuetify": "^3.9.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.1.4",
     "@eslint/js": "^9.33.0",
     "@tsconfig/node22": "^22.0.2",
     "@types/node": "^24.2.1",
@@ -45,6 +46,7 @@
     "husky": "^9.1.7",
     "js-yaml": "^4.1.0",
     "npm-run-all2": "^8.0.4",
+    "oxlint": "^1.11.1",
     "pinia": "^3.0.3",
     "sass": "1.90.0",
     "sass-embedded": "^1.90.0",

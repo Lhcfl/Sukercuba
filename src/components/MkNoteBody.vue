@@ -62,8 +62,8 @@
   </VCardText>
 </template>
 <script setup lang="ts">
-import type { NoteWithExtension } from '@/stores/note-cache';
-import { useResizeObserver } from '@vueuse/core';
+import type { NoteWithExtension } from "@/stores/note-cache";
+import { useResizeObserver } from "@vueuse/core";
 
 const { t } = useI18n();
 
@@ -73,27 +73,31 @@ defineProps<{
   simple?: boolean;
   /** 防止subnote也被折叠 */
   neverCollapse?: boolean;
-}>()
+}>();
 
 const noteTextRef = useTemplateRef("noteTextRef");
 const isLongNote = ref(false);
 const collapsed = ref(true);
 
-/** 
+/**
  * 当 noteTextRef 第一次被加载的时候，施加一个 ResizeObserver
  * 只要检测到一次 long note 就无须再检测
  */
-watch(noteTextRef, () => {
-  const observer = useResizeObserver(noteTextRef, () => {
-    const height = noteTextRef.value?.clientHeight;
-    if (height && height > 400) {
-      isLongNote.value = true;
-      observer.stop();
-    }
-  });
-}, {
-  once: true,
-})
+watch(
+  noteTextRef,
+  () => {
+    const observer = useResizeObserver(noteTextRef, () => {
+      const height = noteTextRef.value?.clientHeight;
+      if (height && height > 400) {
+        isLongNote.value = true;
+        observer.stop();
+      }
+    });
+  },
+  {
+    once: true,
+  },
+);
 </script>
 
 <style lang="scss" module>

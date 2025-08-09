@@ -60,12 +60,12 @@ export const useUserCache = defineStore("user-cache", () => {
           detailed: true,
           data: account.me,
           cachedAt: new Date(),
-        } as CachedUserDetailed),
+        }) as CachedUserDetailed,
       set: (u) => {
         debugLog("Warning: don't set user me.", u);
         // do nothing
       },
-    })
+    });
     userCache.set(account.me.id, me);
     userCache.set(acct.toString(account.me), me);
   }
@@ -87,7 +87,7 @@ export const useUserCache = defineStore("user-cache", () => {
       detailed?: boolean;
       /** 无论如何都 fetch */
       fetch?: boolean;
-    } = {}
+    } = {},
   ): Ref<CachedUserType | undefined> {
     const cached = getCacheByQuery(query);
     nextTick(() =>
@@ -95,8 +95,8 @@ export const useUserCache = defineStore("user-cache", () => {
         query,
         cached.value == null ||
           params.fetch ||
-          (!cached.value?.detailed && params.detailed)
-      )
+          (!cached.value?.detailed && params.detailed),
+      ),
     );
     return cached;
   }
@@ -123,7 +123,7 @@ export const useUserCache = defineStore("user-cache", () => {
           "users/show",
           "id" in query
             ? { userId: query.id }
-            : (query as { username: string; host: string | null })
+            : (query as { username: string; host: string | null }),
         );
 
         cached.value = {
@@ -178,7 +178,7 @@ export const useUserCache = defineStore("user-cache", () => {
       update?: Updateable;
       /** get a detailed user if is a lite user */
       detailed?: boolean;
-    } = {}
+    } = {},
   ): Ref<U extends UserDetailed ? CachedUserDetailed : CachedUserType> {
     const cached = getCacheByQuery(user);
     const now = new Date();
@@ -251,16 +251,19 @@ export class UserApi {
       ing.value = false;
     }
   }
-  
+
   async accept(ing: Ref<boolean>) {
     ing.value = true;
     try {
       await this.account.api.request("following/requests/accept", {
         userId: this.user.id,
       });
-      this.userCache.patchUser(this.user.id, { isFollowed: true, hasPendingFollowRequestToYou: false });
+      this.userCache.patchUser(this.user.id, {
+        isFollowed: true,
+        hasPendingFollowRequestToYou: false,
+      });
     } catch (err) {
-      this.handleRequestError(err)
+      this.handleRequestError(err);
     } finally {
       ing.value = false;
     }
@@ -271,7 +274,9 @@ export class UserApi {
       await this.account.api.request("following/requests/reject", {
         userId: this.user.id,
       });
-      this.userCache.patchUser(this.user.id, { hasPendingFollowRequestToYou: false });
+      this.userCache.patchUser(this.user.id, {
+        hasPendingFollowRequestToYou: false,
+      });
     } catch (err) {
       this.handleRequestError(err);
     } finally {
@@ -284,7 +289,9 @@ export class UserApi {
       await this.account.api.request("following/requests/cancel", {
         userId: this.user.id,
       });
-      this.userCache.patchUser(this.user.id, { hasPendingFollowRequestFromYou: false });
+      this.userCache.patchUser(this.user.id, {
+        hasPendingFollowRequestFromYou: false,
+      });
     } catch (err) {
       this.handleRequestError(err);
     } finally {
@@ -293,7 +300,12 @@ export class UserApi {
   }
   async unfollow(ing: Ref<boolean>) {
     const i18n = getI18n().global;
-    const { ok } = await usePopupMessage().push({ type: 'info', message: i18n.t('unfollowConfirm', { name: this.user.name ?? this.user.username }) });
+    const { ok } = await usePopupMessage().push({
+      type: "info",
+      message: i18n.t("unfollowConfirm", {
+        name: this.user.name ?? this.user.username,
+      }),
+    });
     if (!ok) {
       return;
     }

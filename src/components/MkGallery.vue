@@ -41,10 +41,12 @@ const props = defineProps<{
 }>();
 
 const images = computed(() =>
-  props.images.filter((i) => i.type.startsWith("image")).map((i) => ({
-    ...i,
-    ...i.properties
-  }))
+  props.images
+    .filter((i) => i.type.startsWith("image"))
+    .map((i) => ({
+      ...i,
+      ...i.properties,
+    })),
 );
 const columns = computed(() => {
   const ret: [typeof images.value, typeof images.value] = [[], []];

@@ -40,10 +40,10 @@ async function load(context: {
   done: (stat: "ok" | "error" | "empty") => void;
 }) {
   try {
-    const ret = await (context.side == "start" ? props.pre : props.next)?.(
-      notes.value
+    const ret = await (context.side === "start" ? props.pre : props.next)?.(
+      notes.value,
     );
-    if (!ret || ret.length == 0) {
+    if (!ret || ret.length === 0) {
       context.done("empty");
     } else {
       notes.value = notes.value.concat(ret);

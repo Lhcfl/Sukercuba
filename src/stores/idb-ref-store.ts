@@ -1,22 +1,21 @@
 import type { Ref, WritableComputedRef } from "vue";
-import { IDBStore } from "./store";
+import type { IDBStore } from "./store";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type IDBRefStoreRes<T extends Record<string, any>> = {
   [K in keyof T]: T[K] | undefined;
 };
 
-
 /**
  * Reactive IndexedDB store, strongly typed
- * 
- * We don't actually care about the time to write to IndexDB, 
- * so we just need to load IndexedDB at the beginning, so that 
- * IndexedDB can be treated as a synchronous operation, 
+ *
+ * We don't actually care about the time to write to IndexDB,
+ * so we just need to load IndexedDB at the beginning, so that
+ * IndexedDB can be treated as a synchronous operation,
  * just like localstorage.
- * 
- * This class is a simple wrapper for IndexDB, using the 
- * principles of Proxy and WritableComputedRef to automatically 
+ *
+ * This class is a simple wrapper for IndexDB, using the
+ * principles of Proxy and WritableComputedRef to automatically
  * initiate a write to IndexedDB after access.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,29 +47,32 @@ export class IDBRefStore<T extends Record<string, any>> {
     const base = this.base;
     return new Proxy(this.__refs, {
       get(target, key) {
-        if (typeof key != 'string') throw "key must be string"
+        if (typeof key !== "string") throw "key must be string";
         target[key] ??= ref();
         return target[key].value;
       },
       set(target, key, val) {
-        if (typeof key != 'string') throw "key must be string";
+        if (typeof key !== "string") throw "key must be string";
         const r = target[key];
-        if (r) { r.value = val; }
-        else { target[key] = ref(val); }
-        base.set(key, val)
+        if (r) {
+          r.value = val;
+        } else {
+          target[key] = ref(val);
+        }
+        base.set(key, val);
         return true;
-      }
+      },
     }) as IDBRefStoreRes<T>;
   }
 
   getRef<K extends keyof T>(key: K) {
     this.__refs[key as string] ??= ref();
     return computed({
-      get: () => this.__refs[key as string]!.value,
+      get: () => this.__refs[key as string]?.value,
       set: (v) => {
         this.__refs[key as string]!.value = v;
         this.base.set(key as string, v);
-      }
+      },
     }) as WritableComputedRef<T[K] | undefined>;
   }
 }

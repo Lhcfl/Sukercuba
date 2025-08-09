@@ -99,7 +99,7 @@ const cached = useUserCache().cache(props.notification.user, {
   detailed: true,
 });
 const userDetailed = computed(() =>
-  cached.value.detailed ? cached.value.data : undefined
+  cached.value.detailed ? cached.value.data : undefined,
 );
 
 const sendingFollow = ref(false);
@@ -115,19 +115,19 @@ const message = computed(
       follow: t("youGotNewFollower"),
       receiveFollowRequest: t("receiveFollowRequest"),
       followRequestAccepted: t("followRequestAccepted"),
-    }[props.notification.type])
+    })[props.notification.type],
 );
 
 const showAcceptRefuse = computed(() =>
   !rejected.value && props.notification.type === "receiveFollowRequest"
     ? !(userDetailed.value?.isFollowed || userDetailed.value?.isBlocking)
-    : false
+    : false,
 );
 
 const showFollowBack = computed(() =>
   userDetailed.value?.isFollowed && props.notification.type === "follow"
     ? !userDetailed.value?.isFollowing
-    : false
+    : false,
 );
 
 function routeToUser() {
@@ -141,7 +141,8 @@ const userApi = computed(() => new UserApi(props.notification.user));
 const accept = () => userApi.value.accept(sendingAccept);
 const reject = () => userApi.value.reject(sendingReject);
 const follow = () => userApi.value.follow(sendingFollow);
-const cancelFollowRequest = () => userApi.value.cancelFollowRequest(sendingCancelFollowRequest);
+const cancelFollowRequest = () =>
+  userApi.value.cancelFollowRequest(sendingCancelFollowRequest);
 const breakFollow = () => userApi.value.breakFollow(sendingBreakFollow);
 </script>
 

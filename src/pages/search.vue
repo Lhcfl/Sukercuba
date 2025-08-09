@@ -34,8 +34,8 @@
 <script setup lang="ts">
 const { t } = useI18n();
 const tabs = computed(() => [
-  { text: t('notes'), value: 'notes' },
-  { text: t('users'), value: 'users' },
-])
+  { text: t("notes"), value: "notes" },
+  { text: t("users"), value: "users" },
+]);
 const tab = ref(0);
 </script>

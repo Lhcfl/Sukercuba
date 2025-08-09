@@ -25,20 +25,29 @@
 </template>
 
 <script lang="ts" setup>
-import { NoteEventNotificationTypes, type ExtractNotifications } from "@/types/notification";
+import {
+  NoteEventNotificationTypes,
+  type ExtractNotifications,
+} from "@/types/notification";
 import type { Notification } from "misskey-js/entities.js";
 const props = defineProps<{
   notification: Notification;
-}>()
+}>();
 
-function isNoteEventNotification(n: Notification): n is ExtractNotifications<typeof NoteEventNotificationTypes> {
-  return (NoteEventNotificationTypes as readonly string[]).includes(n.type)
+function isNoteEventNotification(
+  n: Notification,
+): n is ExtractNotifications<typeof NoteEventNotificationTypes> {
+  return (NoteEventNotificationTypes as readonly string[]).includes(n.type);
 }
 
 const noteCache = useNoteCache();
 
 /** Notifications will always return detailed note */
-const note = computed(() => 'note' in props.notification ? noteCache.cached(props.notification.note, true).value : undefined)
+const note = computed(() =>
+  "note" in props.notification
+    ? noteCache.cached(props.notification.note, true).value
+    : undefined,
+);
 </script>
 
 <style lang="scss" module>

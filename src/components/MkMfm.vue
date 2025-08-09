@@ -21,7 +21,7 @@ import MkHashtag from "./MkHashtag.vue";
 function safeParseFloat(str: unknown): number | null {
   if (typeof str !== "string" || str === "") return null;
   const num = parseFloat(str);
-  if (isNaN(num)) return null;
+  if (Number.isNaN(num)) return null;
   return num;
 }
 
@@ -78,13 +78,14 @@ const shouldNyaize = true;
 
 const rootAst = computed(
   () =>
-    props.parsedNodes ?? (props.plain ? mfm.parseSimple : mfm.parse)(props.text)
+    props.parsedNodes ??
+    (props.plain ? mfm.parseSimple : mfm.parse)(props.text),
 );
 
 const validTime = (t: string | boolean | null | undefined) => {
   if (t == null) return null;
   if (typeof t === "boolean") return null;
-  return t.match(/^\-?[0-9.]+s$/) ? t : null;
+  return t.match(/^-?[0-9.]+s$/) ? t : null;
 };
 
 const useAnim = true;
@@ -139,7 +140,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
             {
               style: "font-style: oblique;",
             },
-            genEl(token.children, scale)
+            genEl(token.children, scale),
           );
         }
 
@@ -185,13 +186,13 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               const direction = token.props.args.left
                 ? "reverse"
                 : token.props.args.alternate
-                ? "alternate"
-                : "normal";
+                  ? "alternate"
+                  : "normal";
               const anime = token.props.args.x
                 ? "mfm-spinX"
                 : token.props.args.y
-                ? "mfm-spinY"
-                : "mfm-spin";
+                  ? "mfm-spinY"
+                  : "mfm-spin";
               const speed = validTime(token.props.args.speed) ?? "1.5s";
               const delay = validTime(token.props.args.delay) ?? "0s";
               style = useAnim
@@ -220,8 +221,8 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 token.props.args.h && token.props.args.v
                   ? "scale(-1, -1)"
                   : token.props.args.v
-                  ? "scaleY(-1)"
-                  : "scaleX(-1)";
+                    ? "scaleY(-1)"
+                    : "scaleX(-1)";
               style = `transform: ${transform};`;
               break;
             }
@@ -230,7 +231,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 return h(
                   "span",
                   { style: "font-size: 120%" },
-                  genEl(token.children, scale * 1.2)
+                  genEl(token.children, scale * 1.2),
                 );
               }
               return h(
@@ -238,7 +239,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 {
                   class: defaultStore.state.advancedMfm ? "mfm-x2" : "",
                 },
-                genEl(token.children, scale * 2)
+                genEl(token.children, scale * 2),
               );
             }
             case "x3": {
@@ -246,7 +247,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 return h(
                   "span",
                   { style: "font-size: 120%" },
-                  genEl(token.children, scale * 1.2)
+                  genEl(token.children, scale * 1.2),
                 );
               }
               return h(
@@ -254,7 +255,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 {
                   class: defaultStore.state.advancedMfm ? "mfm-x3" : "",
                 },
-                genEl(token.children, scale * 3)
+                genEl(token.children, scale * 3),
               );
             }
             case "x4": {
@@ -262,7 +263,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 return h(
                   "span",
                   { style: "font-size: 120%" },
-                  genEl(token.children, scale * 1.2)
+                  genEl(token.children, scale * 1.2),
                 );
               }
               return h(
@@ -270,23 +271,23 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 {
                   class: defaultStore.state.advancedMfm ? "mfm-x4" : "",
                 },
-                genEl(token.children, scale * 4)
+                genEl(token.children, scale * 4),
               );
             }
             case "font": {
               const family = token.props.args.serif
                 ? "serif"
                 : token.props.args.monospace
-                ? "monospace"
-                : token.props.args.cursive
-                ? "cursive"
-                : token.props.args.fantasy
-                ? "fantasy"
-                : token.props.args.emoji
-                ? "emoji"
-                : token.props.args.math
-                ? "math"
-                : null;
+                  ? "monospace"
+                  : token.props.args.cursive
+                    ? "cursive"
+                    : token.props.args.fantasy
+                      ? "fantasy"
+                      : token.props.args.emoji
+                        ? "emoji"
+                        : token.props.args.math
+                          ? "math"
+                          : null;
               if (family) style = `font-family: ${family};`;
               break;
             }
@@ -296,7 +297,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 {
                   class: "_mfm_blur_",
                 },
-                genEl(token.children, scale)
+                genEl(token.children, scale),
               );
             }
             case "rainbow": {
@@ -306,7 +307,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                   {
                     class: "_mfm_rainbow_fallback_",
                   },
-                  genEl(token.children, scale)
+                  genEl(token.children, scale),
                 );
               }
               const speed = validTime(token.props.args.speed) ?? "1s";
@@ -371,7 +372,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                   speed: validTime(token.props.args.speed) ?? "0.1s",
                   rotateByVelocity: !!token.props.args.rotateByVelocity,
                 },
-                genEl(token.children, scale)
+                genEl(token.children, scale),
               );
             }
             case "position": {
@@ -387,16 +388,16 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
             }
             case "crop": {
               const top = Number.parseFloat(
-                (token.props.args.top ?? "0").toString()
+                (token.props.args.top ?? "0").toString(),
               );
               const right = Number.parseFloat(
-                (token.props.args.right ?? "0").toString()
+                (token.props.args.right ?? "0").toString(),
               );
               const bottom = Number.parseFloat(
-                (token.props.args.bottom ?? "0").toString()
+                (token.props.args.bottom ?? "0").toString(),
               );
               const left = Number.parseFloat(
-                (token.props.args.left ?? "0").toString()
+                (token.props.args.left ?? "0").toString(),
               );
               style = `clip-path: inset(${top}% ${right}% ${bottom}% ${left}%);`;
               break;
@@ -481,7 +482,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 return h("ruby", {}, [
                   ...genEl(
                     token.children.slice(0, token.children.length - 1),
-                    scale
+                    scale,
                   ),
                   h("rt", text.trim()),
                 ]);
@@ -495,7 +496,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
             case "unixtime": {
               const child = token.children[0];
               const unixtime = parseInt(
-                child.type === "text" ? child.props.text : ""
+                child.type === "text" ? child.props.text : "",
               );
               return h(
                 "span",
@@ -513,7 +514,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                     time: unixtime * 1000,
                     mode: "detail",
                   }),
-                ]
+                ],
               );
             }
             case "clickable": {
@@ -534,7 +535,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                     emit("clickEv", clickEv);
                   },
                 },
-                genEl(token.children, scale)
+                genEl(token.children, scale),
               );
             }
           }
@@ -550,9 +551,9 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
             return h(
               "span",
               {
-                style: "display: inline-block; " + style,
+                style: `display: inline-block; ${style}`,
               },
-              genEl(token.children, scale)
+              genEl(token.children, scale),
             );
           }
         }
@@ -563,7 +564,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               h(
                 "span",
                 { style: "opacity: 0.7;" },
-                genEl(token.children, scale)
+                genEl(token.children, scale),
               ),
             ];
           }
@@ -573,7 +574,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               {
                 style: "opacity: 0.7;",
               },
-              genEl(token.children, scale)
+              genEl(token.children, scale),
             ),
           ];
         }
@@ -584,7 +585,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               h(
                 "span",
                 { style: "opacity: 0.7;" },
-                genEl(token.children, scale)
+                genEl(token.children, scale),
               ),
             ];
           }
@@ -594,7 +595,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               {
                 style: "text-align:center;",
               },
-              h("bdi", genEl(token.children, scale))
+              h("bdi", genEl(token.children, scale)),
             ),
           ];
         }
@@ -613,7 +614,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 url: token.props.url,
                 rel: "nofollow noopener",
                 navigationBehavior: props.linkNavigationBehavior,
-              })
+              }),
             ),
           ];
         }
@@ -624,7 +625,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               h(
                 "span",
                 { style: "color: var(--link);" },
-                genEl(token.children, scale)
+                genEl(token.children, scale),
               ),
             ];
           }
@@ -639,8 +640,8 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                   rel: "nofollow noopener",
                   navigationBehavior: props.linkNavigationBehavior,
                 },
-                genEl(token.children, scale, true)
-              )
+                genEl(token.children, scale, true),
+              ),
             ),
           ];
         }
@@ -661,7 +662,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 username: token.props.username,
                 navigationBehavior: props.linkNavigationBehavior,
                 noNavigate: props.stpvInline,
-              })
+              }),
             ),
           ];
         }
@@ -675,7 +676,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 tag: token.props.hashtag,
                 kind: props.isNote ? "note" : "user",
                 noNavigate: props.stpvInline,
-              })
+              }),
             ),
           ];
         }
@@ -688,7 +689,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 h("code", {
                   key: Math.random(),
                   code: token.props.code.replaceAll("\n", "  "),
-                })
+                }),
               ),
             ];
           }
@@ -700,7 +701,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 key: Math.random(),
                 code: token.props.code,
                 lang: token.props.lang ?? undefined,
-              })
+              }),
             ),
           ];
         }
@@ -712,7 +713,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               h("code", {
                 key: Math.random(),
                 code: token.props.code,
-              })
+              }),
             ),
           ];
         }
@@ -728,8 +729,8 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                   {
                     style: QUOTE_STYLE,
                   },
-                  h("bdi", genEl(token.children, scale, true))
-                )
+                  h("bdi", genEl(token.children, scale, true)),
+                ),
               ),
             ];
           } else {
@@ -839,7 +840,7 @@ function renderMfm() {
 
   return h(
     "bdi",
-    { ...(isBlock ? { class: "block" } : {}) },
+    isBlock ? { class: "block" } : {},
     h(
       "span",
       {
@@ -848,8 +849,8 @@ function renderMfm() {
           ? "white-space: pre; word-wrap: normal; overflow: hidden; text-overflow: ellipsis;"
           : "white-space: pre-wrap;",
       },
-      genEl(rootAst.value, props.rootScale ?? 1)
-    )
+      genEl(rootAst.value, props.rootScale ?? 1),
+    ),
   );
 }
 </script>

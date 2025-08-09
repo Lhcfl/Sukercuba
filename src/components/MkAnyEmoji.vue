@@ -27,6 +27,10 @@ const props = defineProps<{
   fallbackToImage?: boolean;
 }>();
 
-const isCustom = computed(() => props.name.startsWith(":"))
-const url = computed(() => isCustom.value ? ((props.urls ?? {})[props.name.slice(1, -1)] ?? props.url) : props.url)
+const isCustom = computed(() => props.name.startsWith(":"));
+const url = computed(() =>
+  isCustom.value
+    ? (props.urls?.[props.name.slice(1, -1)] ?? props.url)
+    : props.url,
+);
 </script>

@@ -38,7 +38,7 @@ const message = computed(() => popupMessages.messages.at(0));
 const show = computed(() => message.value && !message.value.resolved);
 
 function close(ok: boolean) {
-  message.value!.callback({ ok });
+  message.value?.callback({ ok });
   message.value!.resolved = true;
   setTimeout(() => {
     popupMessages.messages.shift();

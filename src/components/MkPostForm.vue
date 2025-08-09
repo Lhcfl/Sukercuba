@@ -153,7 +153,7 @@ const props = withDefaults(
     edit: undefined,
     allowCancel: undefined,
     variant: "flat",
-  }
+  },
 );
 
 const emit = defineEmits<{
@@ -168,7 +168,7 @@ const draft = computed(() =>
     replyId: props.replyId,
     quoteId: props.quoteId,
     edit: props.edit,
-  })
+  }),
 );
 
 const textRef = useTemplateRef("textRef");
@@ -180,21 +180,20 @@ const sendbtn = computed(() =>
   props.edit
     ? { icon: "mdi-square-edit-outline", text: t("edit") }
     : props.quoteId
-    ? { icon: "mdi-comment-quote-outline", text: t("quote") }
-    : props.replyId
-    ? { icon: "mdi-reply-outline", text: t("reply") }
-    : { icon: "mdi-send-outline", text: t("send") }
+      ? { icon: "mdi-comment-quote-outline", text: t("quote") }
+      : props.replyId
+        ? { icon: "mdi-reply-outline", text: t("reply") }
+        : { icon: "mdi-send-outline", text: t("send") },
 );
 
-const submitDisabled = computed(() => 
-  !draft.value.computedText &&
-  !draft.value.pollAvailable
+const submitDisabled = computed(
+  () => !draft.value.computedText && !draft.value.pollAvailable,
 );
 
 async function submit() {
   try {
     loading.value = true;
-    draft.value.poll.choices = draft.value.poll.choices.filter(x => x);
+    draft.value.poll.choices = draft.value.poll.choices.filter((x) => x);
     const req: NotesCreateRequest = {
       text: draft.value.computedText || null,
       cw: draft.value.computedCw || null,
@@ -225,14 +224,14 @@ async function submit() {
       draft.value.text = "";
       draft.value.poll = { choices: [] };
     }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err : any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
     console.error(err);
     if (isAPIError(err)) {
-      popupMessages.push({ type:"error", "message": err.message });
+      popupMessages.push({ type: "error", message: err.message });
     } else {
       if (err instanceof Error) {
-        popupMessages.push({ type:"error", "message": err.message });
+        popupMessages.push({ type: "error", message: err.message });
       }
     }
   } finally {
@@ -246,9 +245,9 @@ function onkeydown(ev: KeyboardEvent) {
 }
 
 function prependEmoji(emoji: EmojiSimple) {
-  const textarea = (textRef.value?.$el as HTMLElement).querySelector(
-    "textarea"
-  );
+  const el = textRef.value?.$el;
+  if (!el) return;
+  const textarea = (el as HTMLElement).querySelector("textarea");
   if (!textarea) {
     return;
   }
@@ -260,8 +259,8 @@ function prependEmoji(emoji: EmojiSimple) {
   setTimeout(() => {
     textarea.setSelectionRange(
       selectionSt + emojiCode.length,
-      selectionSt + emojiCode.length
+      selectionSt + emojiCode.length,
     );
-  }, 0)
+  }, 0);
 }
 </script>

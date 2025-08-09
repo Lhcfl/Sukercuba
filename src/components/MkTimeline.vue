@@ -19,7 +19,7 @@ const props = withDefaults(
     withReplies: true,
     withRenotes: true,
     withFiles: false,
-  }
+  },
 );
 
 const account = useAccount();
@@ -33,7 +33,7 @@ onMounted(() => {
       withFiles: props.withFiles,
       withRenotes: props.withRenotes,
       withReplies: props.withReplies,
-    }
+    },
   );
   connection.on("note", (note) => {
     const cached = noteCache.cached(note, true);
@@ -56,7 +56,7 @@ async function load() {
     withFiles: props.withFiles,
     withRenotes: props.withRenotes,
     withReplies: props.withReplies,
-    limit: 50,
+    limit: 10,
   };
 
   const mapedRequest = {
@@ -68,7 +68,7 @@ async function load() {
     bubbleTimeline: () =>
       account.api.request(
         "notes/bubble-timeline" as "notes/hybrid-timeline",
-        params
+        params,
       ),
   };
 

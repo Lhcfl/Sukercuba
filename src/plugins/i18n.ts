@@ -6,15 +6,15 @@ import zh from "@/locales/zh-CN.json";
 let created_i18n: ReturnType<typeof initI18n> | null = null;
 
 export function initI18n() {
-  const savedLocale = localStorage.getItem("locale") || 'zh-CN';
+  const savedLocale = localStorage.getItem("locale") || "zh-CN";
 
   const i18n = createI18n({
     legacy: false,
     locale: savedLocale, // 默认语言
-    fallbackLocale: 'en-US', // 回退语言
+    fallbackLocale: "en-US", // 回退语言
     messages: {
-      'en-US': en,
-      'zh-CN': zh,
+      "en-US": en,
+      "zh-CN": zh,
     },
   });
 

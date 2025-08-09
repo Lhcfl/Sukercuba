@@ -11,19 +11,26 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  navigationBehaviour?: unknown,
-  host?: string | null,
-	username: string,
-  noNavigate?: boolean
+  navigationBehaviour?: unknown;
+  host?: string | null;
+  username: string;
+  noNavigate?: boolean;
 }>();
 
 const userCache = useUserCache();
-const mentionUser = userCache.getCache({ username: props.username, host: props.host ?? null });
+const mentionUser = userCache.getCache({
+  username: props.username,
+  host: props.host ?? null,
+});
 
-const to = computed(() => (props.noNavigate ? undefined : {
-  name: '/@[userhandle]' as const,
-  params: {
-    userhandle: [props.username, props.host].filter((x) => x).join("@"),
-  }
-}))
+const to = computed(() =>
+  props.noNavigate
+    ? undefined
+    : {
+        name: "/@[userhandle]" as const,
+        params: {
+          userhandle: [props.username, props.host].filter((x) => x).join("@"),
+        },
+      },
+);
 </script>

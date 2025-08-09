@@ -50,8 +50,8 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from 'vuetify';
-import langs from '@/locales/index.json';
+import { useTheme } from "vuetify";
+import langs from "@/locales/index.json";
 
 const { t, locale } = useI18n();
 

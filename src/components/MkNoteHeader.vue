@@ -20,7 +20,6 @@
 </template>
 <script setup lang="ts">
 import type { NoteWithExtension } from "@/stores/note-cache";
-import { acct } from "misskey-js";
 
 const props = defineProps<{
   note: NoteWithExtension;

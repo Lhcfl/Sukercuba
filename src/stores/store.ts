@@ -6,8 +6,10 @@ export class IDBStore {
   constructor(dbName?: string) {
     this.store = dbName ? IDB.createStore(dbName, "keyval") : undefined;
   }
-  
-  protected storeKey(k: string) { return k; }
+
+  protected storeKey(k: string) {
+    return k;
+  }
 
   async get(k: string) {
     return await IDB.get(this.storeKey(k), this.store);
@@ -18,11 +20,17 @@ export class IDBStore {
   }
 
   async setMany(kvs: [string, unknown][]) {
-    return await IDB.setMany(kvs.map(([k, v]) => [this.storeKey(k), v]), this.store);
+    return await IDB.setMany(
+      kvs.map(([k, v]) => [this.storeKey(k), v]),
+      this.store,
+    );
   }
 
   async getMany(ks: string[]) {
-    return await IDB.getMany(ks.map((x) => this.storeKey(x)), this.store);
+    return await IDB.getMany(
+      ks.map((x) => this.storeKey(x)),
+      this.store,
+    );
   }
 
   async del(k: string) {
@@ -30,9 +38,12 @@ export class IDBStore {
   }
 
   async delMany(ks: string[]) {
-    return await IDB.delMany(ks.map((k) => this.storeKey(k)), this.store);
+    return await IDB.delMany(
+      ks.map((k) => this.storeKey(k)),
+      this.store,
+    );
   }
-  
+
   async entries() {
     return await IDB.entries(this.store);
   }

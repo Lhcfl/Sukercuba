@@ -13,5 +13,7 @@
 
 <script lang="ts" setup>
 const route = useRoute();
-const componentId = computed(() => `${route.name}[${JSON.stringify(route.params)}]`)
+const componentId = computed(
+  () => `${route.name}[${JSON.stringify(route.params)}]`,
+);
 </script>

@@ -60,7 +60,7 @@ const account = useAccount();
 const expired = computed(() =>
   props.poll.expiresAt
     ? new Date(props.poll.expiresAt).getTime() < Date.now()
-    : false
+    : false,
 );
 
 const meVoted = computed(() => props.poll.choices.some((x) => x.isVoted));

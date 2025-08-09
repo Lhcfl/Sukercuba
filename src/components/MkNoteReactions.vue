@@ -22,16 +22,16 @@
 </template>
 
 <script setup lang="ts">
-import type { Note } from 'misskey-js/entities.js';
+import type { Note } from "misskey-js/entities.js";
 const props = defineProps<{
-  note: Note,
+  note: Note;
 }>();
 
 const account = useAccount();
 const reactions = computed(() => Object.entries(props.note.reactions));
 const emojiUrls = computed(() => props.note.reactionEmojis ?? {});
 const reacting = ref<string | null>();
-const myReaction = computed(() => props.note.myReaction)
+const myReaction = computed(() => props.note.myReaction);
 
 async function react(reaction: string) {
   try {
@@ -42,7 +42,10 @@ async function react(reaction: string) {
     });
   } catch (err) {
     console.error(err);
-    usePopupMessage().push({ type: "error", message: (err as { message: string }).message });
+    usePopupMessage().push({
+      type: "error",
+      message: (err as { message: string }).message,
+    });
   } finally {
     reacting.value = undefined;
   }
@@ -56,7 +59,10 @@ async function undoReact() {
     });
   } catch (err) {
     console.error(err);
-    usePopupMessage().push({ type: "error", message: (err as { message: string }).message });
+    usePopupMessage().push({
+      type: "error",
+      message: (err as { message: string }).message,
+    });
   } finally {
     reacting.value = undefined;
   }

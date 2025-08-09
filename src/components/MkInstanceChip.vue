@@ -20,9 +20,16 @@ const props = defineProps<{
 
 const account = useAccount();
 
-const iconUrl = computed(() => props.instance?.iconUrl ?? account.meta?.iconUrl ?? account.site + "/favicon.ico")
-const color = computed(() => props.instance?.themeColor ?? account.meta?.themeColor ?? undefined)
-const name = computed(() => props.instance?.name ?? account.meta?.name ?? "")
+const iconUrl = computed(
+  () =>
+    props.instance?.iconUrl ??
+    account.meta?.iconUrl ??
+    `${account.site}/favicon.ico`,
+);
+const color = computed(
+  () => props.instance?.themeColor ?? account.meta?.themeColor ?? undefined,
+);
+const name = computed(() => props.instance?.name ?? account.meta?.name ?? "");
 </script>
 
 <style lang="scss" module>

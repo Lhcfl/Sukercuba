@@ -54,21 +54,21 @@ const props = withDefaults(
     detailed?: boolean;
     simple?: boolean;
     disableRoute?: boolean;
-    hideReactions?: boolean,
+    hideReactions?: boolean;
     /** 防止subnote也被折叠 */
     neverCollapse?: boolean;
   }>(),
   {
     variant: undefined,
     gap: 0,
-  }
+  },
 );
 
 const router = useRouter();
 
 const isPureRenote = computed(() => Misskey.note.isPureRenote(props.note));
 const appearNote = computed(() =>
-  isPureRenote.value ? props.note.renote! : props.note
+  isPureRenote.value ? props.note.renote! : props.note,
 );
 
 function routeToNote() {

@@ -24,9 +24,9 @@ onMounted(() => {
   connection.on("notification", (n: Notification) => {
     notifications.value.unshift(n);
   });
-  connection.on('notificationFlushed', () => {
+  connection.on("notificationFlushed", () => {
     notifications.value = [];
-  })
+  });
 
   onUnmounted(() => {
     connection.dispose();

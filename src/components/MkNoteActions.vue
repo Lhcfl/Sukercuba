@@ -162,9 +162,9 @@
 </template>
 
 <script setup lang="ts">
-import type { NoteWithExtension } from "@/stores/note-cache";
 import { isAPIError } from "misskey-js/api.js";
 import type { EmojiSimple } from "misskey-js/entities.js";
+import type { NoteWithExtension } from "@/stores/note-cache";
 
 const props = defineProps<{
   note: NoteWithExtension;
@@ -191,10 +191,10 @@ const isMyNote = computed(() => props.note.userId === account.me?.id);
 function popupError(err: any) {
   console.error(err);
   if (isAPIError(err)) {
-    popupMessages.push({ type:"error", "message": err.message });
+    popupMessages.push({ type: "error", message: err.message });
   } else {
     if (err instanceof Error) {
-      popupMessages.push({ type:"error", "message": err.message });
+      popupMessages.push({ type: "error", message: err.message });
     }
   }
 }
@@ -258,7 +258,7 @@ async function deleteNote() {
 
 function openRemote() {
   window.open(
-    props.note.url ?? new URL("/notes/" + props.note.id, account.site)
+    props.note.url ?? new URL(`/notes/${props.note.id}`, account.site),
   );
   showMenu.value = false;
 }
@@ -277,7 +277,7 @@ function getLocalUrl() {
       name: "/notes/[id]",
       params: { id: props.note.id },
     }).fullPath,
-    window.location.origin
+    window.location.origin,
   ).toString();
 }
 
@@ -290,7 +290,7 @@ async function copyRemoteLink() {
   showMenu.value = false;
   await navigator.clipboard.writeText(
     props.note.url ??
-      new URL(`/notes/${props.note.id}`, account.site).toString()
+      new URL(`/notes/${props.note.id}`, account.site).toString(),
   );
 }
 
@@ -298,7 +298,7 @@ async function share() {
   showMenu.value = false;
   await navigator.share({
     url: getLocalUrl(),
-    text: props.note.cw || props.note.text || ""
+    text: props.note.cw || props.note.text || "",
   });
 }
 </script>

@@ -80,7 +80,7 @@ const emojis = useCustomEmojisData();
 const account = useAccount();
 
 const recentlyUsedEmojis = computed(() =>
-  (account.accountStore.reactive.recentlyUsedEmojis ?? []).map(attachInfo)
+  (account.accountStore.reactive.recentlyUsedEmojis ?? []).map(attachInfo),
 );
 
 const search = ref("");
@@ -89,7 +89,7 @@ const sections = ref(getSections());
 
 function clickEmoji(e: EmojiSimple) {
   account.accountStore.reactive.recentlyUsedEmojis = [e]
-    .concat(recentlyUsedEmojis.value.filter((x) => x.name != e.name))
+    .concat(recentlyUsedEmojis.value.filter((x) => x.name !== e.name))
     .slice(0, 60);
   emit("selected", e);
 }

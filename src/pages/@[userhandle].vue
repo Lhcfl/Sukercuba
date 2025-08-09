@@ -20,9 +20,12 @@ import { useUserCache } from "@/stores/user-cache";
 const route = useRoute<"/@[userhandle]">();
 const [username, host] = route.params.userhandle.split("@") as [
   string,
-  string | undefined
+  string | undefined,
 ];
 
 const userCache = useUserCache();
-const data = userCache.getCache({ username, host: host ?? null }, { detailed: true, fetch: true });
+const data = userCache.getCache(
+  { username, host: host ?? null },
+  { detailed: true, fetch: true },
+);
 </script>

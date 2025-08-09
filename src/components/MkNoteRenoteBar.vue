@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import * as Misskey from "misskey-js";
+import type * as Misskey from "misskey-js";
 
 const props = defineProps<{
   note: Misskey.entities.Note;
@@ -82,7 +82,10 @@ async function deleteRenote() {
     });
   } catch (err) {
     console.error(err);
-    usePopupMessage().push({ type: "error", message: (err as { message: string }).message });
+    usePopupMessage().push({
+      type: "error",
+      message: (err as { message: string }).message,
+    });
   } finally {
     deleting.value = false;
   }

@@ -23,12 +23,12 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  rel?: string,
-  url: string,
-  navigationBehaviour?: unknown,
+  rel?: string;
+  url: string;
+  navigationBehaviour?: unknown;
 }>();
 
-const selfSite = computed(() => props.url.startsWith('/'));
+const selfSite = computed(() => props.url.startsWith("/"));
 </script>
 
 <style lang="scss" module>

@@ -195,22 +195,30 @@
 </template>
 
 <script setup lang="ts">
-import type { User, UserDetailed } from 'misskey-js/entities.js';
+import type { User, UserDetailed } from "misskey-js/entities.js";
 
 const props = defineProps<{
-  user: Partial<UserDetailed> & User,
-  width?: number,
+  user: Partial<UserDetailed> & User;
+  width?: number;
 }>();
 
 const { t } = useI18n();
 const account = useAccount();
 const userCache = useUserCache();
-const detailedUser = computed(() => userCache.cache(props.user, { detailed: true }).value);
-const user = computed(() => detailedUser.value.detailed ? detailedUser.value.data : props.user);
+const detailedUser = computed(
+  () => userCache.cache(props.user, { detailed: true }).value,
+);
+const user = computed(() =>
+  detailedUser.value.detailed ? detailedUser.value.data : props.user,
+);
 const loading = computed(() => !detailedUser.value.detailed);
-const isMe = computed(() => account.me?.id == props.user.id);
-const followText = computed(() => props.user.isLocked ? t('followRequest') : t('follow'));
-const parallaxMaxH = computed(() => (props.width ? props.width * 0.6 : 500) + 'px');
+const isMe = computed(() => account.me?.id === props.user.id);
+const followText = computed(() =>
+  props.user.isLocked ? t("followRequest") : t("follow"),
+);
+const parallaxMaxH = computed(
+  () => `${props.width ? props.width * 0.6 : 500}px`,
+);
 const followLoading = ref(false);
 const sendingAccept = ref(false);
 const sendingReject = ref(false);
@@ -221,7 +229,8 @@ const reject = () => userApi.value.reject(sendingReject);
 const unblock = () => userApi.value.unblock(followLoading);
 const unfollow = () => userApi.value.unfollow(followLoading);
 const follow = () => userApi.value.follow(followLoading);
-const cancelFollowRequest = () => userApi.value.cancelFollowRequest(followLoading);
+const cancelFollowRequest = () =>
+  userApi.value.cancelFollowRequest(followLoading);
 </script>
 
 

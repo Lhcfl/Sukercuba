@@ -44,13 +44,16 @@ const autocompleteSites = ref<string[]>([]);
 function redirectAuth() {
   const session = `${crypto.randomUUID()}`;
   if (!site.value.startsWith("http")) {
-    site.value = "https://" + site.value
+    site.value = `https://${site.value}`;
   }
   const url = new URL(`/miauth/${session}`, site.value);
   account.site = url.origin;
 
   url.searchParams.append("name", "Sukerkuba the another Misskey Client");
-  url.searchParams.append("callback", window.location.origin + "/login-redriect");
+  url.searchParams.append(
+    "callback",
+    `${window.location.origin}/login-redriect`,
+  );
   url.searchParams.append("permission", permissions.join(","));
 
   window.location.href = url.toString();

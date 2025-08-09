@@ -56,43 +56,56 @@
 </template>
 
 <script lang="ts" setup>
-import type { ExtractNotifications, NoteEventNotificationTypes } from "@/types/notification";
+import type {
+  ExtractNotifications,
+  NoteEventNotificationTypes,
+} from "@/types/notification";
 import type { VCard } from "vuetify/components";
 
 const props = defineProps<{
   notification: ExtractNotifications<typeof NoteEventNotificationTypes>;
-  variant?: VCard["$props"]["variant"]
-}>()
+  variant?: VCard["$props"]["variant"];
+}>();
 
 const router = useRouter();
 
-const icon = computed(() => ({
-  renote: "mdi-repeat-variant",
-  reaction: 'mdi-sticker-emoji',
-  pollEnded: 'mdi-poll',
-  'reaction:grouped': 'mdi-sticker-emoji',
-  'renote:grouped': "mdi-repeat-variant",
-}[props.notification.type]))
+const icon = computed(
+  () =>
+    ({
+      renote: "mdi-repeat-variant",
+      reaction: "mdi-sticker-emoji",
+      pollEnded: "mdi-poll",
+      "reaction:grouped": "mdi-sticker-emoji",
+      "renote:grouped": "mdi-repeat-variant",
+    })[props.notification.type],
+);
 
 const users = computed(() => {
-  if (props.notification.type === 'pollEnded') return null;
-  if (props.notification.type === 'reaction') return [props.notification.user];
-  if (props.notification.type === 'renote') return [props.notification.user];
-  if (props.notification.type === 'renote:grouped') return props.notification.users;
-  if (props.notification.type === 'reaction:grouped') return null;
-})
+  if (props.notification.type === "pollEnded") return null;
+  if (props.notification.type === "reaction") return [props.notification.user];
+  if (props.notification.type === "renote") return [props.notification.user];
+  if (props.notification.type === "renote:grouped")
+    return props.notification.users;
+  if (props.notification.type === "reaction:grouped") return null;
+});
 
 const reactions = computed(() => {
-  if (users.value) return users.value.map((user) => ({user, reaction: null}));
-  if (props.notification.type === 'reaction:grouped') return props.notification.reactions;
+  if (users.value) return users.value.map((user) => ({ user, reaction: null }));
+  if (props.notification.type === "reaction:grouped")
+    return props.notification.reactions;
   return null;
-})
+});
 
-const appearNote = computed(() => props.notification.type.startsWith('renote') ? props.notification.note.renote! : props.notification.note)
+const appearNote = computed(() =>
+  props.notification.type.startsWith("renote")
+    ? props.notification.note.renote!
+    : props.notification.note,
+);
 
 const showMore = ref(false);
-const avatars = computed(() => showMore.value ? reactions.value : reactions.value?.slice(0, 3));
-
+const avatars = computed(() =>
+  showMore.value ? reactions.value : reactions.value?.slice(0, 3),
+);
 </script>
 
 <style lang="scss" module>

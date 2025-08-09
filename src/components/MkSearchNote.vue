@@ -58,7 +58,7 @@ const next = shallowRef(
   async (_notes: NoteWithExtension[]): Promise<NoteWithExtension[]> => {
     // 默认不搜索
     return [];
-  }
+  },
 );
 
 const queryHost = computed(() => {
@@ -73,7 +73,7 @@ const queryHost = computed(() => {
 
 watch(queryHost, () => {
   search();
-})
+});
 
 const search = async () => {
   if (query.value === "") {
@@ -81,7 +81,7 @@ const search = async () => {
   }
   searching.value = true;
   const q = query.value;
-  const host = queryHost.value == "host" ? hostStr.value : queryHost.value;
+  const host = queryHost.value === "host" ? hostStr.value : queryHost.value;
   next.value = async (notes) => {
     const raw_notes = await account.api.request("notes/search", {
       untilId: notes.at(-1)?.id,
@@ -95,5 +95,5 @@ const search = async () => {
     });
   };
   noteListKey.value = crypto.randomUUID();
-}
+};
 </script>
