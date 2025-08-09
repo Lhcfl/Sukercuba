@@ -25,5 +25,6 @@ declare module 'vue-router/auto-routes' {
     '/notes/[id]': RouteRecordInfo<'/notes/[id]', '/notes/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/search': RouteRecordInfo<'/search', '/search', Record<never, never>, Record<never, never>>,
     '/tags/[tag]': RouteRecordInfo<'/tags/[tag]', '/tags/:tag', { tag: ParamValue<true> }, { tag: ParamValue<false> }>,
+    '/test': RouteRecordInfo<'/test', '/test', Record<never, never>, Record<never, never>>,
   }
 }

@@ -27,15 +27,15 @@
         @click.stop="clearCache"
       />
       <VListItem>
-        <VSelect
-          v-model="theme.global.name.value"
-          :items="themeNames"  
+        <VBtn
+          :icon="theme.global.name.value === 'dark' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+          @click="theme.global.name.value = theme.global.name.value === 'dark' ? 'light' : 'dark'"
         />
       </VListItem>
       <VListItem>
         <VSelect
           v-model="locale"
-          :items="availableLanguages"  
+          :items="availableLanguages"
         />
       </VListItem>
       <VListItem>

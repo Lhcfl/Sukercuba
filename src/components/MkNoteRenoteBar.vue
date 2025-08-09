@@ -1,5 +1,5 @@
 <template>
-  <VCardItem class="pb-0 text-secondary">
+  <div class="pb-0 text-secondary">
     <div class="d-flex justify-space-between align-center">
       <span>
         <VIcon icon="mdi-repeat-variant" />
@@ -41,7 +41,7 @@
         </VChip>
       </div>
     </div>
-  </VCardItem>
+  </div>
 </template>
 
 <script lang="ts" setup>

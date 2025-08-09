@@ -14,6 +14,8 @@ import App from './App.vue'
 import { createApp } from 'vue'
 import { boot } from './boot'
 
+// Styles
+import 'virtual:uno.css'
 
 const app = createApp(App)
 

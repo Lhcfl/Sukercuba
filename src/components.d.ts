@@ -10,6 +10,7 @@ declare module 'vue' {
     AppPopupMessageContainer: typeof import('./components/AppPopupMessageContainer.vue')['default']
     AppSidebar: typeof import('./components/AppSidebar.vue')['default']
     AppSnackbarQueueContainer: typeof import('./components/AppSnackbarQueueContainer.vue')['default']
+    MdButton: typeof import('./components/MdButton.vue')['default']
     MkAnyEmoji: typeof import('./components/MkAnyEmoji.vue')['default']
     MkAvatar: typeof import('./components/MkAvatar.vue')['default']
     MkCode: typeof import('./components/MkCode.vue')['default']

@@ -9,11 +9,12 @@
         v-for="note in computedNotes"
         :key="note.id"
       >
-        <MkNote
-          :note
-          :gap="perfer.noteGap"
-          tile
-        />
+        <VCard :class="$style.note">
+          <MkNote
+            :note
+            tile
+          />
+        </VCard>
         <VDivider v-if="perfer.noteGap === 0" />
       </div>
     </TransitionGroup>
@@ -63,3 +64,9 @@ async function load(context: {
   }
 }
 </script>
+
+<style lang="scss" module>
+  .note {
+    margin: v-bind("`${perfer.noteGap}px`") v-bind("`${perfer.noteGap * 2}px`");
+  }
+</style>

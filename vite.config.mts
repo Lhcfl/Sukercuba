@@ -7,6 +7,7 @@ import Vue from "@vitejs/plugin-vue";
 import VueRouter from "unplugin-vue-router/vite";
 import Vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import VueDevTools from "vite-plugin-vue-devtools";
+import UnoCSS from 'unocss/vite'
 
 // Utilities
 import { defineConfig } from "vite";
@@ -37,6 +38,7 @@ export default defineConfig({
     Components({
       dts: "src/components.d.ts",
     }),
+    UnoCSS(),
     Vue({
       template: { transformAssetUrls },
     }),

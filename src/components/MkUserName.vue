@@ -1,11 +1,15 @@
 <template>
-  <MkMfm
+  <span
     v-if="user.name"
-    plain
-    :text="user.name"
-    :author="user"
-    :emoji-urls="user.emojis"
-  />
+    :class="$style.mfmUsername"
+  >
+    <MkMfm
+      plain
+      :text="user.name"
+      :author="user"
+      :emoji-urls="user.emojis"
+    />
+  </span>
   <span v-else>
     {{ user.username }}
   </span>
@@ -18,3 +22,11 @@ defineProps<{
   user: User;
 }>();
 </script>
+
+<style lang="scss" module>
+.mfmUsername {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>

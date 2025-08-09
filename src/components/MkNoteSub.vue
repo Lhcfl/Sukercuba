@@ -1,8 +1,7 @@
 <template>
-  <VCard
+  <div
     v-ripple="!disableRoute"
     :class="$style.note"
-    :variant
     @click.stop="routeToNote"
   >
     <div class="d-flex">
@@ -37,7 +36,7 @@
         </VCardActions>
       </div>
     </div>
-  </VCard>
+  </div>
 </template>
 
 <script lang="ts" setup>

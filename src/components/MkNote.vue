@@ -1,8 +1,7 @@
 <template>
-  <VCard
+  <div
     v-ripple="!disableRoute"
     :class="$style.note"
-    :variant
     @click.stop="routeToNote"
   >
     <MkNoteSub
@@ -38,7 +37,7 @@
     >
       <MkNoteActions :note="appearNote" />
     </VCardActions>
-  </VCard>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -58,7 +57,6 @@ const props = withDefaults(
     hideReactions?: boolean,
     /** 防止subnote也被折叠 */
     neverCollapse?: boolean;
-    gap?: number;
   }>(),
   {
     variant: undefined,
@@ -67,8 +65,6 @@ const props = withDefaults(
 );
 
 const router = useRouter();
-
-const variant = computed(() => props.variant || props.gap == 0 ? "text" : "elevated");
 
 const isPureRenote = computed(() => Misskey.note.isPureRenote(props.note));
 const appearNote = computed(() =>
@@ -84,9 +80,6 @@ function routeToNote() {
 <style lang="scss" module>
 .note {
   overflow: visible;
-  margin: 
-    v-bind("`${gap}px`")
-    v-bind("`${gap * 2}px`");
 
   :global(.v-card-item__content) {
     overflow: visible;
