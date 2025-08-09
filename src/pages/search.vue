@@ -1,30 +1,15 @@
 <template>
-  <div class="search-tabs d-flex flex-column">
-    <VTabs
-      v-model="tab"
-      :items="tabs"
-      class="flex-0-0"
-    >
-      <VTab
-        v-for="item in tabs"
-        :key="item.value"
-      >
+  <div class="search-tabs flex flex-col">
+    <VTabs v-model="tab" :items="tabs" class="flex-0-0">
+      <VTab v-for="item in tabs" :key="item.value">
         {{ item.text }}
       </VTab>
     </VTabs>
-    <VTabsWindow
-      v-model="tab"
-      class="flex-1-1"
-      :style="{ overflowY: 'auto' }"
-    >
-      <VTabsWindowItem
-        value="notes"
-      >
+    <VTabsWindow v-model="tab" class="flex-1-1" :style="{ overflowY: 'auto' }">
+      <VTabsWindowItem value="notes">
         <MkSearchNote />
       </VTabsWindowItem>
-      <VTabsWindowItem
-        value="users"
-      >
+      <VTabsWindowItem value="users">
         <MkSearchUser />
       </VTabsWindowItem>
     </VTabsWindow>

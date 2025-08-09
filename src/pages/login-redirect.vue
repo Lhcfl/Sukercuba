@@ -4,15 +4,9 @@ meta:
 </route>
 
 <template>
-  <div class="d-flex h-screen w-100 align-center justify-space-evenly">
-    <VProgressCircular
-      v-if="loading"
-      indeterminate
-    />
-    <VCard
-      v-else
-      class="w-sm-100 w-md-50"
-    >
+  <div class="flex h-screen w-full items-center justify-evenly">
+    <VProgressCircular v-if="loading" indeterminate />
+    <VCard v-else class="w-sm-100 w-md-50">
       <VCardTitle>{{ t("done") }}</VCardTitle>
     </VCard>
   </div>

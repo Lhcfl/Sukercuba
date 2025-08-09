@@ -1,173 +1,89 @@
 <template>
-  <VCard
-    :class="$style.main"
-    :loading
-    :width
-  >
+  <VCard :class="$style.main" :loading :width>
     <VCardActions v-if="user.hasPendingFollowRequestToYou">
       <span>
         {{ t("receiveFollowRequest") }}
       </span>
       <VSpacer />
-      <VBtn
-        class="text-secondary"
-        prepend-icon="mdi-check-circle-outline"
-        :text="t('accept')"
-        :loading="sendingAccept"
-        @click.stop="accept"
-      />
-      <VBtn
-        class="text-red"
-        prepend-icon="mdi-close-circle-outline"
-        :loading="sendingReject"
-        :text="t('reject')"
-        @click.stop="reject"
-      />
+      <VBtn class="text-secondary" prepend-icon="mdi-check-circle-outline" :text="t('accept')" :loading="sendingAccept"
+        @click.stop="accept" />
+      <VBtn class="text-red" prepend-icon="mdi-close-circle-outline" :loading="sendingReject" :text="t('reject')"
+        @click.stop="reject" />
     </VCardActions>
-    <VParallax
-      :class="$style.parallax"
-      :src="user?.bannerUrl"
-    >
-      <VCardText class="d-flex h-100 justify-space-between justify-end">
+    <VParallax :class="$style.parallax" :src="user?.bannerUrl">
+      <VCardText class="flex h-100 justify-between justify-end">
         <div>
-          <VChip
-            v-if="user.isFollowed"
-            class="bg-background"
-          >
+          <VChip v-if="user.isFollowed" class="bg-background">
             {{ user.isFollowing ? t('mutualFollow') : t('followsYou') }}
           </VChip>
-          <VChip
-            v-if="user.isBlocked"
-            class="bg-black"
-          >
+          <VChip v-if="user.isBlocked" class="bg-black">
             {{ t('blockingYou') }}
           </VChip>
-          <VChip
-            v-if="user.isMuted"
-            class="bg-grey-darken-2"
-          >
+          <VChip v-if="user.isMuted" class="bg-grey-darken-2">
             {{ t('muted') }}
           </VChip>
         </div>
-          
+
         <VBtnGroup>
           <template v-if="!isMe">
-            <VBtn
-              v-if="user.isFollowing"
-              prepend-icon="mdi-minus"
-              color="primary"
-              :loading="followLoading"
-              @click.stop="unfollow"
-            >
+            <VBtn v-if="user.isFollowing" prepend-icon="mdi-minus" color="primary" :loading="followLoading"
+              @click.stop="unfollow">
               {{ t('youFollowing') }}
             </VBtn>
-            <VBtn
-              v-else-if="user.isBlocking"
-              prepend-icon="mdi-cancel"
-              color="black"
-              :loading="followLoading"
-              @click.stop="unblock"
-            >
+            <VBtn v-else-if="user.isBlocking" prepend-icon="mdi-cancel" color="black" :loading="followLoading"
+              @click.stop="unblock">
               {{ t('blocked') }}
             </VBtn>
-            <VBtn
-              v-else-if="user.hasPendingFollowRequestFromYou"
-              prepend-icon="mdi-clock-outline"
-              :loading="followLoading"
-              color="secondary"
-              @click.stop="cancelFollowRequest"
-            >
+            <VBtn v-else-if="user.hasPendingFollowRequestFromYou" prepend-icon="mdi-clock-outline"
+              :loading="followLoading" color="secondary" @click.stop="cancelFollowRequest">
               {{ t('followRequestPending') }}
             </VBtn>
-            <VBtn
-              v-else
-              prepend-icon="mdi-plus"
-              :loading="followLoading"
-              @click.stop="follow"
-            >
+            <VBtn v-else prepend-icon="mdi-plus" :loading="followLoading" @click.stop="follow">
               {{ followText }}
             </VBtn>
           </template>
           <VBtn>
             <VIcon icon="mdi-dots-vertical" />
-            <MkUserMenu
-              v-if="detailedUser?.detailed"
-              :user="detailedUser.data"
-            />
+            <MkUserMenu v-if="detailedUser?.detailed" :user="detailedUser.data" />
           </VBtn>
         </VBtnGroup>
       </VCardText>
     </VParallax>
     <div :class="$style.avatarContainer">
-      <MkAvatar
-        :user
-        :size="150"
-      />
+      <MkAvatar :user :size="150" />
     </div>
     <VCardTitle class="text-center">
-      <MkMfm
-        :text="user.name ?? user.username"
-        :emoji-urls="user.emojis"
-        plain
-      />
+      <MkMfm :text="user.name ?? user.username" :emoji-urls="user.emojis" plain />
     </VCardTitle>
     <VCardSubtitle class="text-center">
       <span>@{{ user.username }}</span>
       <span v-if="user.host">@{{ user.host }}</span>
     </VCardSubtitle>
     <VCardText class="text-center">
-      <VAlert
-        v-if="user.followedMessage"
-        class="text-secondary"
-        density="compact"
-      >
+      <VAlert v-if="user.followedMessage" class="text-secondary" density="compact">
         <p>
           <small>
             {{ t('messageToFollower') }}
           </small>
         </p>
-        <MkMfm
-          :text="user.followedMessage"
-          :emoji-urls="user.emojis"
-          :author="user"
-        />
+        <MkMfm :text="user.followedMessage" :emoji-urls="user.emojis" :author="user" />
       </VAlert>
-      <p
-        v-if="user.description"
-        class="py-3"
-      >
-        <MkMfm
-          :text="user.description"
-          :emoji-urls="user.emojis"
-          :author="user"
-        />
+      <p v-if="user.description" class="py-3">
+        <MkMfm :text="user.description" :emoji-urls="user.emojis" :author="user" />
       </p>
     </VCardText>
     <VCardText v-if="Object.keys(user.fields ?? {}).length > 0">
       <VDivider />
-      <div class="d-flex justify-space-evenly  mt-2">
-        <VTable
-          :class="$style.fieldTable"
-        >
+      <div class="flex justify-evenly  mt-2">
+        <VTable :class="$style.fieldTable">
           <tbody>
-            <tr
-              v-for="(item, idx) in user.fields"
-              :key="idx"
-            >
+            <tr v-for="(item, idx) in user.fields" :key="idx">
               <td :class="$style.fieldName">
-                <MkMfm
-                  :text="item.name"
-                  :emoji-urls="user.emojis"
-                  :author="user"
-                />
+                <MkMfm :text="item.name" :emoji-urls="user.emojis" :author="user" />
               </td>
               <td />
               <td :class="$style.fieldVal">
-                <MkMfm
-                  :text="item.value"
-                  :emoji-urls="user.emojis"
-                  :author="user"
-                />
+                <MkMfm :text="item.value" :emoji-urls="user.emojis" :author="user" />
               </td>
             </tr>
           </tbody>
@@ -176,16 +92,16 @@
     </VCardText>
     <VCardText>
       <VDivider />
-      <div class="d-flex justify-space-evenly text-center mt-2">
-        <div class="d-flex flex-column">
+      <div class="flex justify-evenly text-center mt-2">
+        <div class="flex flex-col">
           <span class="text-h5">{{ user.notesCount }}</span>
           <span class="text-subtitle-2">{{ t('notes') }}</span>
         </div>
-        <div class="d-flex flex-column">
+        <div class="flex flex-col">
           <span class="text-h5">{{ user.followersCount }}</span>
           <span class="text-subtitle-2">{{ t('followers') }}</span>
         </div>
-        <div class="d-flex flex-column">
+        <div class="flex flex-col">
           <span class="text-h5">{{ user.followingCount }}</span>
           <span class="text-subtitle-2">{{ t('following') }}</span>
         </div>
@@ -239,26 +155,32 @@ const cancelFollowRequest = () =>
   .parallax {
     max-height: v-bind("parallaxMaxH");
   }
+
   .avatarContainer {
     margin-top: -80px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
   }
+
   .fieldTable {
     width: 500px;
     --v-table-row-height: 2.5em;
+
     tr {
       margin: 1em;
     }
+
     td {
       border: none !important;
     }
+
     .fieldName {
       width: 25%;
       text-align: right;
       font-weight: bold;
     }
+
     .fieldVal {
       width: 65%;
       text-align: left;

@@ -21,6 +21,13 @@ export default defineConfig({
     }),
     Layouts(),
     AutoImport({
+       include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/,
+        /\.vue\?vue/, // .vue
+        /\.vue\.[tj]sx?\?vue/, // .vue (vue-loader with experimentalInlineMatchResource enabled)
+        /\.md$/, // .md
+      ],
       imports: [
         "vue",
         'vue-i18n',

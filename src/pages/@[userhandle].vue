@@ -2,10 +2,7 @@
   <VCard v-if="data?.error">
     <VCardText>{{ data.apiError?.message }}</VCardText>
   </VCard>
-  <div
-    v-else-if="!data?.data"
-    class="d-flex h-screen w-100 align-center justify-space-evenly"
-  >
+  <div v-else-if="!data?.data" class="flex h-screen w-full items-center justify-evenly">
     <VProgressCircular indeterminate />
   </div>
   <template v-else>

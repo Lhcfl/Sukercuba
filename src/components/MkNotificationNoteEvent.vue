@@ -1,41 +1,15 @@
 <template>
-  <VCard
-    v-ripple 
-    :variant
-    @click.stop="router.push({ name: '/notes/[id]', params: { id: appearNote.id }})"
-  >
+  <VCard v-ripple :variant @click.stop="router.push({ name: '/notes/[id]', params: { id: appearNote.id } })">
     <VCardItem :prepend-icon="icon">
-      <div
-        v-if="avatars"
-        class="d-flex flex-wrap"
-      >
-        <div
-          v-for="(pair, index) in avatars"
-          :key="index"
-          :class="$style.avatar"
-        >
-          <MkAvatar
-            :user="pair.user"
-          />
-          <MkAnyEmoji
-            v-if="pair.reaction"
-            :class="$style.reaction"
-            :name="pair.reaction"
-            :urls="appearNote.reactionEmojis"
-          />
+      <div v-if="avatars" class="flex flex-wrap">
+        <div v-for="(pair, index) in avatars" :key="index" :class="$style.avatar">
+          <MkAvatar :user="pair.user" />
+          <MkAnyEmoji v-if="pair.reaction" :class="$style.reaction" :name="pair.reaction"
+            :urls="appearNote.reactionEmojis" />
         </div>
-        <VBtn
-          v-if="showMore"
-          variant="flat"
-          icon="mdi-chevron-up"
-          @click.stop="showMore = false"
-        />
-        <VBtn
-          v-else-if="reactions && reactions.length > 3"
-          variant="flat"
-          icon="mdi-chevron-down"
-          @click.stop="showMore = true"
-        />
+        <VBtn v-if="showMore" variant="flat" icon="mdi-chevron-up" @click.stop="showMore = false" />
+        <VBtn v-else-if="reactions && reactions.length > 3" variant="flat" icon="mdi-chevron-down"
+          @click.stop="showMore = true" />
       </div>
     </VCardItem>
     <VCardText>
@@ -44,12 +18,8 @@
           <VIcon icon="mdi-image" />
           x{{ appearNote.files?.length }}
         </span>
-        <MkMfm
-          v-if="appearNote.text"
-          :text="appearNote.text"
-          :author="appearNote.user"
-          :emoji-urls="appearNote.emojis"
-        />
+        <MkMfm v-if="appearNote.text" :text="appearNote.text" :author="appearNote.user"
+          :emoji-urls="appearNote.emojis" />
       </p>
     </VCardText>
   </VCard>
@@ -112,10 +82,12 @@ const avatars = computed(() =>
 .note {
   max-height: 100px;
   overflow: hidden;
+
   &.showMore {
     max-height: unset;
   }
 }
+
 .avatar {
   height: 45px;
   width: 45px;

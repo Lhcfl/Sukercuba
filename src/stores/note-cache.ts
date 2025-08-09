@@ -1,14 +1,14 @@
 import type { EmojiSimple, Note } from "misskey-js/entities.js";
 import { isPureRenote } from "misskey-js/note.js";
 import { defineStore } from "pinia";
-import type { Ref } from "vue";
+import { type Ref, ref } from "vue";
 import { useAccount } from "./account";
 import { useUserCache } from "./user-cache";
 
 export type NoteWithExtension = Note & {
   renote?: NoteWithExtension;
   reply?: NoteWithExtension;
-  renotedByMe?: boolean;
+  isRenoted?: boolean;
   isDeleted?: boolean;
 };
 
@@ -167,7 +167,7 @@ export const useNoteCache = defineStore("note-cache", () => {
     if (note.value.renote) {
       note.value.renote.renoteCount--;
       if (isMe) {
-        note.value.renote.renotedByMe = false;
+        note.value.renote.isRenoted = false;
       }
     }
   }
@@ -221,7 +221,7 @@ export const useNoteCache = defineStore("note-cache", () => {
         if (fully) {
           storedRenote.value.renoteCount++;
           if (storedNote.value.userId === account.me?.id) {
-            storedRenote.value.renotedByMe = true;
+            storedRenote.value.isRenoted = true;
           }
         }
       }

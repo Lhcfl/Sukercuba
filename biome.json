@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["src/**/*.{ts,vue}", "./*.json"]
+    "includes": ["src/**/*.{ts}", "biome.json", "vite.config.mts"]
   },
   "formatter": {
     "enabled": true,

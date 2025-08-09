@@ -5,14 +5,13 @@
  */
 
 // https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+@use 'vuetify/settings' with ($utilities: false);
 
 .note-enter-active,
 .note-leave-active {
   transition: all 0.3s ease;
 }
+
 .note-enter-from,
 .note-leave-to {
   opacity: 0;
@@ -22,6 +21,7 @@
 .overflow-y-visible {
   overflow-y: visible !important;
 }
+
 .overflow-visible {
   overflow: visible !important;
 }

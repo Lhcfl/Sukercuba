@@ -1,14 +1,10 @@
 <template>
-  <VCard
-    v-ripple
-    :variant
-    @click.stop="routeToUser"
-  >
+  <VCard v-ripple :variant @click.stop="routeToUser">
     <VCardItem>
       <template #prepend>
         <MkAvatar :user="notification.user" />
       </template>
-      <div class="d-flex flex-column">
+      <div class="flex flex-col">
         <span>
           <MkUserName :user="notification.user" />
           <span class="text-subtitle-2 ml-2">@{{ acct.toString(notification.user) }}</span>
@@ -19,63 +15,24 @@
       </div>
     </VCardItem>
     <VCardActions v-if="showAcceptRefuse">
-      <VBtn
-        class="text-secondary"
-        prepend-icon="mdi-check-circle-outline"
-        :text="t('accept')"
-        :loading="sendingAccept"
-        @click.stop="accept"
-      />
-      <VBtn
-        class="text-red"
-        prepend-icon="mdi-close-circle-outline"
-        :loading="sendingReject"
-        :text="t('reject')"
-        @click.stop="reject"
-      />
+      <VBtn class="text-secondary" prepend-icon="mdi-check-circle-outline" :text="t('accept')" :loading="sendingAccept"
+        @click.stop="accept" />
+      <VBtn class="text-red" prepend-icon="mdi-close-circle-outline" :loading="sendingReject" :text="t('reject')"
+        @click.stop="reject" />
     </VCardActions>
-    <VCardActions
-      v-if="showFollowBack"
-      class="py-0"
-    >
-      <VBtn
-        v-if="userDetailed?.hasPendingFollowRequestFromYou"
-        class="bg-primary"
-        prepend-icon="mdi-clock-outline"
-        :text="t('followRequestPending')"
-        :loading="sendingCancelFollowRequest"
-        @click.stop="cancelFollowRequest"
-      />
-      <VBtn
-        v-else
-        class="text-primary"
-        prepend-icon="mdi-account-plus-outline"
-        :text="t('follow')"
-        :loading="sendingFollow"
-        @click.stop="follow"
-      />
-      <VBtn
-        class="text-red"
-        prepend-icon="mdi-account-minus-outline"
-        :text="t('breakFollow')"
-        :loading="sendingBreakFollow"
-        @click.stop="breakFollow"
-      />
+    <VCardActions v-if="showFollowBack" class="py-0">
+      <VBtn v-if="userDetailed?.hasPendingFollowRequestFromYou" class="bg-primary" prepend-icon="mdi-clock-outline"
+        :text="t('followRequestPending')" :loading="sendingCancelFollowRequest" @click.stop="cancelFollowRequest" />
+      <VBtn v-else class="text-primary" prepend-icon="mdi-account-plus-outline" :text="t('follow')"
+        :loading="sendingFollow" @click.stop="follow" />
+      <VBtn class="text-red" prepend-icon="mdi-account-minus-outline" :text="t('breakFollow')"
+        :loading="sendingBreakFollow" @click.stop="breakFollow" />
     </VCardActions>
-    <VCardText
-      v-if="
-        notification.type === 'followRequestAccepted' && notification.message
-      "
-    >
-      <VAlert
-        class="text-secondary"
-        density="compact"
-      >
-        <MkMfm
-          :text="notification.message"
-          :emoji-urls="notification.user.emojis"
-          :author="notification.user"
-        />
+    <VCardText v-if="
+      notification.type === 'followRequestAccepted' && notification.message
+    ">
+      <VAlert class="text-secondary" density="compact">
+        <MkMfm :text="notification.message" :emoji-urls="notification.user.emojis" :author="notification.user" />
       </VAlert>
     </VCardText>
   </VCard>
@@ -150,10 +107,12 @@ const breakFollow = () => userApi.value.breakFollow(sendingBreakFollow);
 .note {
   max-height: 100px;
   overflow: hidden;
+
   &.showMore {
     max-height: unset;
   }
 }
+
 .emoji {
   height: 1.7em;
   width: 1.7em;

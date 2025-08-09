@@ -1,40 +1,18 @@
 <template>
-  <div
-    v-ripple="!disableRoute"
-    :class="$style.note"
-    @click.stop="routeToNote"
-  >
-    <MkNoteSub
-      v-if="appearNote.reply && !detailed && !simple"
-      :note="appearNote.reply"
-      :detailed="false"
-    />
-    <MkNoteRenoteBar
-      v-if="isPureRenote"
-      :note
-    />
+  <div v-ripple="!disableRoute" :class="$style.note" @click.stop="routeToNote">
+    <MkNoteSub v-if="appearNote.reply && !detailed && !simple" :note="appearNote.reply" :detailed="false" />
+    <MkNoteRenoteBar v-if="isPureRenote" :note />
     <VCardItem>
       <template #prepend>
         <MkAvatar :user="appearNote.user" />
       </template>
       <MkNoteHeader :note="appearNote" />
     </VCardItem>
-    <MkNoteBody
-      :note="appearNote"
-      :detailed
-      :simple
-      :never-collapse
-    />
-    <VCardText
-      v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0"
-      class="py-0"
-    >
+    <MkNoteBody :note="appearNote" :detailed :simple :never-collapse />
+    <VCardText v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0" class="py-0">
       <MkNoteReactions :note="appearNote" />
     </VCardText>
-    <VCardActions
-      v-if="!hideActions"
-      class="py-0"
-    >
+    <VCardActions v-if="!hideActions" class="py-0">
       <MkNoteActions :note="appearNote" />
     </VCardActions>
   </div>

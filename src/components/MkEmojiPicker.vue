@@ -1,57 +1,29 @@
 <template>
   <VCard :class="$style.main">
-    <VTextField
-      v-model="search"
-      autofocus
-      :label="t('enterEmoji')"
-    />
+    <VTextField v-model="search" variant="filled" autofocus hide-details="auto" :label="t('enterEmoji')" />
     <div :class="$style.emojiPanels">
       <VItemGroup>
-        <VBtn
-          v-for="emoji in recentlyUsedEmojis"
-          :key="emoji.name"
-          variant="flat"
-          :disabled="emoji.disabled"
-          @click.stop="clickEmoji(emoji)"
-        >
+        <VBtn v-for="emoji in recentlyUsedEmojis" :key="emoji.name" variant="flat" :disabled="emoji.disabled"
+          @click.stop="clickEmoji(emoji)">
           <MkCustomEmoji :name="emoji.name" />
         </VBtn>
       </VItemGroup>
       <VItemGroup v-if="searched">
-        <VBtn
-          v-for="emoji in searched"
-          :key="emoji.name"
-          variant="flat"
-          :disabled="emoji.disabled"
-          @click.stop="clickEmoji(emoji)"
-        >
+        <VBtn v-for="emoji in searched" :key="emoji.name" variant="flat" :disabled="emoji.disabled"
+          @click.stop="clickEmoji(emoji)">
           <MkCustomEmoji :name="emoji.name" />
         </VBtn>
       </VItemGroup>
-      <VExpansionPanels
-        variant="accordion"
-        multiple
-      >
-        <VExpansionPanel
-          v-for="section in sections"
-          :key="section.name ?? '-1'"
-        >
+      <VExpansionPanels variant="accordion" multiple>
+        <VExpansionPanel v-for="section in sections" :key="section.name ?? '-1'">
           <VExpansionPanelTitle>
-            <MkCustomEmoji
-              v-if="section.example"
-              :name="section.example.name"
-            />
+            <MkCustomEmoji v-if="section.example" :name="section.example.name" />
             {{ section.name ?? t("other") }}
           </VExpansionPanelTitle>
           <VExpansionPanelText>
             <VItemGroup>
-              <VBtn
-                v-for="emoji in section.emojis"
-                :key="emoji.name"
-                variant="flat"
-                :disabled="emoji.disabled"
-                @click.stop="clickEmoji(emoji)"
-              >
+              <VBtn v-for="emoji in section.emojis" :key="emoji.name" color="text" variant="flat"
+                :disabled="emoji.disabled" @click.stop="clickEmoji(emoji)">
                 <MkCustomEmoji :name="emoji.name" />
               </VBtn>
             </VItemGroup>
@@ -132,8 +104,8 @@ const debounceSearch = useDebounceFn(() => {
   searched.value = !search.value
     ? []
     : emojis.emojiFuse
-        .search(search.value, { limit: 100 })
-        .map((x) => attachInfo(x.item));
+      .search(search.value, { limit: 100 })
+      .map((x) => attachInfo(x.item));
   sections.value = getSections();
 }, 150);
 

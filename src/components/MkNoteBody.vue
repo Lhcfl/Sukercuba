@@ -1,25 +1,12 @@
 <template>
-  <VCardText
-    v-if="note.cw"
-    :class="$style.cwCardText"
-  >
-    <VExpansionPanels
-      bg-color="#0000"
-      ripple
-    >
-      <VExpansionPanel
-        :elevation="0"
-        @click.stop
-      >
+  <VCardText v-if="note.cw" :class="$style.cwCardText">
+    <VExpansionPanels bg-color="#0000" ripple>
+      <VExpansionPanel :elevation="0" @click.stop>
         <VExpansionPanelTitle>
           <template #default="{ expanded }">
-            <div class="d-inline-block text-body-2">
+            <div class="inline-block text-body-2">
               <p>
-                <MkMfm
-                  :text="note.cw"
-                  :author="note.user"
-                  :emoji-urls="note.emojis"
-                />
+                <MkMfm :text="note.cw" :author="note.user" :emoji-urls="note.emojis" />
               </p>
               <p v-if="!expanded">
                 <VChip>{{ t('showMore') }} ({{ t('_cw.chars', note.text?.length ?? 0) }})</VChip>
@@ -28,35 +15,17 @@
           </template>
         </VExpansionPanelTitle>
         <VExpansionPanelText>
-          <MkNoteText
-            :note="note"
-            :simple
-          />
+          <MkNoteText :note="note" :simple />
         </VExpansionPanelText>
       </VExpansionPanel>
     </VExpansionPanels>
   </VCardText>
-  <VCardText
-    v-else
-    :class="$style.cardText"
-  >
-    <div
-      ref="noteTextRef"
-      :class="!neverCollapse && isLongNote && collapsed && $style.collapsed"
-    >
-      <MkNoteText
-        :simple
-        :note="note"
-        :never-collapse="neverCollapse || isLongNote"
-      />
+  <VCardText v-else :class="$style.cardText">
+    <div ref="noteTextRef" :class="!neverCollapse && isLongNote && collapsed && $style.collapsed">
+      <MkNoteText :simple :note="note" :never-collapse="neverCollapse || isLongNote" />
     </div>
-    <VBtn
-      v-if="!neverCollapse && isLongNote"
-      block
-      variant="tonal"
-      :class="$style.collapseBtn"
-      @click.stop="collapsed = !collapsed"
-    >
+    <VBtn v-if="!neverCollapse && isLongNote" block variant="tonal" :class="$style.collapseBtn"
+      @click.stop="collapsed = !collapsed">
       {{ collapsed ? t('showMore') : t('showLess') }}
     </VBtn>
   </VCardText>
@@ -108,13 +77,16 @@ watch(
   -webkit-mask-image: linear-gradient(to bottom, black, black 70%, transparent);
   mask-image: linear-gradient(to bottom, black, black 70%, transparent);
 }
+
 .collapseBtn {
   margin: auto;
   position: sticky;
   bottom: 1em;
 }
+
 .cwCardText {
   padding: 0;
+
   :global(.v-expansion-panel-text__wrapper) {
     padding: 0 1rem;
   }

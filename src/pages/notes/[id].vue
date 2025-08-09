@@ -1,46 +1,21 @@
 <template>
-  <div
-    v-if="!note"
-    class="d-flex h-screen w-100 align-center justify-space-evenly"
-  >
-    <VProgressCircular
-      indeterminate
-    />
+  <div v-if="!note" class="flex h-screen w-full items-center justify-evenly">
+    <VProgressCircular indeterminate />
   </div>
   <div v-else>
-    <VInfiniteScroll
-      v-if="note.replyId"
-      side="start"
-      @load="preConversation"
-    >
+    <VInfiniteScroll v-if="note.replyId" side="start" @load="preConversation">
       <TransitionGroup name="note">
-        <div
-          v-for="n in conversationsComputed"
-          :key="n.id"
-        >
-          <MkNoteSub
-            :note="n"
-          />
+        <div v-for="n in conversationsComputed" :key="n.id">
+          <MkNoteSub :note="n" />
           <VDivider />
         </div>
       </TransitionGroup>
     </VInfiniteScroll>
-    <MkNote
-      :note="note"
-      detailed
-      disable-route
-    />
-    <VInfiniteScroll
-      @load="nextReplies"
-    >
+    <MkNote :note="note" detailed disable-route />
+    <VInfiniteScroll @load="nextReplies">
       <TransitionGroup name="note">
-        <div
-          v-for="n in repliesComputed"
-          :key="n.id"
-        >
-          <MkNoteSub
-            :note="n"
-          />
+        <div v-for="n in repliesComputed" :key="n.id">
+          <MkNoteSub :note="n" />
           <VDivider />
         </div>
       </TransitionGroup>

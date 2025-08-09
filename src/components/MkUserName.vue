@@ -1,14 +1,6 @@
 <template>
-  <span
-    v-if="user.name"
-    :class="$style.mfmUsername"
-  >
-    <MkMfm
-      plain
-      :text="user.name"
-      :author="user"
-      :emoji-urls="user.emojis"
-    />
+  <span v-if="user.name" class="mfm-name">
+    <MkMfm inline plain nowrap :text="user.name" :author="user" :emoji-urls="user.emojis" />
   </span>
   <span v-else>
     {{ user.username }}
@@ -22,11 +14,3 @@ defineProps<{
   user: User;
 }>();
 </script>
-
-<style lang="scss" module>
-.mfmUsername {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-</style>

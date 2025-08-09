@@ -1,42 +1,26 @@
 <template>
-  <div class="pb-0 text-secondary">
-    <div class="d-flex justify-space-between align-center">
-      <span>
+  <div class="px-4 pt-2 text-secondary">
+    <div class="flex justify-between items-center">
+      <span class="flex items-center gap-2">
         <VIcon icon="mdi-repeat-variant" />
-        <VAvatar :image="note.user.avatarUrl ?? undefined" />
+        <MkAvatar :user="note.user ?? undefined" size="small" />
         <MkUserName :user="note.user" />
       </span>
       <div>
         <VMenu v-if="note.userId == account.me?.id">
           <template #activator="{ props: p }">
-            <VBtn
-              v-bind="p"
-              icon="mdi-dots-vertical"
-              variant="plain"
-              size="small"
-              @click.stop
-            />
+            <VBtn v-bind="p" icon="mdi-dots-vertical" variant="plain" size="small" @click.stop />
           </template>
           <VList>
-            <VListItem
-              prepend-icon="mdi-delete-outline"
-              class="text-red"
-              @click.stop="deleteRenote"
-            >
-              <VProgressCircular
-                v-if="deleting"
-                indeterminate
-              />
+            <VListItem prepend-icon="mdi-delete-outline" class="text-red" @click.stop="deleteRenote">
+              <VProgressCircular v-if="deleting" indeterminate />
               <span v-else>
                 {{ t('unrenote') }}
               </span>
             </VListItem>
           </VList>
         </VMenu>
-        <VChip
-          :append-icon="visibilityIcon"
-          size="small"
-        >
+        <VChip :append-icon="visibilityIcon" size="small">
           <MkTime :time="note.createdAt" />
         </VChip>
       </div>

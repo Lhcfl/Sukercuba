@@ -39,7 +39,7 @@ opacity: 0.7;
 type MfmProps = {
   text: string;
   plain?: boolean;
-  stpvInline?: boolean;
+  inline?: boolean;
   nowrap?: boolean;
   author?: Misskey.entities.UserLite;
   isNote?: boolean;
@@ -95,8 +95,6 @@ const validColor = (c: unknown): string | null => {
   return c.match(/^[0-9a-f]{3,6}$/i) ? c : null;
 };
 
-const isBlock = props.isBlock ?? false;
-
 /**
  * Gen Vue Elements from MFM AST
  * @param ast MFM AST
@@ -113,7 +111,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
             text = Misskey.nyaize(text);
           }
 
-          if (!props.plain && !props.stpvInline) {
+          if (!props.plain && !props.inline) {
             const res: (VNode | string)[] = [];
             for (const t of text.split("\n")) {
               res.push(h("br"));
@@ -227,7 +225,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               break;
             }
             case "x2": {
-              if (props.stpvInline) {
+              if (props.inline) {
                 return h(
                   "span",
                   { style: "font-size: 120%" },
@@ -243,7 +241,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               );
             }
             case "x3": {
-              if (props.stpvInline) {
+              if (props.inline) {
                 return h(
                   "span",
                   { style: "font-size: 120%" },
@@ -259,7 +257,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               );
             }
             case "x4": {
-              if (props.stpvInline) {
+              if (props.inline) {
                 return h(
                   "span",
                   { style: "font-size: 120%" },
@@ -337,7 +335,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               break;
             }
             case "rotate": {
-              if (props.stpvInline) {
+              if (props.inline) {
                 style = "font-style: italic;";
                 break;
               }
@@ -346,7 +344,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               break;
             }
             case "followmouse": {
-              if (props.stpvInline) {
+              if (props.inline) {
                 style = "font-style: italic;";
                 break;
               }
@@ -376,7 +374,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               );
             }
             case "position": {
-              if (props.stpvInline) {
+              if (props.inline) {
                 style = "font-style: italic;";
                 break;
               }
@@ -403,7 +401,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               break;
             }
             case "scale": {
-              if (props.stpvInline) {
+              if (props.inline) {
                 style = "font-style: italic;";
                 break;
               }
@@ -450,9 +448,8 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 b_style = "solid";
               const width = safeParseFloat(token.props.args.width) ?? 1;
               const radius = safeParseFloat(token.props.args.radius) ?? 0;
-              style = `border: ${width}px ${b_style} ${color}; border-radius: ${radius}px;${
-                token.props.args.noclip ? "" : " overflow: clip;"
-              }`;
+              style = `border: ${width}px ${b_style} ${color}; border-radius: ${radius}px;${token.props.args.noclip ? "" : " overflow: clip;"
+                }`;
               break;
             }
             case "ruby": {
@@ -518,7 +515,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               );
             }
             case "clickable": {
-              if (props.stpvInline) {
+              if (props.inline) {
                 style = "font-style: italic;";
                 break;
               }
@@ -559,7 +556,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
         }
 
         case "small": {
-          if (props.stpvInline) {
+          if (props.inline) {
             return [
               h(
                 "span",
@@ -580,7 +577,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
         }
 
         case "center": {
-          if (props.stpvInline) {
+          if (props.inline) {
             return [
               h(
                 "span",
@@ -601,7 +598,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
         }
 
         case "url": {
-          if (props.stpvInline) {
+          if (props.inline) {
             return [
               h("span", { style: "color: var(--link);" }, token.props.url),
             ];
@@ -620,7 +617,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
         }
 
         case "link": {
-          if (props.stpvInline) {
+          if (props.inline) {
             return [
               h(
                 "span",
@@ -649,8 +646,8 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
         case "mention": {
           const mentionHost =
             token.props.host == null &&
-            props.author &&
-            props.author.host != null
+              props.author &&
+              props.author.host != null
               ? props.author.host
               : token.props.host;
           return [
@@ -661,7 +658,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 host: mentionHost ?? host,
                 username: token.props.username,
                 navigationBehavior: props.linkNavigationBehavior,
-                noNavigate: props.stpvInline,
+                noNavigate: props.inline,
               }),
             ),
           ];
@@ -675,14 +672,14 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 key: Math.random(),
                 tag: token.props.hashtag,
                 kind: props.isNote ? "note" : "user",
-                noNavigate: props.stpvInline,
+                noNavigate: props.inline,
               }),
             ),
           ];
         }
 
         case "blockCode": {
-          if (props.stpvInline) {
+          if (props.inline) {
             return [
               h(
                 "span",
@@ -753,7 +750,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
               h(MkCustomEmoji, {
                 key: Math.random(),
                 name: token.props.name,
-                normal: props.plain || props.stpvInline,
+                normal: props.plain || props.inline,
                 host: null,
                 useOriginalSize: scale >= 2.5,
                 menu: props.enableEmojiMenu,
@@ -770,7 +767,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                   key: Math.random(),
                   name: token.props.name,
                   url: props.emojiUrls[token.props.name],
-                  normal: props.plain || props.stpvInline,
+                  normal: props.plain || props.inline,
                   host: props.author.host,
                   useOriginalSize: scale >= 2.5,
                 }),
@@ -791,14 +788,14 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
         }
 
         case "mathInline": {
-          if (props.stpvInline) {
+          if (props.inline) {
             return [h("i", {}, token.props.formula)];
           }
           return [h("bdi", h("code", {}, token.props.formula))];
         }
 
         case "mathBlock": {
-          if (props.stpvInline) {
+          if (props.inline) {
             return [h("i", {}, token.props.formula)];
           }
           return [
@@ -807,7 +804,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
         }
 
         case "search": {
-          if (props.stpvInline) {
+          if (props.inline) {
             return [h("i", {}, ["[Search]", token.props.query])];
           }
           return [
@@ -819,7 +816,7 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
         }
 
         case "plain": {
-          if (props.stpvInline) {
+          if (props.inline) {
             return [h("span", genEl(token.children, scale, true))];
           }
           return [h("bdi", h("span", genEl(token.children, scale, true)))];
@@ -838,16 +835,20 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
 function renderMfm() {
   if (props.text == null || props.text === "") return;
 
+  const classList = ["mfm"];
+  if (props.isBlock) classList.push("block");
+  if (props.inline) classList.push("mfm-inline");
+
   return h(
     "bdi",
-    isBlock ? { class: "block" } : {},
+    { class: classList.join(" ") },
     h(
       "span",
       {
         // https://codeday.me/jp/qa/20190424/690106.html
-        style: props.nowrap
-          ? "white-space: pre; word-wrap: normal; overflow: hidden; text-overflow: ellipsis;"
-          : "white-space: pre-wrap;",
+        class: props.nowrap
+          ? "inline-block truncate whitespace-pre"
+          : "whitespace-pre-wrap",
       },
       genEl(rootAst.value, props.rootScale ?? 1),
     ),

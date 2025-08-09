@@ -4,24 +4,15 @@ meta:
 </route>
 
 <template>
-  <div class="d-flex h-screen w-100 align-center justify-space-evenly">
-    <VCard
-      class="w-sm-100 w-md-50"
-    >
+  <div class="flex h-screen w-full items-center justify-evenly">
+    <VCard class="w-sm-100 w-md-50">
       <VCardTitle>{{ t('login') }}</VCardTitle>
       <VForm>
         <VCardText>
-          <VCombobox
-            v-model="site"
-            :label="t('specifyServerHost')"
-            :items="autocompleteSites"
-          />
+          <VCombobox v-model="site" :label="t('specifyServerHost')" :items="autocompleteSites" />
         </VCardText>
         <VCardActions>
-          <VBtn
-            color="primary"
-            @click.stop="redirectAuth"
-          >
+          <VBtn color="primary" @click.stop="redirectAuth">
             {{ t("done") }}
           </VBtn>
         </VCardActions>

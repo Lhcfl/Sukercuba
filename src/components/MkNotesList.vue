@@ -1,19 +1,9 @@
 <template>
-  <VInfiniteScroll
-    class="overflow-y-visible"
-    :side
-    @load="load"
-  >
+  <VInfiniteScroll class="overflow-y-visible" :side @load="load">
     <TransitionGroup name="note">
-      <div
-        v-for="note in computedNotes"
-        :key="note.id"
-      >
+      <div v-for="note in computedNotes" :key="note.id">
         <VCard :class="$style.note">
-          <MkNote
-            :note
-            tile
-          />
+          <MkNote :note tile />
         </VCard>
         <VDivider v-if="perfer.noteGap === 0" />
       </div>
@@ -21,6 +11,7 @@
   </VInfiniteScroll>
 </template>
 <script lang="ts" setup>
+import * as Misskey from "misskey-js";
 import type { APIError } from "misskey-js/api.js";
 import type { NoteWithExtension } from "@/stores/note-cache";
 
@@ -66,7 +57,7 @@ async function load(context: {
 </script>
 
 <style lang="scss" module>
-  .note {
-    margin: v-bind("`${perfer.noteGap}px`") v-bind("`${perfer.noteGap * 2}px`");
-  }
+.note {
+  margin: v-bind("`${perfer.noteGap}px`") v-bind("`${perfer.noteGap * 2}px`");
+}
 </style>

@@ -3,6 +3,7 @@ import { type APIError, isAPIError } from "misskey-js/api.js";
 import type { User, UserDetailed } from "misskey-js/entities.js";
 import { defineStore } from "pinia";
 import type { Ref } from "vue";
+import { computed, ref } from "vue";
 import { getI18n } from "@/plugins/i18n";
 import { useAccount } from "./account";
 import { usePopupMessage } from "./popup-message";

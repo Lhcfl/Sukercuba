@@ -1,37 +1,18 @@
 <template>
-  <div
-    v-ripple="!disableRoute"
-    :class="$style.note"
-    @click.stop="routeToNote"
-  >
-    <div class="d-flex">
-      <div
-        class="flex-0-0"
-        :class="$style.avatarContainer"
-      >
-        <MkAvatar
-          :user="appearNote.user"
-          :class="$style.avatar"
-        />
+  <div v-ripple="!disableRoute" :class="$style.note" @click.stop="routeToNote">
+    <div class="flex">
+      <div class="flex-0-0" :class="$style.avatarContainer">
+        <MkAvatar :user="appearNote.user" :class="$style.avatar" />
       </div>
       <div class="flex-1-1">
         <VCardItem>
           <MkNoteHeader :note="appearNote" />
         </VCardItem>
-        <MkNoteBody
-          :note="appearNote"
-          simple
-        />
-        <VCardText
-          v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0"
-          class="py-0"
-        >
+        <MkNoteBody :note="appearNote" simple />
+        <VCardText v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0" class="py-0">
           <MkNoteReactions :note="appearNote" />
         </VCardText>
-        <VCardActions
-          v-if="!hideActions"
-          class="py-0"
-        >
+        <VCardActions v-if="!hideActions" class="py-0">
           <MkNoteActions :note="appearNote" />
         </VCardActions>
       </div>
@@ -74,17 +55,21 @@ function routeToNote() {
 <style lang="scss" module>
 .note {
   overflow: visible;
+
   :global(.v-card-item__prepend) {
     height: 100%;
     display: block;
   }
+
   :global(.v-card-item__content) {
     overflow-y: visible;
     overflow: visible;
   }
+
   .avatarContainer {
     padding: 1rem 0 0 1rem;
   }
+
   .avatar {
     position: sticky;
     top: 0;
