@@ -5,12 +5,14 @@
         {{ item.text }}
       </VTab>
     </VTabs>
-    <VTabsWindow v-model="tab" class="flex-1-1 overflow-y-auto!">
-      <VTabsWindowItem v-for="item in tabs" :key="item.value" :value="item.value">
-        <MkPostForm class="mx-2.5 mt-2.5 border" />
-        <MkTimeline :timeline="item.value" />
-      </VTabsWindowItem>
-    </VTabsWindow>
+    <div class="overflow-y-auto!">
+      <MkPostForm class="mx-2.5 mt-2.5 border flex-0-0" />
+      <VTabsWindow v-model="tab" class="flex-1-1">
+        <VTabsWindowItem v-for="item in tabs" :key="item.value" :value="item.value">
+          <MkTimeline :timeline="item.value" />
+        </VTabsWindowItem>
+      </VTabsWindow>
+    </div>
   </div>
 </template>
 

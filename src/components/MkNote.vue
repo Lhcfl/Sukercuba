@@ -50,6 +50,10 @@ const appearNote = computed(() =>
 );
 
 function routeToNote() {
+  if (window.getSelection()?.toString()) {
+    // 如果有选中的文本，则不触发路由跳转
+    return;
+  }
   if (props.disableRoute) return;
   router.push({ name: "/notes/[id]", params: { id: appearNote.value.id } });
 }
