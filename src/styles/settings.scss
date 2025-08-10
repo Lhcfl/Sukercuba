@@ -5,7 +5,8 @@
  */
 
 // https://vuetifyjs.com/features/sass-variables/`
-@use 'vuetify/settings' with ($utilities: false);
+@use 'vuetify/settings' with ($utilities: false,
+);
 
 .note-enter-active,
 .note-leave-active {

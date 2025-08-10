@@ -1,5 +1,5 @@
 <template>
-  <VBottomNavigation color="secondary" v-model="currentActive" :active="xs">
+  <VBottomNavigation class="bg-primary-container" v-model="currentActive" :active="xs">
     <VBtn v-for="item in navigations.filter(x => x.bottom)" :key="item.title" :value="item.to">
       <v-icon :icon="item.icon"></v-icon>
       <span>{{ item.title }}</span>

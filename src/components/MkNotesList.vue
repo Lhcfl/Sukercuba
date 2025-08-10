@@ -1,9 +1,9 @@
 <template>
-  <VInfiniteScroll class="overflow-y-visible" :side @load="load">
+  <VInfiniteScroll class="notes-list overflow-y-visible" :side @load="load">
     <TransitionGroup name="note">
       <div v-for="note in computedNotes" :key="note.id">
-        <VCard :class="$style.note">
-          <MkNote :note tile />
+        <VCard class="note-card border" variant="flat">
+          <MkNote :note />
         </VCard>
         <VDivider v-if="perfer.noteGap === 0" />
       </div>
@@ -56,8 +56,12 @@ async function load(context: {
 }
 </script>
 
-<style lang="scss" module>
-.note {
+<style lang="scss">
+.notes-list .note-card {
   margin: v-bind("`${perfer.noteGap}px`") v-bind("`${perfer.noteGap * 2}px`");
+}
+
+.v-infinite-scroll__side {
+  padding: 2px;
 }
 </style>

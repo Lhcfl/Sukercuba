@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 pt-2 text-secondary">
+  <div class="px-4 pt-2 text-tertiary">
     <div class="flex justify-between items-center">
       <span class="flex items-center gap-2">
         <VIcon icon="mdi-repeat-variant" />

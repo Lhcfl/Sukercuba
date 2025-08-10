@@ -2,32 +2,32 @@
   <div class="flex flex-col w-full">
     <div class="flex items-center">
       <VBtn v-if="note.repliesCount == 0" variant="plain" icon="mdi-reply"
-        :color="posting === 'reply' ? 'primary' : 'text'"
+        :color="posting === 'reply' ? 'primary' : 'base'"
         @click.stop="posting = posting === 'reply' ? null : 'reply'" />
       <VBtn v-else variant="plain" prepend-icon="mdi-reply" rounded size="large" :text="note.repliesCount"
-        :color="posting === 'reply' ? 'primary' : 'text'"
+        :color="posting === 'reply' ? 'primary' : 'base'"
         @click.stop="posting = posting === 'reply' ? null : 'reply'" />
       <VBtn v-if="note.renoteCount == 0" variant="plain" icon="mdi-repeat-variant" :loading="renoting"
-        :color="note.isRenoted ? 'primary' : 'text'" @click.stop="renoteOrCancel" />
+        :color="note.isRenoted ? 'primary' : 'base'" @click.stop="renoteOrCancel" />
       <VBtn v-else variant="plain" prepend-icon="mdi-repeat-variant" rounded :loading="renoting"
-        :color="note.isRenoted ? 'primary' : 'text'" size="large" :text="note.renoteCount"
+        :color="note.isRenoted ? 'primary' : 'base'" size="large" :text="note.renoteCount"
         @click.stop="renoteOrCancel" />
-      <VBtn variant="plain" icon="mdi-format-quote-close-outline" :color="posting === 'quote' ? 'primary' : 'text'"
+      <VBtn variant="plain" icon="mdi-format-quote-close-outline" :color="posting === 'quote' ? 'primary' : 'base'"
         @click.stop="posting = posting === 'quote' ? null : 'quote'" />
       <VBtn v-if="note.myReaction" variant="plain" icon="mdi-minus" color="primary" :loading="reacting"
         @click.stop="undoReact" />
       <template v-else>
-        <VBtn variant="plain" color="text" icon="mdi-heart-outline" :loading="reacting" @click.stop="react()" />
+        <VBtn variant="plain" color="base" icon="mdi-heart-outline" :loading="reacting" @click.stop="react()" />
         <VMenu v-if="note.reactionAcceptance !== 'likeOnly'" v-model="showEmojiPicker" :close-on-content-click="false">
           <template #activator="{ props: p }">
-            <VBtn variant="plain" color="text" v-bind="p" icon="mdi-sticker-emoji" :loading="reacting" />
+            <VBtn variant="plain" color="base" v-bind="p" icon="mdi-sticker-emoji" :loading="reacting" />
           </template>
           <MkEmojiPicker :accept="note.reactionAcceptance" @selected="react" />
         </VMenu>
       </template>
       <VMenu v-model="showMenu">
         <template #activator="{ props: p }">
-          <VBtn variant="plain" color="text" icon="mdi-dots-horizontal" v-bind="p" @click.stop />
+          <VBtn variant="plain" color="base" icon="mdi-dots-horizontal" v-bind="p" @click.stop />
         </template>
         <VList>
           <VListItem prepend-icon="mdi-content-copy" :title="t('copyContent')" @click.stop="copyNoteContent" />
@@ -53,9 +53,11 @@
         </VList>
       </VMenu>
     </div>
-    <MkPostForm v-if="posting" variant="outlined" :reply-id="posting === 'reply' ? note.id : undefined"
-      :quote-id="posting === 'quote' ? note.id : undefined" :edit="posting === 'edit' ? note : undefined" allow-cancel
-      @click.stop @done="posting = null" @cancel="posting = null" />
+    <VDivider v-if="posting" />
+    <MkPostForm v-if="posting" variant="flat" class="bg-transparent"
+      :reply-id="posting === 'reply' ? note.id : undefined" :quote-id="posting === 'quote' ? note.id : undefined"
+      :edit="posting === 'edit' ? note : undefined" allow-cancel @click.stop @done="posting = null"
+      @cancel="posting = null" />
   </div>
 </template>
 

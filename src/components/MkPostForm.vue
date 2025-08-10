@@ -33,23 +33,23 @@
     </VCardText>
     <VCardActions class="flex justify-between">
       <div>
-        <VBtn icon="mdi-image-outline" />
-        <VBtn icon="mdi-poll" :color="draft.showPoll ? 'primary' : undefined"
+        <VBtn color="base" icon="mdi-image-outline" />
+        <VBtn icon="mdi-poll" :color="draft.showPoll ? 'primary' : 'base'"
           @click.stop="draft.showPoll = !draft.showPoll" />
-        <VBtn icon="mdi-eye-off-outline" :color="draft.showCw ? 'primary' : undefined"
+        <VBtn icon="mdi-eye-off-outline" :color="draft.showCw ? 'primary' : 'base'"
           @click.stop="draft.showCw = !draft.showCw" />
-        <VBtn icon="mdi-tag-multiple-outline" :color="draft.showTags ? 'primary' : undefined"
+        <VBtn icon="mdi-tag-multiple-outline" :color="draft.showTags ? 'primary' : 'base'"
           @click.stop="draft.showTags = !draft.showTags" />
         <VMenu :close-on-content-click="false">
           <template #activator="{ props: p }">
-            <VBtn icon="mdi-sticker-emoji" v-bind="p" />
+            <VBtn color="base" icon="mdi-sticker-emoji" v-bind="p" />
           </template>
           <MkEmojiPicker @selected="prependEmoji" />
         </VMenu>
-        <VBtn icon="mdi-dots-horizontal" />
+        <VBtn color="base" icon="mdi-dots-horizontal" />
       </div>
       <div>
-        <VBtn icon="mdi-eye-outline" :color="draft.showPreview ? 'primary' : undefined"
+        <VBtn icon="mdi-eye-outline" :color="draft.showPreview ? 'primary' : 'base'"
           @click.stop="draft.showPreview = !draft.showPreview" />
         <VBtn color="primary" variant="tonal" :prepend-icon="sendbtn.icon" :loading :text="sendbtn.text"
           :disabled="submitDisabled" @click.stop="submit" />

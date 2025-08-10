@@ -1,5 +1,6 @@
 <template>
-  <VNavigationDrawer color="primary-low" mobile-breakpoint="sm" :rail="mdAndDown" :expand-on-hover="!platform.touch">
+  <VNavigationDrawer color="primary-container" mobile-breakpoint="sm" :rail="mdAndDown"
+    :expand-on-hover="!platform.touch">
     <VList nav>
       <VListItem v-if="account.me" :prepend-avatar="account.me.avatarUrl || undefined"
         :to="{ name: '/@[userhandle]', params: { userhandle: account.me.username } }">
@@ -8,9 +9,9 @@
       <VDivider class="my-2" />
       <VListItem v-for="item in navigationsShow" :key="item.title" :title="item.title" :to="item.to"
         :prepend-icon="item.icon" @click="item.action" />
-      <VListItem :prepend-icon="theme.global.name.value === 'dark' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
-        @click="theme.global.name.value = theme.global.name.value === 'dark' ? 'light' : 'dark'"
-        :title="theme.global.name.value === 'dark' ? t('lightThemes') : t('darkThemes')">
+      <VListItem :prepend-icon="theme.global.name.value === 'darkPurple' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+        @click="theme.global.name.value = theme.global.name.value === 'darkPurple' ? 'lightWarm' : 'darkPurple'"
+        :title="theme.global.name.value === 'darkPurple' ? t('lightThemes') : t('darkThemes')">
       </VListItem>
       <VListItem prepend-icon="mdi-dots-horizontal" :title="t('other')" @click.stop="expanded = !expanded" />
       <VListItem>

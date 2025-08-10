@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col bg-surface-light">
     <VTabs v-model="tab" :items="tabs" class="flex-0-0">
       <VTab v-for="item in tabs" :key="item.value" :value="item.value">
         {{ item.text }}
@@ -7,7 +7,7 @@
     </VTabs>
     <VTabsWindow v-model="tab" class="flex-1-1 overflow-y-auto!">
       <VTabsWindowItem v-for="item in tabs" :key="item.value" :value="item.value">
-        <MkPostForm />
+        <MkPostForm class="mx-2.5 mt-2.5 border" />
         <MkTimeline :timeline="item.value" />
       </VTabsWindowItem>
     </VTabsWindow>
