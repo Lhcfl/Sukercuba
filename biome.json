@@ -7,7 +7,12 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["src/**/*.{ts}", "biome.json", "vite.config.mts"]
+    "includes": [
+      "src/**/*.{ts}",
+      "biome.json",
+      "vite.config.mts",
+      "!src/*.d.ts"
+    ]
   },
   "formatter": {
     "enabled": true,
