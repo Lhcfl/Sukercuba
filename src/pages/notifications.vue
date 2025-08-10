@@ -1,3 +1,3 @@
 <template>
-  <MkNotifications></MkNotifications>
+  <MkNotifications class="overflow-y-visible!"></MkNotifications>
 </template>

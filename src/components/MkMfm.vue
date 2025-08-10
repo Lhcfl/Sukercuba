@@ -25,17 +25,6 @@ function safeParseFloat(str: unknown): number | null {
   return num;
 }
 
-const QUOTE_STYLE = `
-display: block;
-margin: 8px;
-padding: 6px 0 6px 12px;
-color: var(--MI_THEME-fg);
-border-left: solid 3px var(--MI_THEME-fg);
-opacity: 0.7;
-`
-  .split("\n")
-  .join(" ");
-
 type MfmProps = {
   text: string;
   plain?: boolean;
@@ -722,18 +711,12 @@ const genEl = (ast: mfm.MfmNode[], scale: number, disableNyaize = false) =>
                 "bdi",
                 { class: "block" },
                 h(
-                  "div",
-                  {
-                    style: QUOTE_STYLE,
-                  },
+                  "blockquote",
                   h("bdi", genEl(token.children, scale, true)),
                 ),
               ),
             ];
           } else {
-            // return [h('span', {
-            // 	style: QUOTE_STYLE,
-            // }, h('bdi', genEl(token.children, scale, true)))];
             return [
               h("i", { style: "opactity: 0.7;" }, [
                 "> ",
@@ -859,5 +842,9 @@ function renderMfm() {
 <style lang="scss">
 .mfm {
   line-height: 1.6em;
+
+  blockquote {
+    @apply opacity-55 border-l-4 border-l-primary pl-2 my-1;
+  }
 }
 </style>

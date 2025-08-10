@@ -18,6 +18,9 @@ const defaults: DefaultsOptions = {
   },
   VChip: {
     rounded: "pill"
-  }
+  },
+  VBtn: {
+    variant: "tonal",
+  },
 }
 </script>

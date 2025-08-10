@@ -1,5 +1,5 @@
 <template>
-  <VInfiniteScroll class="notes-list overflow-y-visible" :side @load="load">
+  <VInfiniteScroll class="notes-list overflow-y-visible!" :side @load="load">
     <TransitionGroup name="note">
       <div v-for="note in computedNotes" :key="note.id">
         <VCard class="note-card border">

@@ -3,8 +3,8 @@
     <VProgressCircular indeterminate />
   </div>
   <div v-else class="p-2">
-    <VCard class="previous-conversations mb-2 border">
-      <VInfiniteScroll v-if="note.replyId" side="start" @load="preConversation">
+    <VCard v-if="note.replyId" class="previous-conversations mb-2 border">
+      <VInfiniteScroll side="start" @load="preConversation">
         <TransitionGroup name="note">
           <div v-for="n in conversationsComputed" :key="n.id">
             <MkNoteSub :note="n" />
