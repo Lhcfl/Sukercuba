@@ -10,8 +10,10 @@
     </p>
     <MkNotePoll v-if="note.poll" :note :poll="note.poll" />
     <MkGallery v-if="note.files" :images="note.files" />
-    <MkNote v-if="note.renote" hide-actions :note="note.renote" variant="tonal" :detailed="false" :never-collapse
-      hide-reactions simple />
+    <VCard v-if="note.renote" class="quote-note border border-tertiary my-2">
+      <MkNote hide-actions :note="note.renote" variant="tonal" :detailed="false" :never-collapse hide-reactions
+        simple />
+    </VCard>
   </div>
 </template>
 <script setup lang="ts">

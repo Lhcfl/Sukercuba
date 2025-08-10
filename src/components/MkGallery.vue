@@ -1,7 +1,7 @@
 <template>
   <VCard v-if="images.length > 0" variant="text">
     <VCardText>
-      <div class="flex w-full justify-evenly">
+      <div class="mk-gallery flex w-full justify-evenly">
         <div class="flex flex-wrap justify-between" :class="$style.photobox">
           <div v-for="(col, idx) in columns" :key="idx" :class="[$style.col, $style[`col-${columns.length}`]]">
             <div v-for="img in col" :key="img.id" :class="$style.imgRow">

@@ -16,6 +16,9 @@
       </VListItem>
       <VListItem class="rounded-2xl!" prepend-icon="mdi-dots-horizontal" :title="t('other')"
         @click.stop="expanded = !expanded" />
+      <VListItem class="rounded-2xl!" @click.stop="blurMode = !blurMode"
+        :prepend-icon="blurMode ? 'mdi-eye-off' : 'mdi-eye'" title="模糊模式">
+      </VListItem>
       <VListItem>
         <VSelect v-model="locale" :items="availableLanguages" />
       </VListItem>
@@ -48,4 +51,21 @@ const navigationsShow = computed(() => expanded.value ? navigations.value : navi
 const themeNames = computed(() => Object.keys(theme.computedThemes.value));
 
 const availableLanguages = [...langs];
+
+const blurMode = ref(false);
+watch(blurMode, (nv) => {
+  document.body.classList.toggle("blur-mode");
+})
 </script>
+
+<style lang="scss">
+body.blur-mode {
+
+  .mfm,
+  .username,
+  .v-avatar,
+  .mk-gallery {
+    filter: blur(5px);
+  }
+}
+</style>
