@@ -1,10 +1,6 @@
 <template>
-  <VChip
-    :to
-    size="small"
-    :prepend-avatar="mentionUser?.data?.avatarUrl ?? undefined"
-    @click.stop
-  >
+  <VChip :to size="small" color="primary" class="my-0.5" text="xs"
+    :prepend-avatar="mentionUser?.data?.avatarUrl ?? undefined" @click.stop>
     <span>@{{ username }}</span><span v-if="host">@{{ host }}</span>
   </VChip>
 </template>
@@ -27,10 +23,10 @@ const to = computed(() =>
   props.noNavigate
     ? undefined
     : {
-        name: "/@[userhandle]" as const,
-        params: {
-          userhandle: [props.username, props.host].filter((x) => x).join("@"),
-        },
+      name: "/@[userhandle]" as const,
+      params: {
+        userhandle: [props.username, props.host].filter((x) => x).join("@"),
       },
+    },
 );
 </script>

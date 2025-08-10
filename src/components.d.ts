@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppBottomNavigation: typeof import('./components/AppBottomNavigation.vue')['default']
     AppPopupMessageContainer: typeof import('./components/AppPopupMessageContainer.vue')['default']
+    AppRightSidebar: typeof import('./components/AppRightSidebar.vue')['default']
     AppSidebar: typeof import('./components/AppSidebar.vue')['default']
     AppSnackbarQueueContainer: typeof import('./components/AppSnackbarQueueContainer.vue')['default']
     MdButton: typeof import("./components/MdButton.vue")["default"]

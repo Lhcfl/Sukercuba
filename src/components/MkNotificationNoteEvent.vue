@@ -7,9 +7,10 @@
           <MkAnyEmoji v-if="pair.reaction" :class="$style.reaction" :name="pair.reaction"
             :urls="appearNote.reactionEmojis" />
         </div>
-        <VBtn v-if="showMore" variant="flat" icon="mdi-chevron-up" @click.stop="showMore = false" />
-        <VBtn v-else-if="reactions && reactions.length > 3" variant="flat" icon="mdi-chevron-down"
-          @click.stop="showMore = true" />
+        <VBtn v-if="showMore" color="secondary-container" rounded="circle" variant="flat" icon="mdi-chevron-up"
+          @click.stop="showMore = false" />
+        <VBtn v-else-if="reactions && reactions.length > 3" color="secondary-container" rounded="circle" variant="flat"
+          icon="mdi-chevron-down" @click.stop="showMore = true" />
       </div>
     </VCardItem>
     <VCardText>

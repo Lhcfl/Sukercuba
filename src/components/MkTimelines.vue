@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col bg-surface-light">
+  <div class="flex flex-col">
     <VTabs v-model="tab" :items="tabs" class="flex-0-0">
       <VTab v-for="item in tabs" :key="item.value" :value="item.value">
         {{ item.text }}

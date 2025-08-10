@@ -1,15 +1,13 @@
 <template>
   <AppSidebar />
-  <VMain>
+  <VMain class="bg-surface-light h-screen overflow-y-auto">
     <RouterView v-slot="{ Component }">
       <KeepAlive :max="10">
         <component :is="Component" :key="componentId" />
       </KeepAlive>
     </RouterView>
   </VMain>
-  <VNavigationDrawer mobile-breakpoint="md" location="right" :width="400">
-    <MkNotifications />
-  </VNavigationDrawer>
+  <AppRightSidebar />
   <AppBottomNavigation />
 </template>
 

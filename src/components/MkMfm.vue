@@ -855,3 +855,9 @@ function renderMfm() {
   );
 }
 </script>
+
+<style lang="scss">
+.mfm {
+  line-height: 1.6em;
+}
+</style>

@@ -2,18 +2,20 @@
   <VNavigationDrawer color="primary-container" mobile-breakpoint="sm" :rail="mdAndDown"
     :expand-on-hover="!platform.touch">
     <VList nav>
-      <VListItem v-if="account.me" :prepend-avatar="account.me.avatarUrl || undefined"
+      <VListItem class="rounded-2xl!" v-if="account.me" :prepend-avatar="account.me.avatarUrl || undefined"
         :to="{ name: '/@[userhandle]', params: { userhandle: account.me.username } }">
         <MkUserName :user="account.me" />
       </VListItem>
       <VDivider class="my-2" />
       <VListItem v-for="item in navigationsShow" :key="item.title" :title="item.title" :to="item.to"
-        :prepend-icon="item.icon" @click="item.action" />
-      <VListItem :prepend-icon="theme.global.name.value === 'darkPurple' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+        :prepend-icon="item.icon" class="rounded-2xl!" @click="item.action" />
+      <VListItem class="rounded-2xl!"
+        :prepend-icon="theme.global.name.value === 'darkPurple' ? 'mdi-weather-sunny' : 'mdi-weather-night'"
         @click="theme.global.name.value = theme.global.name.value === 'darkPurple' ? 'lightWarm' : 'darkPurple'"
         :title="theme.global.name.value === 'darkPurple' ? t('lightThemes') : t('darkThemes')">
       </VListItem>
-      <VListItem prepend-icon="mdi-dots-horizontal" :title="t('other')" @click.stop="expanded = !expanded" />
+      <VListItem class="rounded-2xl!" prepend-icon="mdi-dots-horizontal" :title="t('other')"
+        @click.stop="expanded = !expanded" />
       <VListItem>
         <VSelect v-model="locale" :items="availableLanguages" />
       </VListItem>

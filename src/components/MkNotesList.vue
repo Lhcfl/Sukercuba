@@ -2,7 +2,7 @@
   <VInfiniteScroll class="notes-list overflow-y-visible" :side @load="load">
     <TransitionGroup name="note">
       <div v-for="note in computedNotes" :key="note.id">
-        <VCard class="note-card border" variant="flat">
+        <VCard class="note-card border">
           <MkNote :note />
         </VCard>
         <VDivider v-if="perfer.noteGap === 0" />
