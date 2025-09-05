@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between items-center">
     <div class="flex flex-col">
-      <MkUserName :user="note.user" />
+      <MkUserName class="mb--1" :user="note.user" />
       <span class="username text-sm opacity-70">@{{ acct.toString(note.user) }}</span>
     </div>
     <div class="flex flex-col items-end">

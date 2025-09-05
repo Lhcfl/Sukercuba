@@ -841,7 +841,9 @@ function renderMfm() {
 
 <style lang="scss">
 .mfm {
-  line-height: 1.6em;
+  &:not(.mfm-inline) {
+    line-height: 1.6em;
+  }
 
   blockquote {
     @apply opacity-55 border-l-4 border-l-primary pl-2 my-1;
