@@ -1,27 +1,5 @@
 <template>
-  <VTooltip
-    v-model="showTip"
-    :eager="false"
-    :open-delay="600"
-    :close-delay="1000"
-    :content-class="['pa-0', 'elevation-4', $style.tooltipUserCard]"
-    :open-on-hover="!noTooltip"
-  >
-    <template #activator="{ props: bind }">
-      <VAvatar
-        v-bind="bind"
-        :image="user?.avatarUrl ?? undefined"
-        :size
-        @click.stop="routeToUser"
-      />
-    </template>
-    <MkUserPageCard
-      v-if="user"
-      :user="user"
-      :width="400"
-      variant="flat"
-    />
-  </VTooltip>
+  <VAvatar :image="user?.avatarUrl ?? undefined" :size @click.stop="routeToUser" />
 </template>
 
 <script setup lang="ts">
@@ -51,10 +29,3 @@ function routeToUser() {
   });
 }
 </script>
-
-<style lang="scss" module>
-.tooltipUserCard {
-  max-height: 600px;
-  overflow-y: auto;
-}
-</style>
