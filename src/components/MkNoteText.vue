@@ -9,7 +9,7 @@
       <span v-if="note.isHidden">({{ t('private') }})</span>
     </p>
     <MkNotePoll v-if="note.poll" :note :poll="note.poll" />
-    <MkGallery v-if="note.files" :images="note.files" />
+    <MkGallery class="w-full" v-if="images.length > 0" :images />
     <VCard v-if="note.renote" class="quote-note border border-tertiary my-2">
       <MkNote hide-actions :note="note.renote" variant="tonal" :detailed="false" :never-collapse hide-reactions
         simple />
@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import type { NoteWithExtension } from "@/stores/note-cache";
 
-defineProps<{
+const props = defineProps<{
   note: NoteWithExtension;
   simple?: boolean;
   neverCollapse?: boolean;
@@ -31,6 +31,8 @@ const router = useRouter();
 function routeToNote(id: string) {
   router.push({ name: "/notes/[id]", params: { id } });
 }
+
+const images = computed(() => props.note.files?.filter(x => x.type.startsWith("image")) ?? []);
 </script>
 
 <style lang="scss">
