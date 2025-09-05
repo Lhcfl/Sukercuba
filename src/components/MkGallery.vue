@@ -35,6 +35,7 @@ const images = computed(() =>
 );
 
 const aspectRatio = computed(() => {
+  if (expanded.value || props.forceExpanded) return undefined;
   if (images.value.length === 1) {
     const img = images.value[0];
     if (!img.properties.width || !img.properties.height) return undefined;
@@ -63,7 +64,7 @@ onMounted(() => {
       src: img.url,
       w: img.properties.width,
       h: img.properties.height,
-      comment: img.comment ?? img.name,
+      alt: img.comment ?? img.name,
     })),
     children: ".mk-gallery-item",
     loop: false,
@@ -71,6 +72,35 @@ onMounted(() => {
     tapAction: "close",
     showHideAnimationType: 'fade',
     pswpModule: PhotoSwipe,
+  });
+
+  lightbox.on('uiRegister', () => {
+    lightbox.pswp?.ui?.registerElement({
+      name: 'altText',
+      className: 'absolute bottom-5 left-1/2 -translate-x-1/2 text-center text-sm max-w-[80%] rounded-lg bg-primary-container/20 text-primary px-4 py-2',
+      appendTo: 'wrapper',
+      onInit: (el, pswp) => {
+        const textBox = window.document.createElement('p');
+        textBox.className = "max-h-20 overflow-y-auto";
+        el.appendChild(textBox);
+
+        pswp.on('change', () => {
+          console.log(pswp.currSlide);
+          if (pswp.currSlide?.data.alt) {
+            textBox.style.display = '';
+          } else {
+            textBox.style.display = 'none';
+          }
+          textBox.textContent = pswp.currSlide?.data.alt || "";
+        });
+
+        // `passive: true` is for Safari compatibility, apparently
+        const stopEvent = (name: string) => textBox.addEventListener(name, event => event.stopPropagation(), { passive: true });
+        stopEvent('wheel');
+        stopEvent('pointerdown');
+        stopEvent('pointercancel');
+      },
+    });
   });
 
   lightbox.on('afterInit', () => {

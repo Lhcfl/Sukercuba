@@ -1,5 +1,5 @@
 <template>
-  <VImg :src="url" class="w-full h-full object-contain bg-tertiary-container rounded-lg">
+  <VImg :src="url" class="w-full h-full object-contain bg-tertiary-container rounded-lg" :alt="img.comment || img.name">
     <template #sources>
       <a class="sr-only" :data-pswp-src="img.url" :data-pswp-width="img.properties.width"
         :data-pswp-height="img.properties.height"></a>
