@@ -14,7 +14,7 @@
     </div>
   </VCardText>
   <VCardText v-else class="note-body">
-    <div ref="noteTextRef" :class="!neverCollapse && isLongNote && collapsed && $style.collapsed">
+    <div :class="!neverCollapse && isLongNote && collapsed && $style.collapsed">
       <MkNoteText :simple :note="note" :never-collapse="neverCollapse || isLongNote" />
     </div>
     <VBtn v-if="!neverCollapse && isLongNote" block variant="tonal" :class="$style.collapseBtn"
@@ -24,12 +24,11 @@
   </VCardText>
 </template>
 <script setup lang="ts">
-import { useResizeObserver } from "@vueuse/core";
 import type { NoteWithExtension } from "@/stores/note-cache";
 
 const { t } = useI18n();
 
-defineProps<{
+const props = defineProps<{
   note: NoteWithExtension;
   detailed?: boolean;
   simple?: boolean;
@@ -37,30 +36,35 @@ defineProps<{
   neverCollapse?: boolean;
 }>();
 
-const noteTextRef = useTemplateRef("noteTextRef");
-const isLongNote = ref(false);
 const collapsed = ref(true);
 const cwExpanded = ref(false);
 
-/**
- * 当 noteTextRef 第一次被加载的时候，施加一个 ResizeObserver
- * 只要检测到一次 long note 就无须再检测
- */
-watch(
-  noteTextRef,
-  () => {
-    const observer = useResizeObserver(noteTextRef, () => {
-      const height = noteTextRef.value?.clientHeight;
-      if (height && height > 400) {
-        isLongNote.value = true;
-        observer.stop();
-      }
-    });
-  },
-  {
-    once: true,
-  },
-);
+const isLongNote = computed(() => [
+  () => (props.note.text?.length ?? 0) > 500,
+  () => (props.note.text ?? "").split("\n").length > 5,
+  () => (props.note.files?.length ?? 0) > 4
+].some((check) => check()));
+
+// 这个逻辑经常出现 bug，取消掉
+// /**
+//  * 当 noteTextRef 第一次被加载的时候，施加一个 ResizeObserver
+//  * 只要检测到一次 long note 就无须再检测
+//  */
+// watch(
+//   noteTextRef,
+//   () => {
+//     const observer = useResizeObserver(noteTextRef, () => {
+//       const height = noteTextRef.value?.clientHeight;
+//       if (height && height > 400) {
+//         isLongNote.value = true;
+//         observer.stop();
+//       }
+//     });
+//   },
+//   {
+//     once: true,
+//   },
+// );
 </script>
 
 <style lang="scss" module>
