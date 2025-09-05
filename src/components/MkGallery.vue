@@ -3,12 +3,6 @@
     <div :class="`mk-gallery grid gap-2 w-full ${imageClass}`" ref="gallery" :style="{ aspectRatio }">
       <MkImage class="mk-gallery-item cursor-pointer" :img="img" v-for="img in shownImages" :key="img.id" v-ripple />
     </div>
-    <VBtn v-if="images.length >= 4 && !expanded" block variant="tonal" @click="expanded = true">
-      {{ $t('showMore') }}
-    </VBtn>
-    <VBtn v-if="images.length >= 4 && expanded && !forceExpanded" block variant="tonal" @click="expanded = false">
-      {{ $t('showLess') }}
-    </VBtn>
   </div>
 </template>
 
@@ -20,7 +14,7 @@ import 'photoswipe/style.css';
 
 const props = defineProps<{
   images: DriveFile[];
-  forceExpanded?: boolean;
+  expanded?: boolean;
 }>();
 
 const gallery = useTemplateRef("gallery");
@@ -35,7 +29,7 @@ const images = computed(() =>
 );
 
 const aspectRatio = computed(() => {
-  if (expanded.value || props.forceExpanded) return undefined;
+  if (props.expanded) return undefined;
   if (images.value.length === 1) {
     const img = images.value[0];
     if (!img.properties.width || !img.properties.height) return undefined;
@@ -46,10 +40,8 @@ const aspectRatio = computed(() => {
   return "16 / 9";
 });
 
-const shownImages = computed(() => (expanded.value || props.forceExpanded ? images.value : images.value.slice(0, 4)));
+const shownImages = computed(() => (props.expanded ? images.value : images.value.slice(0, 4)));
 const imageClass = computed(() => images.value.length >= 4 ? "files-auto" : `files-${images.value.length}`);
-
-const expanded = ref(false);
 
 onMounted(() => {
   const popstateHandler = (): void => {
@@ -77,7 +69,7 @@ onMounted(() => {
   lightbox.on('uiRegister', () => {
     lightbox.pswp?.ui?.registerElement({
       name: 'altText',
-      className: 'absolute bottom-5 left-1/2 -translate-x-1/2 text-center text-sm max-w-[80%] rounded-lg bg-primary-container/20 text-primary px-4 py-2',
+      className: 'absolute bottom-5 left-1/2 -translate-x-1/2 text-center text-sm max-w-[80%] rounded-lg bg-primary/30 text-on-primary backdrop-blur-lg px-4 py-2',
       appendTo: 'wrapper',
       onInit: (el, pswp) => {
         const textBox = window.document.createElement('p');

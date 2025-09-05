@@ -9,7 +9,7 @@
       <span v-if="note.isHidden">({{ t('private') }})</span>
     </p>
     <MkNotePoll v-if="note.poll" :note :poll="note.poll" />
-    <MkGallery class="w-full" v-if="images.length > 0" :images />
+    <MkGallery class="w-full" v-if="images.length > 0" :images :expanded="expandImages" />
     <VCard v-if="note.renote" class="quote-note border border-tertiary my-2">
       <MkNote hide-actions :note="note.renote" variant="tonal" :detailed="false" :never-collapse hide-reactions
         simple />
@@ -22,6 +22,7 @@ import type { NoteWithExtension } from "@/stores/note-cache";
 const props = defineProps<{
   note: NoteWithExtension;
   simple?: boolean;
+  expandImages?: boolean;
   neverCollapse?: boolean;
 }>();
 

@@ -5,17 +5,17 @@
     </p>
     <div class="flex justify-evenly">
       <VBtn v-if="!cwExpanded" @click.stop="cwExpanded = true">
-        {{ t('showMore') }} ({{ t('_cw.chars', note.text?.length ?? 0) }})
+        {{ t('showMore') }} ({{ moreText }})
       </VBtn>
     </div>
-    <MkNoteText v-if="cwExpanded" :note="note" :simple never-collapse />
+    <MkNoteText v-if="cwExpanded" :note="note" :simple never-collapse :expandImages="true" />
     <div class="flex justify-evenly sticky bottom-1">
       <VBtn v-if="cwExpanded" @click.stop="cwExpanded = false">{{ t('showLess') }}</VBtn>
     </div>
   </VCardText>
   <VCardText v-else class="note-body">
     <div :class="!neverCollapse && isLongNote && collapsed && $style.collapsed">
-      <MkNoteText :simple :note="note" :never-collapse="neverCollapse || isLongNote" />
+      <MkNoteText :simple :note="note" :never-collapse="neverCollapse || isLongNote" :expandImages="!collapsed" />
     </div>
     <VBtn v-if="!neverCollapse && isLongNote" block variant="tonal" :class="$style.collapseBtn"
       @click.stop="collapsed = !collapsed">
@@ -44,6 +44,11 @@ const isLongNote = computed(() => [
   () => (props.note.text ?? "").split("\n").length > 5,
   () => (props.note.files?.length ?? 0) > 4
 ].some((check) => check()));
+
+const moreText = computed(() => [
+  props.note.text && t('_cw.chars', props.note.text?.length ?? 0),
+  (props.note.files?.length ?? 0) > 0 && t('_cw.files', props.note.files?.length ?? 0),
+].filter(Boolean).join(", "));
 
 // 这个逻辑经常出现 bug，取消掉
 // /**
