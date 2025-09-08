@@ -6,6 +6,7 @@
     "DirectiveBinding": true,
     "DraftPoll": true,
     "EffectScope": true,
+    "EmojiExtended": true,
     "ExtractDefaultPropTypes": true,
     "ExtractPropTypes": true,
     "ExtractPublicPropTypes": true,

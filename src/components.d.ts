@@ -20,6 +20,7 @@ declare module 'vue' {
     MkCustomEmoji: typeof import('./components/MkCustomEmoji.vue')['default']
     MkEmoji: typeof import('./components/MkEmoji.vue')['default']
     MkEmojiPicker: typeof import('./components/MkEmojiPicker.vue')['default']
+    MkEmojiPickerEmojis: typeof import('./components/MkEmojiPickerEmojis.vue')['default']
     MkGallery: typeof import('./components/MkGallery.vue')['default']
     MkGalleryImage: typeof import('./components/MkGalleryImage.vue')['default']
     MkHashtag: typeof import('./components/MkHashtag.vue')['default']

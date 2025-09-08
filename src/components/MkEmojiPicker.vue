@@ -1,18 +1,12 @@
 <template>
-  <VCard :class="$style.main">
+  <VCard :class="$style.main" :loading="searching">
     <VTextField v-model="search" variant="filled" autofocus hide-details="auto" :label="t('enterEmoji')" />
     <div :class="$style.emojiPanels">
       <VItemGroup>
-        <VBtn v-for="emoji in recentlyUsedEmojis" :key="emoji.name" variant="flat" :disabled="emoji.disabled"
-          @click.stop="clickEmoji(emoji)">
-          <MkCustomEmoji :name="emoji.name" />
-        </VBtn>
+        <MkEmojiPickerEmojis :emojis="recentlyUsedEmojis" @selected="clickEmoji" />
       </VItemGroup>
       <VItemGroup v-if="searched">
-        <VBtn v-for="emoji in searched" :key="emoji.name" variant="flat" :disabled="emoji.disabled"
-          @click.stop="clickEmoji(emoji)">
-          <MkCustomEmoji :name="emoji.name" />
-        </VBtn>
+        <MkEmojiPickerEmojis :emojis="searched" @selected="clickEmoji" />
       </VItemGroup>
       <VExpansionPanels variant="accordion" multiple>
         <VExpansionPanel v-for="section in sections" :key="section.name ?? '-1'">
@@ -22,10 +16,7 @@
           </VExpansionPanelTitle>
           <VExpansionPanelText>
             <VItemGroup>
-              <VBtn v-for="emoji in section.emojis" :key="emoji.name" color="text" variant="flat"
-                :disabled="emoji.disabled" @click.stop="clickEmoji(emoji)">
-                <MkCustomEmoji :name="emoji.name" />
-              </VBtn>
+              <MkEmojiPickerEmojis :emojis="section.emojis" @selected="clickEmoji" />
             </VItemGroup>
           </VExpansionPanelText>
         </VExpansionPanel>
@@ -38,6 +29,7 @@
 import { useDebounceFn } from "@vueuse/core";
 import type { EmojiSimple } from "misskey-js/entities.js";
 import type { NoteWithExtension } from "@/stores/note-cache";
+import EmojiSearcher from "@/workers/emoji-searcher?worker";
 
 const props = defineProps<{
   accept?: NoteWithExtension["reactionAcceptance"];
@@ -56,8 +48,12 @@ const recentlyUsedEmojis = computed(() =>
 );
 
 const search = ref("");
+const searching = ref(false);
 const searched = ref<ReturnType<typeof attachInfo>[]>([]);
 const sections = ref(getSections());
+const searchWorker = new EmojiSearcher();
+
+searchWorker.postMessage({ op: "init", data: account.site });
 
 function clickEmoji(e: EmojiSimple) {
   account.accountStore.reactive.recentlyUsedEmojis = [e]
@@ -100,13 +96,20 @@ function getSections() {
     });
 }
 
-const debounceSearch = useDebounceFn(() => {
-  searched.value = !search.value
-    ? []
-    : emojis.emojiFuse
-      .search(search.value, { limit: 100 })
-      .map((x) => attachInfo(x.item));
+searchWorker.addEventListener("message", (emojis) => {
+  searched.value = !search.value ? [] : emojis.data.map(attachInfo);
   sections.value = getSections();
+  searching.value = false;
+})
+
+const debounceSearch = useDebounceFn(() => {
+  if (search.value) {
+    searching.value = true;
+    searchWorker.postMessage({ op: "search", data: search.value });
+  } else {
+    searched.value = [];
+    sections.value = getSections();
+  }
 }, 150);
 
 watch(search, () => {
