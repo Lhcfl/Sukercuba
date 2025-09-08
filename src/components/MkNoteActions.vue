@@ -20,7 +20,7 @@
         <VBtn variant="plain" color="base" icon="mdi-heart-outline" :loading="reacting" @click.stop="react()" />
         <VMenu v-if="note.reactionAcceptance !== 'likeOnly'" v-model="showEmojiPicker" :close-on-content-click="false">
           <template #activator="{ props: p }">
-            <VBtn variant="plain" color="base" v-bind="p" icon="mdi-sticker-emoji" :loading="reacting" />
+            <VBtn v-if="!reacting" variant="plain" color="base" v-bind="p" icon="mdi-sticker-emoji" />
           </template>
           <MkEmojiPicker :accept="note.reactionAcceptance" @selected="react" />
         </VMenu>

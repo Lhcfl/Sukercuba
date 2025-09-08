@@ -50,6 +50,8 @@ export const useNoteCache = defineStore("note-cache", () => {
       }
 
       case "reacted": {
+        console.log("received reacted", { emoji: body.emoji, note });
+
         if (note == null) {
           return;
         }
@@ -99,8 +101,8 @@ export const useNoteCache = defineStore("note-cache", () => {
           votes: choices[choice].votes + 1,
           ...(me && body.userId === me.id
             ? {
-                isVoted: true,
-              }
+              isVoted: true,
+            }
             : {}),
         };
 

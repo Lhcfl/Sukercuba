@@ -1,20 +1,11 @@
 <template>
-  <VItemGroup>
-    <VBtn
-      v-for="[reaction, count] in reactions"
-      :key="reaction"
-      :value="reaction"
-      :loading="reacting == reaction"
-      :color="myReaction == reaction ? 'primary' : undefined"
-      variant="tonal"
-      rounded
-      @click.stop="myReaction == reaction ? undoReact() : react(reaction)"
-    >
-      <MkAnyEmoji
-        :name="reaction"
-        :urls="emojiUrls"
-      />
-      <span>
+  <VItemGroup class="flex flex-wrap gap-1">
+    <VBtn v-for="[reaction, count] in reactions" :key="reaction" :value="reaction" :loading="reacting == reaction"
+      :variant="myReaction == reaction ? 'flat' : 'tonal'"
+      :class="['px-1 min-w-unset', myReaction == reaction ? 'rounded-sm! px-2' : 'rounded-xl']"
+      @click.stop="myReaction == reaction ? undoReact() : react(reaction)">
+      <MkAnyEmoji :name="reaction" :urls="emojiUrls" />
+      <span class="ml-1">
         {{ count }}
       </span>
     </VBtn>
