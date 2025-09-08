@@ -101,8 +101,8 @@ export const useNoteCache = defineStore("note-cache", () => {
           votes: choices[choice].votes + 1,
           ...(me && body.userId === me.id
             ? {
-              isVoted: true,
-            }
+                isVoted: true,
+              }
             : {}),
         };
 

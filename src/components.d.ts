@@ -13,7 +13,6 @@ declare module 'vue' {
     AppRightSidebar: typeof import('./components/AppRightSidebar.vue')['default']
     AppSidebar: typeof import('./components/AppSidebar.vue')['default']
     AppSnackbarQueueContainer: typeof import('./components/AppSnackbarQueueContainer.vue')['default']
-    MdButton: typeof import("./components/MdButton.vue")["default"]
     MkAnyEmoji: typeof import('./components/MkAnyEmoji.vue')['default']
     MkAvatar: typeof import('./components/MkAvatar.vue')['default']
     MkCode: typeof import('./components/MkCode.vue')['default']
@@ -22,7 +21,6 @@ declare module 'vue' {
     MkEmojiPicker: typeof import('./components/MkEmojiPicker.vue')['default']
     MkEmojiPickerEmojis: typeof import('./components/MkEmojiPickerEmojis.vue')['default']
     MkGallery: typeof import('./components/MkGallery.vue')['default']
-    MkGalleryImage: typeof import('./components/MkGalleryImage.vue')['default']
     MkHashtag: typeof import('./components/MkHashtag.vue')['default']
     MkImage: typeof import('./components/MkImage.vue')['default']
     MkImageBlurHash: typeof import('./components/MkImageBlurHash.vue')['default']
@@ -56,7 +54,6 @@ declare module 'vue' {
     MkUserPageCard: typeof import('./components/MkUserPageCard.vue')['default']
     MkUserTimeline: typeof import('./components/MkUserTimeline.vue')['default']
     MkVisibilityPicker: typeof import('./components/MkVisibilityPicker.vue')['default']
-    MobileBottomNavigation: typeof import('./components/MobileBottomNavigation.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
