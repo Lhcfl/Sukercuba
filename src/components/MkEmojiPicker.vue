@@ -98,7 +98,14 @@ function getSections() {
 
 searchWorker.addEventListener("message", (emojis) => {
   searched.value = !search.value ? [] : emojis.data.map(attachInfo);
-  sections.value = getSections();
+  if (import.meta.env.DEV) {
+    const time1 = performance.now();
+    sections.value = getSections();
+    const time2 = performance.now();
+    console.log(`MkEmojiPicker: filtering took ${time2 - time1}ms`);
+  } else {
+    sections.value = getSections();
+  }
   searching.value = false;
 })
 

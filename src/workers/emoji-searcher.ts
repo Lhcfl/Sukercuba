@@ -8,7 +8,6 @@ async function createEmojiFuse(site: string) {
   emojiFuse = new Fuse((await siteStore.get("emojis")) ?? [], {
     keys: ["name", "aliases"],
     threshold: 0.1,
-    includeScore: true,
   });
 }
 
@@ -29,8 +28,16 @@ addEventListener("message", (event) => {
       return;
     }
     case "search": {
-      const ret = emojiFuse.search(data, { limit: 100 }).map((x) => x.item);
-      postMessage(ret);
+      if (import.meta.env.DEV) {
+        const time1 = performance.now();
+        const ret = emojiFuse.search(data, { limit: 100 }).map((x) => x.item);
+        const time2 = performance.now();
+        postMessage(ret);
+        console.log(`emoji-searcher: fuzzy searching took ${time2 - time1}ms`);
+      } else {
+        const ret = emojiFuse.search(data, { limit: 100 }).map((x) => x.item);
+        postMessage(ret);
+      }
     }
   }
 });
