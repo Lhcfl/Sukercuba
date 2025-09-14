@@ -1,17 +1,26 @@
 <template>
   <div class="flex flex-col w-full">
     <div class="flex items-center">
-      <VBtn v-if="note.repliesCount == 0" variant="plain" icon="mdi-reply"
-        :color="posting === 'reply' ? 'primary' : 'base'"
-        @click.stop="posting = posting === 'reply' ? null : 'reply'" />
-      <VBtn v-else variant="plain" prepend-icon="mdi-reply" rounded size="large" :text="note.repliesCount"
-        :color="posting === 'reply' ? 'primary' : 'base'"
-        @click.stop="posting = posting === 'reply' ? null : 'reply'" />
-      <VBtn v-if="note.renoteCount == 0" variant="plain" icon="mdi-repeat-variant" :loading="renoting"
-        :color="note.isRenoted ? 'primary' : 'base'" @click.stop="renoteOrCancel" />
-      <VBtn v-else variant="plain" prepend-icon="mdi-repeat-variant" rounded :loading="renoting"
-        :color="note.isRenoted ? 'primary' : 'base'" size="large" :text="note.renoteCount"
-        @click.stop="renoteOrCancel" />
+      <VBtn variant="plain" @click.stop="posting = posting === 'reply' ? null : 'reply'"
+        :color="posting === 'reply' ? 'primary' : 'base'" v-bind="note.repliesCount == 0 ? {
+          icon: 'mdi-reply'
+        } : {
+          prependIcon: 'mdi-reply',
+          rounded: true,
+          size: 'large',
+          text: `${note.repliesCount}`
+        }" />
+
+      <VBtn v-if="renoteable" variant="plain" :loading="renoting" :color="note.isRenoted ? 'primary' : 'base'"
+        @click.stop="renoteOrCancel" v-bind="note.renoteCount == 0 ? {
+          icon: 'mdi-repeat-variant'
+        } : {
+          prependIcon: 'mdi-repeat-variant',
+          rounded: true,
+          size: 'large',
+          text: `${note.renoteCount}`
+        }" />
+
       <VBtn variant="plain" icon="mdi-format-quote-close-outline" :color="posting === 'quote' ? 'primary' : 'base'"
         @click.stop="posting = posting === 'quote' ? null : 'quote'" />
       <VBtn v-if="note.myReaction" variant="plain" icon="mdi-minus" color="primary" :loading="reacting"
@@ -54,10 +63,11 @@
       </VMenu>
     </div>
     <VDivider v-if="posting" />
-    <MkPostForm v-if="posting" variant="flat" class="bg-transparent"
-      :reply-id="posting === 'reply' ? note.id : undefined" :quote-id="posting === 'quote' ? note.id : undefined"
-      :edit="posting === 'edit' ? note : undefined" allow-cancel @click.stop @done="posting = null"
-      @cancel="posting = null" />
+    <div class="post-form-wrapper" v-if="posting" @click.stop @keydown.stop>
+      <MkPostForm variant="text" class="bg-transparent" :reply-id="posting === 'reply' ? note.id : undefined"
+        :quote-id="posting === 'quote' ? note.id : undefined" :edit="posting === 'edit' ? note : undefined" allow-cancel
+        @click.stop @done="posting = null" @cancel="posting = null" />
+    </div>
   </div>
 </template>
 
@@ -84,6 +94,7 @@ const posting = ref<"reply" | "quote" | "edit" | null>(null);
 const deleting = ref(false);
 const showMenu = ref(false);
 const showEmojiPicker = ref(false);
+const renoteable = computed(() => props.note.visibility === "public" || props.note.visibility === "home");
 
 const isMyNote = computed(() => props.note.userId === account.me?.id);
 

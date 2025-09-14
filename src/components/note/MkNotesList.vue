@@ -22,7 +22,6 @@ const props = defineProps<{
 }>();
 
 const perfer = usePreferences();
-
 const notes = defineModel<NoteWithExtension[]>({ default: [] });
 const computedNotes = computed(() => notes.value.filter((x) => !x.isDeleted));
 

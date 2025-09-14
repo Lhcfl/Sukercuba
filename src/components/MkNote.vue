@@ -9,11 +9,29 @@
       <MkNoteHeader :note="appearNote" />
     </VCardItem>
     <MkNoteBody :note="appearNote" :detailed :simple :never-collapse />
+    <template v-if="translatedText || translating" :loading="translating">
+      <VCardText v-if="translatedText">
+        <p class="font-bold my-2">{{ $t("translatedFrom", { x: sourceLang }) }}</p>
+        <p>
+          <MkMfm :text="translatedText" />
+        </p>
+      </VCardText>
+      <VCardText v-if="translating" class="animate-pulse">
+        <p class="font-bold my-2">{{ $t("translatedFrom", { x: "..." }) }}</p>
+        <p>
+          <span class="inline-block w-32 h-2 bg-on-surface/70"></span>
+          <br></br>
+          <span class="inline-block w-48 h-2 bg-on-surface/70"></span>
+          <br></br>
+          <span class="inline-block w-24 h-2 bg-on-surface/70"></span>
+        </p>
+      </VCardText>
+    </template>
     <VCardText v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0" class="py-0">
       <MkNoteReactions :note="appearNote" />
     </VCardText>
     <VCardActions v-if="!hideActions" class="py-0">
-      <MkNoteActions :note="appearNote" />
+      <MkNoteActions :note="appearNote" @translate="translateNote" />
     </VCardActions>
   </div>
 </template>
@@ -43,11 +61,16 @@ const props = withDefaults(
 );
 
 const router = useRouter();
+const account = useAccount();
 
 const isPureRenote = computed(() => Misskey.note.isPureRenote(props.note));
 const appearNote = computed(() =>
   isPureRenote.value ? props.note.renote! : props.note,
 );
+
+const translating = ref(false);
+const sourceLang = ref<string | null>(null);
+const translatedText = ref<string | null>(null);
 
 function routeToNote() {
   if (window.getSelection()?.toString()) {
@@ -57,6 +80,22 @@ function routeToNote() {
   if (props.disableRoute) return;
   router.push({ name: "/notes/[id]", params: { id: appearNote.value.id } });
 }
+
+async function translateNote() {
+  try {
+    translating.value = true;
+    const res = await account.api.request("notes/translate", {
+      noteId: appearNote.value.id,
+      targetLang: account.me?.lang ?? navigator.language,
+    });
+
+    sourceLang.value = res.sourceLang;
+    translatedText.value = res.text;
+  } finally {
+    translating.value = false;
+  }
+}
+
 </script>
 
 <style lang="scss" module>

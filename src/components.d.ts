@@ -43,6 +43,7 @@ declare module 'vue' {
     MkNotifications: typeof import('./components/MkNotifications.vue')['default']
     MkPollEditor: typeof import('./components/MkPollEditor.vue')['default']
     MkPostForm: typeof import('./components/MkPostForm.vue')['default']
+    MkPostFormCard: typeof import('./components/MkPostFormCard.vue')['default']
     MkSearchNote: typeof import('./components/MkSearchNote.vue')['default']
     MkSearchUser: typeof import('./components/MkSearchUser.vue')['default']
     MkTime: typeof import('./components/MkTime.vue')['default']

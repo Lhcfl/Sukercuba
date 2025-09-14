@@ -1,61 +1,62 @@
 <template>
-  <VCard v-ripple.stop="false" :variant :loading :disabled="loading" @keydown.stop @keyup.stop>
-    <VCardActions class="flex justify-between">
-      <MkAvatar v-if="account.me" no-tooltip :user="account.me" />
-      <div>
-        <MkVisibilityPicker v-model="draft" :disabled="!!edit" />
-        <VBtn icon="mdi-clock-outline" />
-        <VBtn v-if="allowCancel" icon="mdi-close" @click.stop="emit('cancel')" />
-      </div>
-    </VCardActions>
-    <VCardText class="py-0">
-      <VTextarea v-if="draft.showCw" v-model="draft.cw" :rows="2" density="compact" auto-grow variant="underlined"
-        :label="t('_initialTutorial._postNote._cw.title')" hide-details="auto" />
-      <VTextarea ref="textRef" v-model="draft.text" :loading :rows="2" density="compact"
-        :placeholder="t('_postForm._placeholders.' + randomPlaceHolder)" variant="underlined" flat autofocus auto-grow
-        hide-details="auto" @keydown="onkeydown" />
-      <VCombobox v-if="draft.showTags" v-model="draft.appendTags" :label="t('tags')" variant="underlined"
-        :delimiters="[' ']" chips multiple closable-chips hide-details="auto">
-        <template #chip="data">
-          <VChip :key="data.index" prepend-icon="mdi-tag" v-bind="data.props" />
+  <!-- wrap the component in a vcard -->
+  <!-- <VCard v-ripple.stop="false" :variant :loading :disabled="loading" @keydown.stop @keyup.stop> -->
+  <VCardActions class="flex justify-between">
+    <MkAvatar v-if="account.me" no-tooltip :user="account.me" />
+    <div>
+      <MkVisibilityPicker v-model="draft" :disabled="!!edit" />
+      <VBtn icon="mdi-clock-outline" />
+      <VBtn v-if="allowCancel" icon="mdi-close" @click.stop="emit('cancel')" />
+    </div>
+  </VCardActions>
+  <VCardText class="py-0">
+    <VTextarea v-if="draft.showCw" v-model="draft.cw" :rows="2" density="compact" auto-grow variant="underlined"
+      :label="t('_initialTutorial._postNote._cw.title')" hide-details="auto" />
+    <VTextarea ref="textRef" v-model="draft.text" :loading :rows="2" density="compact"
+      :placeholder="t('_postForm._placeholders.' + randomPlaceHolder)" variant="underlined" flat autofocus auto-grow
+      hide-details="auto" @keydown="onkeydown" />
+    <VCombobox v-if="draft.showTags" v-model="draft.appendTags" :label="t('tags')" variant="underlined"
+      :delimiters="[' ']" chips multiple closable-chips hide-details="auto">
+      <template #chip="data">
+        <VChip :key="data.index" prepend-icon="mdi-tag" v-bind="data.props" />
+      </template>
+    </VCombobox>
+  </VCardText>
+  <MkPollEditor v-if="draft.showPoll" v-model="draft.poll" />
+  <VCardText v-if="draft.showPreview">
+    <p v-if="draft.computedCw">
+      <MkMfm :text="draft.computedCw" />
+      <VDivider />
+    </p>
+    <p>
+      <MkMfm :text="draft.computedText" />
+    </p>
+  </VCardText>
+  <VCardActions class="flex justify-between">
+    <div>
+      <VBtn color="base" icon="mdi-image-outline" />
+      <VBtn icon="mdi-poll" :color="draft.showPoll ? 'primary' : 'base'"
+        @click.stop="draft.showPoll = !draft.showPoll" />
+      <VBtn icon="mdi-eye-off-outline" :color="draft.showCw ? 'primary' : 'base'"
+        @click.stop="draft.showCw = !draft.showCw" />
+      <VBtn icon="mdi-tag-multiple-outline" :color="draft.showTags ? 'primary' : 'base'"
+        @click.stop="draft.showTags = !draft.showTags" />
+      <VMenu :close-on-content-click="false">
+        <template #activator="{ props: p }">
+          <VBtn color="base" icon="mdi-sticker-emoji" v-bind="p" />
         </template>
-      </VCombobox>
-    </VCardText>
-    <MkPollEditor v-if="draft.showPoll" v-model="draft.poll" />
-    <VCardText v-if="draft.showPreview">
-      <p v-if="draft.computedCw">
-        <MkMfm :text="draft.computedCw" />
-        <VDivider />
-      </p>
-      <p>
-        <MkMfm :text="draft.computedText" />
-      </p>
-    </VCardText>
-    <VCardActions class="flex justify-between">
-      <div>
-        <VBtn color="base" icon="mdi-image-outline" />
-        <VBtn icon="mdi-poll" :color="draft.showPoll ? 'primary' : 'base'"
-          @click.stop="draft.showPoll = !draft.showPoll" />
-        <VBtn icon="mdi-eye-off-outline" :color="draft.showCw ? 'primary' : 'base'"
-          @click.stop="draft.showCw = !draft.showCw" />
-        <VBtn icon="mdi-tag-multiple-outline" :color="draft.showTags ? 'primary' : 'base'"
-          @click.stop="draft.showTags = !draft.showTags" />
-        <VMenu :close-on-content-click="false">
-          <template #activator="{ props: p }">
-            <VBtn color="base" icon="mdi-sticker-emoji" v-bind="p" />
-          </template>
-          <MkEmojiPicker @selected="prependEmoji" />
-        </VMenu>
-        <VBtn color="base" icon="mdi-dots-horizontal" />
-      </div>
-      <div>
-        <VBtn icon="mdi-eye-outline" :color="draft.showPreview ? 'primary' : 'base'"
-          @click.stop="draft.showPreview = !draft.showPreview" />
-        <VBtn color="primary" variant="tonal" :prepend-icon="sendbtn.icon" :loading :text="sendbtn.text"
-          :disabled="submitDisabled" @click.stop="submit" />
-      </div>
-    </VCardActions>
-  </VCard>
+        <MkEmojiPicker @selected="prependEmoji" />
+      </VMenu>
+      <VBtn color="base" icon="mdi-dots-horizontal" />
+    </div>
+    <div>
+      <VBtn icon="mdi-eye-outline" :color="draft.showPreview ? 'primary' : 'base'"
+        @click.stop="draft.showPreview = !draft.showPreview" />
+      <VBtn color="primary" variant="tonal" :prepend-icon="sendbtn.icon" :loading :text="sendbtn.text"
+        :disabled="submitDisabled" @click.stop="submit" />
+    </div>
+  </VCardActions>
+  <!-- </VCard> -->
 </template>
 
 <script setup lang="ts">
@@ -84,6 +85,7 @@ const props = withDefaults(
 const emit = defineEmits<{
   done: [];
   cancel: [];
+  "update:loading": [boolean];
 }>();
 
 const { t } = useI18n();
@@ -100,6 +102,12 @@ const textRef = useTemplateRef("textRef");
 const loading = ref(false);
 const randomPlaceHolder = ref("abcdef"[Math.floor(Math.random() * 6)]);
 const popupMessages = usePopupMessage();
+
+watch(loading, (val) => {
+  emit("update:loading", val);
+}, {
+  immediate: true,
+});
 
 const sendbtn = computed(() =>
   props.edit
