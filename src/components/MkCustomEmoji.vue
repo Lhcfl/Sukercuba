@@ -56,7 +56,8 @@ const alt = computed(() => `:${customEmojiName.value}:`);
 const errored = ref(url.value == null);
 
 function onClick(ev: MouseEvent) {
-  console.log(ev);
+  // console.log(ev);
+  // todo
 }
 </script>
 

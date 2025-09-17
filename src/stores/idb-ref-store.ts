@@ -59,7 +59,8 @@ export class IDBRefStore<T extends Record<string, any>> {
         } else {
           target[key] = ref(val);
         }
-        base.set(key, toRaw(val));
+        // deep clone to avoid reacitivity issues
+        base.set(key, JSON.parse(JSON.stringify(val)));
         return true;
       },
     }) as IDBRefStoreRes<T>;

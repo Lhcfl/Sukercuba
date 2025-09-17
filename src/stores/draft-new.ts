@@ -88,7 +88,6 @@ export class IdbDraft {
 
   async save() {
     const toSave = toRaw(this.state.value);
-    console.log("Saving draft to IDB:", this.storeId, toSave);
     await IDB.set(this.storeId, toSave);
   }
 
