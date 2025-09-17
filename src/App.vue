@@ -13,7 +13,7 @@ import type { DefaultsOptions } from 'vuetify/lib/composables/defaults.mjs';
 
 const defaults: DefaultsOptions = {
   VCard: {
-    rounded: "2xl!",
+    // rounded: "2xl!",
     variant: "flat",
   },
   VChip: {

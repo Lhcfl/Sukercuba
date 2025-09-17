@@ -1,5 +1,5 @@
 <template>
-  <div class="mk-avatar">
+  <div class="mk-avatar" @click="routeToUser">
     <VImg :src="user.avatarUrl ?? undefined" :width="size" :height="size" class="rounded-full">
       <template #placeholder>
         <div class="relative" :style="{ width: size + 'px', height: size + 'px' }">
@@ -19,9 +19,11 @@ const props = withDefaults(defineProps<{
   user: User;
   size?: string | number;
   noTooltip?: boolean;
+  routeOnClick?: boolean;
 }>(), {
   size: 40,
   noTooltip: false,
+  routeOnClick: true,
 });
 
 const router = useRouter();
@@ -32,7 +34,9 @@ onDeactivated(() => {
   showTip.value = false;
 });
 
-function routeToUser() {
+function routeToUser(ev: MouseEvent) {
+  if (!props.routeOnClick) return;
+  ev.stopPropagation();
   router.push({
     name: "/@[userhandle]",
     params: {
