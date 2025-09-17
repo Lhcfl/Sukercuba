@@ -1,5 +1,5 @@
 <template>
-  <span v-if="user.name" class="mfm-name">
+  <span v-if="user.name" class="mfm-name mb--2">
     <MkMfm inline plain nowrap :text="user.name" :author="user" :emoji-urls="user.emojis" />
   </span>
   <span v-else>

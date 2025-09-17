@@ -14,7 +14,7 @@
       </div>
     </VCardItem>
     <VCardText>
-      <p :class="{ 'line-clamp-3': !showMore }">
+      <p class="mt--2" :class="{ 'line-clamp-3': !showMore }">
         <span v-if="appearNote.files?.length">
           <VIcon icon="mdi-image" />
           x{{ appearNote.files?.length }}

@@ -5,11 +5,8 @@
         <MkAvatar :user="notification.user" />
       </template>
       <div class="flex flex-col">
-        <span>
-          <MkUserName :user="notification.user" />
-          <span class="text-subtitle-2 ml-2">@{{ acct.toString(notification.user) }}</span>
-        </span>
-        <span class="text-subtitle-2">
+        <MkUserName :user="notification.user" />
+        <span class="text-sm">
           {{ message }}
         </span>
       </div>
