@@ -59,7 +59,7 @@ export class IDBRefStore<T extends Record<string, any>> {
         } else {
           target[key] = ref(val);
         }
-        base.set(key, val);
+        base.set(key, toRaw(val));
         return true;
       },
     }) as IDBRefStoreRes<T>;

@@ -1,54 +1,32 @@
 <template>
   <VMenu :disabled>
     <template #activator="{ props: p }">
-      <VBtn
-        v-bind="p"
-        :disabled
-      >
+      <VBtn v-bind="p" :disabled>
         <template #prepend>
           <VIcon :icon="selectedVisibility.icon" />
         </template>
         {{ selectedVisibility.title }}
         <template #append>
-          <VIcon
-            v-if="draft.localOnly"
-            class="text-red"
-            icon="mdi-cloud-cancel-outline"
-          />
-          <VIcon
-            v-else
-            icon="mdi-cloud-check-outline"
-          />
+          <VIcon v-if="draft.localOnly" class="text-red" icon="mdi-cloud-cancel-outline" />
+          <VIcon v-else icon="mdi-cloud-check-outline" />
         </template>
       </VBtn>
     </template>
     <VList>
-      <VListItem
-        v-for="visibility in visibilities"
-        :key="visibility.value"
-        :class="draft.visibility === visibility.value && 'text-primary'"
-        :prepend-icon="visibility.icon"
-        :title="visibility.title"
-        :subtitle="visibility.subtitle"
-        @click.stop="draft.visibility = visibility.value"
-      />
-      <VListItem
-        :class="draft.localOnly && 'text-primary'"
-        :prepend-icon="
-          draft.localOnly
-            ? 'mdi-toggle-switch-outline'
-            : 'mdi-toggle-switch-off-outline'
-        "
-        :title="t('_visibility.disableFederation')"
-        :subtitle="t('_visibility.disableFederationDescription')"
-        @click.stop="draft.localOnly = !draft.localOnly"
-      />
+      <VListItem v-for="visibility in visibilities" :key="visibility.value"
+        :class="draft.visibility === visibility.value && 'text-primary'" :prepend-icon="visibility.icon"
+        :title="visibility.title" :subtitle="visibility.subtitle" @click.stop="draft.visibility = visibility.value" />
+      <VListItem :class="draft.localOnly && 'text-primary'" :prepend-icon="draft.localOnly
+          ? 'mdi-toggle-switch-outline'
+          : 'mdi-toggle-switch-off-outline'
+        " :title="t('_visibility.disableFederation')" :subtitle="t('_visibility.disableFederationDescription')"
+        @click.stop="draft.localOnly = !draft.localOnly" />
     </VList>
   </VMenu>
 </template>
 
 <script setup lang="ts">
-const draft = defineModel<ReturnType<typeof useDraft>>({ required: true });
+const draft = defineModel<DraftState>({ required: true });
 
 defineProps<{
   disabled?: boolean;

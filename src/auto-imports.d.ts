@@ -9,6 +9,7 @@ declare global {
   const EffectScope: typeof import('vue')['EffectScope']
   const IDBRefStore: typeof import('./stores/idb-ref-store')['IDBRefStore']
   const IDBStore: typeof import('./stores/store')['IDBStore']
+  const IdbDraft: typeof import('./stores/draft-new')['IdbDraft']
   const SiteStore: typeof import('./stores/store')['SiteStore']
   const UserApi: typeof import('./stores/user-cache')['UserApi']
   const UserStore: typeof import('./stores/store')['UserStore']
@@ -95,8 +96,8 @@ declare global {
   export type { EmojiExtended } from './components/MkEmojiPickerEmojis.vue'
   import('./components/MkEmojiPickerEmojis.vue')
   // @ts-ignore
-  export type { DraftPoll } from './stores/draft'
-  import('./stores/draft')
+  export type { IdbDraft, DraftPoll, DraftState } from './stores/draft-new'
+  import('./stores/draft-new')
   // @ts-ignore
   export type { IDBRefStore } from './stores/idb-ref-store'
   import('./stores/idb-ref-store')
@@ -122,6 +123,7 @@ declare module 'vue' {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly IDBRefStore: UnwrapRef<typeof import('./stores/idb-ref-store')['IDBRefStore']>
     readonly IDBStore: UnwrapRef<typeof import('./stores/store')['IDBStore']>
+    readonly IdbDraft: UnwrapRef<typeof import('./stores/draft-new')['IdbDraft']>
     readonly SiteStore: UnwrapRef<typeof import('./stores/store')['SiteStore']>
     readonly UserApi: UnwrapRef<typeof import('./stores/user-cache')['UserApi']>
     readonly UserStore: UnwrapRef<typeof import('./stores/store')['UserStore']>
@@ -180,7 +182,6 @@ declare module 'vue' {
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useCustomEmojisData: UnwrapRef<typeof import('./stores/custom-emoji-map')['useCustomEmojisData']>
-    readonly useDraft: UnwrapRef<typeof import('./stores/draft')['useDraft']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
