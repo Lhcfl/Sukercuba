@@ -17,8 +17,8 @@
         :class="draft.visibility === visibility.value && 'text-primary'" :prepend-icon="visibility.icon"
         :title="visibility.title" :subtitle="visibility.subtitle" @click.stop="draft.visibility = visibility.value" />
       <VListItem :class="draft.localOnly && 'text-primary'" :prepend-icon="draft.localOnly
-          ? 'mdi-toggle-switch-outline'
-          : 'mdi-toggle-switch-off-outline'
+        ? 'mdi-toggle-switch-outline'
+        : 'mdi-toggle-switch-off-outline'
         " :title="t('_visibility.disableFederation')" :subtitle="t('_visibility.disableFederationDescription')"
         @click.stop="draft.localOnly = !draft.localOnly" />
     </VList>
@@ -26,6 +26,8 @@
 </template>
 
 <script setup lang="ts">
+import type { DraftState } from '@/stores/draft-new';
+
 const draft = defineModel<DraftState>({ required: true });
 
 defineProps<{
