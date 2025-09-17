@@ -1,84 +1,32 @@
 <template>
   <VCardText>
-    <VTextField
-      v-for="(_, num) in poll.choices"
-      ref="textFields"
-      :key="num"
-      v-model="poll.choices[num]"
-      class="mb-2"
-      :label="t('_poll.choiceN', num + 1)"
-      variant="outlined"
-      density="compact"
-      hide-details="auto"
-    >
+    <VTextField v-for="(_, num) in poll.choices" ref="textFields" :key="num" v-model="poll.choices[num]" class="mb-2"
+      :label="t('_poll.choiceN', num + 1)" variant="outlined" density="compact" hide-details="auto">
       <template #append-inner>
-        <VBtn
-          icon="mdi-arrow-up-thin"
-          size="x-small"
-          variant="plain"
-          :disabled="num == 0"
-          @click="swapPoll(num, num - 1)"
-        />
-        <VBtn
-          icon="mdi-arrow-down-thin"
-          size="x-small"
-          variant="plain"
-          :disabled="num == poll.choices.length - 1"
-          @click="swapPoll(num, num + 1)"
-        />
-        <VBtn
-          icon="mdi-close"
-          size="x-small"
-          variant="plain"
-          :disabled="poll.choices.length <= 2"
-          @click="removePoll(num)"
-        />
+        <VBtn icon="mdi-arrow-up-thin" size="x-small" variant="plain" :disabled="num == 0"
+          @click="swapPoll(num, num - 1)" />
+        <VBtn icon="mdi-arrow-down-thin" size="x-small" variant="plain" :disabled="num == poll.choices.length - 1"
+          @click="swapPoll(num, num + 1)" />
+        <VBtn icon="mdi-close" size="x-small" variant="plain" :disabled="poll.choices.length <= 2"
+          @click="removePoll(num)" />
       </template>
     </VTextField>
-    <VTextField
-      v-if="poll.choices.length < 10"
-      :key="poll.choices.length"
-      class="mb-2"
-      :label="t('add')"
-      variant="outlined"
-      density="compact"
-      hide-details="auto"
-      @click.stop="addPoll"
-    />
-    <VSwitch
-      v-model="poll.multiple"
-      :label="t('_poll.multiple')"
-      hide-details
-    />
+    <VTextField v-if="poll.choices.length < 10" :key="poll.choices.length" class="mb-2" :label="t('add')"
+      variant="outlined" density="compact" hide-details="auto" @click.stop="addPoll" />
+    <VSwitch v-model="poll.multiple" :label="t('_poll.multiple')" hide-details />
     <VContainer class="pa-0">
       <VRow>
         <VCol>
-          <VSelect
-            v-model="expireKind"
-            :items="expireKinds"
-            hide-details
-          />
+          <VSelect v-model="expireKind" :items="expireKinds" hide-details />
         </VCol>
         <VCol v-if="expireKind == 'after'">
-          <VTextField
-            v-model="expiredAfter"
-            type="number"
-            hide-details="auto"
-          />
+          <VTextField v-model="expiredAfter" type="number" hide-details="auto" />
         </VCol>
         <VCol v-if="expireKind == 'after'">
-          <VSelect
-            v-model="after"
-            :items="afterKinds"
-            hide-details
-          />
+          <VSelect v-model="after" :items="afterKinds" hide-details />
         </VCol>
         <VCol v-if="expireKind == 'at'">
-          <VTextField
-            v-model="expiredAt"
-            type="datetime-local"
-            hide-details
-          />
+          <VTextField v-model="expiredAt" type="datetime-local" hide-details />
         </VCol>
       </VRow>
     </VContainer>
@@ -86,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DraftPoll } from "@/stores/draft";
+import type { DraftPoll } from "@/stores/draft-new";
 
 const poll = defineModel<DraftPoll>({ required: true });
 
