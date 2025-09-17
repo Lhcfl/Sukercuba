@@ -8,7 +8,6 @@ export type DraftPoll = {
   expiredAfter?: number | null;
 };
 
-
 type DraftOpts = {
   id?: string;
   replyId?: string;
@@ -30,7 +29,7 @@ export type DraftState = {
 };
 
 export class IdbDraft {
-  constructor(private opts: DraftOpts) { }
+  constructor(private opts: DraftOpts) {}
 
   // when null, it means not loaded yet
   // and it will not be exposed outside
@@ -73,7 +72,7 @@ export class IdbDraft {
       showTags: false,
       showPreview: false,
       showPoll: false,
-    }
+    };
   }
 
   async load() {
