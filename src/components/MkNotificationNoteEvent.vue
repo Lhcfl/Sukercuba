@@ -2,19 +2,19 @@
   <VCard v-ripple :variant @click.stop="router.push({ name: '/notes/[id]', params: { id: appearNote.id } })">
     <VCardItem :prepend-icon="icon">
       <div v-if="avatars" class="flex flex-wrap">
-        <div v-for="(pair, index) in avatars" :key="index" :class="$style.avatar">
+        <div v-for="(pair, index) in avatars" :key="index" class="w-14 h-14 relative">
           <MkAvatar :user="pair.user" />
-          <MkAnyEmoji v-if="pair.reaction" :class="$style.reaction" :name="pair.reaction"
+          <MkAnyEmoji v-if="pair.reaction" class="absolute right-0 bottom-0 scale-75" :name="pair.reaction"
             :urls="appearNote.reactionEmojis" />
         </div>
-        <VBtn v-if="showMore" color="secondary-container" rounded="circle" variant="flat" icon="mdi-chevron-up"
-          @click.stop="showMore = false" />
-        <VBtn v-else-if="reactions && reactions.length > 3" color="secondary-container" rounded="circle" variant="flat"
-          icon="mdi-chevron-down" @click.stop="showMore = true" />
+        <VBtn class="w-12 h-12" v-if="showMore" color="secondary-container" rounded="circle" variant="flat"
+          icon="mdi-chevron-up" @click.stop="showMore = false" />
+        <VBtn class="w-12 h-12" v-else-if="reactions && reactions.length > 3" color="secondary-container"
+          rounded="circle" variant="flat" icon="mdi-chevron-down" @click.stop="showMore = true" />
       </div>
     </VCardItem>
     <VCardText>
-      <p :class="[$style.note, showMore && $style.showMore]">
+      <p :class="{ 'line-clamp-3': !showMore }">
         <span v-if="appearNote.files?.length">
           <VIcon icon="mdi-image" />
           x{{ appearNote.files?.length }}
@@ -78,29 +78,3 @@ const avatars = computed(() =>
   showMore.value ? reactions.value : reactions.value?.slice(0, 3),
 );
 </script>
-
-<style lang="scss" module>
-.note {
-  max-height: 100px;
-  overflow: hidden;
-
-  &.showMore {
-    max-height: unset;
-  }
-}
-
-.avatar {
-  height: 45px;
-  width: 45px;
-}
-
-.reaction {
-  scale: 0.7;
-  position: absolute;
-  transform: translate(-40px, 20px);
-  background-color: rgb(var(--v-theme-background));
-  border-radius: 50%;
-  padding: 5px;
-  z-index: 1;
-}
-</style>
