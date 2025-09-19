@@ -21,6 +21,8 @@ declare module 'vue' {
     MkEmoji: typeof import('./components/MkEmoji.vue')['default']
     MkEmojiPicker: typeof import('./components/MkEmojiPicker.vue')['default']
     MkEmojiPickerEmojis: typeof import('./components/MkEmojiPickerEmojis.vue')['default']
+    MkFollowRequests: typeof import('./components/MkFollowRequests.vue')['default']
+    MkFollowRequestsItem: typeof import('./components/MkFollowRequestsItem.vue')['default']
     MkGallery: typeof import('./components/MkGallery.vue')['default']
     MkHashtag: typeof import('./components/MkHashtag.vue')['default']
     MkImage: typeof import('./components/MkImage.vue')['default']

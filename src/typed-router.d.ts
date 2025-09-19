@@ -23,6 +23,7 @@ declare module 'vue-router/auto-routes' {
     '/clips/': RouteRecordInfo<'/clips/', '/clips', Record<never, never>, Record<never, never>>,
     '/clips/[id]': RouteRecordInfo<'/clips/[id]', '/clips/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/favorites': RouteRecordInfo<'/favorites', '/favorites', Record<never, never>, Record<never, never>>,
+    '/follow-requests': RouteRecordInfo<'/follow-requests', '/follow-requests', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     '/login-redirect': RouteRecordInfo<'/login-redirect', '/login-redirect', Record<never, never>, Record<never, never>>,
     '/notes/[id]': RouteRecordInfo<'/notes/[id]', '/notes/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
@@ -61,6 +62,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/favorites.vue': {
       routes: '/favorites'
+      views: never
+    }
+    'src/pages/follow-requests.vue': {
+      routes: '/follow-requests'
       views: never
     }
     'src/pages/login.vue': {

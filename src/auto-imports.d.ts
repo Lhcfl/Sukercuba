@@ -76,6 +76,7 @@ declare global {
   const useId: typeof import('vue')['useId']
   const useInfiniteQuery: typeof import('@tanstack/vue-query')['useInfiniteQuery']
   const useModel: typeof import('vue')['useModel']
+  const useMutation: typeof import('@tanstack/vue-query')['useMutation']
   const useNavigations: typeof import('./services/navigations')['useNavigations']
   const useNoteCache: typeof import('./stores/note-cache')['useNoteCache']
   const usePopupMessage: typeof import('./stores/popup-message')['usePopupMessage']
@@ -197,6 +198,7 @@ declare module 'vue' {
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useInfiniteQuery: UnwrapRef<typeof import('@tanstack/vue-query')['useInfiniteQuery']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
+    readonly useMutation: UnwrapRef<typeof import('@tanstack/vue-query')['useMutation']>
     readonly useNavigations: UnwrapRef<typeof import('./services/navigations')['useNavigations']>
     readonly useNoteCache: UnwrapRef<typeof import('./stores/note-cache')['useNoteCache']>
     readonly usePopupMessage: UnwrapRef<typeof import('./stores/popup-message')['usePopupMessage']>

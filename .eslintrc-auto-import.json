@@ -90,6 +90,7 @@
     "useId": true,
     "useInfiniteQuery": true,
     "useModel": true,
+    "useMutation": true,
     "useNavigations": true,
     "useNoteCache": true,
     "usePopupMessage": true,
