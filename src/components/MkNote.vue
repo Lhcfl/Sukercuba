@@ -16,16 +16,7 @@
           <MkMfm :text="translatedText" />
         </p>
       </VCardText>
-      <VCardText v-if="translating" class="animate-pulse">
-        <p class="font-bold my-2">{{ $t("translatedFrom", { x: "..." }) }}</p>
-        <p>
-          <span class="inline-block w-32 h-2 bg-on-surface/70"></span>
-          <br></br>
-          <span class="inline-block w-48 h-2 bg-on-surface/70"></span>
-          <br></br>
-          <span class="inline-block w-24 h-2 bg-on-surface/70"></span>
-        </p>
-      </VCardText>
+      <VSkeletonLoader v-if="translating" type="paragraph" />
     </template>
     <VCardText v-if="!hideReactions && Object.keys(appearNote.reactions).length > 0" class="py-0">
       <MkNoteReactions :note="appearNote" />

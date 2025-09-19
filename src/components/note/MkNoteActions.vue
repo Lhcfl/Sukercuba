@@ -34,25 +34,23 @@
           <MkEmojiPicker :accept="note.reactionAcceptance" @selected="react" />
         </VMenu>
       </template>
-      <VMenu v-model="showMenu">
+      <VMenu v-model="showMenu" close-on-content-click>
         <template #activator="{ props: p }">
           <VBtn variant="plain" color="base" icon="mdi-dots-horizontal" v-bind="p" @click.stop />
         </template>
         <VList>
           <VListItem prepend-icon="mdi-content-copy" :title="t('copyContent')" @click.stop="copyNoteContent" />
           <VListItem prepend-icon="mdi-link" :title="t('copyLink')" @click.stop="copyLink" />
-          <VListItem prepend-icon="mdi-link" :title="t('copyRemoteLink')" @click.stop="copyRemoteLink" />
+          <VListItem prepend-icon="mdi-link" :title="t('copyRemoteLink')" @click.stop="copyRemoteLink"
+            v-if="isRemote" />
           <VListItem prepend-icon="mdi-remote-desktop" :title="t('showOnRemote')" @click.stop="openRemote" />
           <VListItem prepend-icon="mdi-share-variant-outline" :title="t('share')" @click.stop="share" />
-          <VListItem prepend-icon="mdi-translate" :title="t('translate')" @click.stop="
-            emit('translate');
-          showMenu = false;
-          " />
+          <VListItem prepend-icon="mdi-translate" :title="t('translate')"
+            @click.stop="() => { emit('translate'); showMenu = false; }" />
+          <VListItem prepend-icon="mdi-star-outline" :title="t('favorite')" @click.stop="favorite" />
           <VDivider />
-          <VListItem v-if="isMyNote" prepend-icon="mdi-square-edit-outline" :title="t('edit')" @click.stop="
-            posting = 'edit';
-          showMenu = false;
-          " />
+          <VListItem v-if="isMyNote" prepend-icon="mdi-square-edit-outline" :title="t('edit')"
+            @click.stop="() => { posting = 'edit'; showMenu = false; }" />
           <VListItem v-if="isMyNote" class="text-red" prepend-icon="mdi-delete-outline" @click.stop="deleteNote">
             <VProgressCircular v-if="deleting" indeterminate />
             <span v-else>
@@ -87,7 +85,7 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const router = useRouter();
 const account = useAccount();
-const popupMessages = usePopupMessage();
+const snackbarQueue = useSnackbarQueue();
 const renoting = ref(false);
 const reacting = ref(false);
 const posting = ref<"reply" | "quote" | "edit" | null>(null);
@@ -95,17 +93,17 @@ const deleting = ref(false);
 const showMenu = ref(false);
 const showEmojiPicker = ref(false);
 const renoteable = computed(() => props.note.visibility === "public" || props.note.visibility === "home");
-
 const isMyNote = computed(() => props.note.userId === account.me?.id);
+const isRemote = computed(() => props.note.user.host != null)
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function popupError(err: any) {
   console.error(err);
   if (isAPIError(err)) {
-    popupMessages.push({ type: "error", message: err.message });
+    snackbarQueue.push({ color: "error", text: err.message });
   } else {
     if (err instanceof Error) {
-      popupMessages.push({ type: "error", message: err.message });
+      snackbarQueue.push({ color: "error", text: err.message });
     }
   }
 }
@@ -164,6 +162,18 @@ async function deleteNote() {
     popupError(err);
   } finally {
     deleting.value = false;
+  }
+}
+
+async function favorite() {
+  try {
+    showMenu.value = false;
+    await account.api.request("notes/favorites/create", {
+      noteId: props.note.id,
+    });
+    snackbarQueue.push({ text: t("favorited") });
+  } catch (err) {
+    popupError(err);
   }
 }
 
