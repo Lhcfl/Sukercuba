@@ -39,8 +39,8 @@ export const useAccount = defineStore(
       E extends keyof Misskey.Endpoints = keyof Misskey.Endpoints,
       P extends Misskey.Endpoints[E]["req"] = Misskey.Endpoints[E]["req"],
       _ResT = ResT extends void
-      ? Misskey.api.SwitchCaseResponseType<E, P>
-      : ResT,
+        ? Misskey.api.SwitchCaseResponseType<E, P>
+        : ResT,
     >(
       endpoint: E,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

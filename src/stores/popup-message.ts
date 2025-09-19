@@ -3,11 +3,11 @@ import type { VNode } from "vue";
 
 type PopupMessage = (
   | {
-    okcancel?: false;
-  }
+      okcancel?: false;
+    }
   | {
-    okcancel: true;
-  }
+      okcancel: true;
+    }
 ) & {
   type: "error" | "warn" | "info" | "success";
   message?: string;

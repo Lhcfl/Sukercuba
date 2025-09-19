@@ -112,7 +112,6 @@ export const useUploader = defineStore("uploader", () => {
     name?: string,
     keepOriginal = false,
   ): Promise<Misskey.entities.DriveFile> {
-
     if (account.me == null) throw new Error("Not logged in");
     if (account.meta == null) throw new Error("Meta is not loaded");
 
@@ -137,7 +136,7 @@ export const useUploader = defineStore("uploader", () => {
       reader.onload = async (): Promise<void> => {
         const filename = name ?? file.name ?? "untitled";
         const extension =
-          filename.split(".").length > 1 ? "." + filename.split(".").pop() : "";
+          filename.split(".").length > 1 ? `.${filename.split(".").pop()}` : "";
 
         const config = !keepOriginal
           ? await getCompressionConfig(file)
@@ -187,7 +186,11 @@ export const useUploader = defineStore("uploader", () => {
         if (_folder) formData.append("folderId", _folder);
 
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", new URL("/api/drive/files/create", account.api.origin), true);
+        xhr.open(
+          "POST",
+          new URL("/api/drive/files/create", account.api.origin),
+          true,
+        );
         xhr.addEventListener("load", function (ev) {
           if (
             xhr.status !== 200 ||
@@ -243,7 +246,7 @@ export const useUploader = defineStore("uploader", () => {
           resolve(driveFile);
 
           remove(id);
-        })
+        });
 
         xhr.upload.onprogress = (ev) => {
           if (ev.lengthComputable) {
@@ -257,12 +260,11 @@ export const useUploader = defineStore("uploader", () => {
     });
   }
 
-
   return {
     uploadings,
     add,
     remove,
     setProgress,
     uploadFile,
-  }
+  };
 });

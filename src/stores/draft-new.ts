@@ -31,7 +31,7 @@ export type DraftState = {
 };
 
 export class IdbDraft {
-  constructor(private opts: DraftOpts) { }
+  constructor(private opts: DraftOpts) {}
 
   // when null, it means not loaded yet
   // and it will not be exposed outside
