@@ -8,6 +8,11 @@
         <VDivider v-if="perfer.noteGap === 0" />
       </div>
     </TransitionGroup>
+    <template #loading>
+      <div class="w-full">
+        <MkNoteSkeleton v-for="i in (notes.length > 0 ? 1 : 10)" :key="i" />
+      </div>
+    </template>
   </VInfiniteScroll>
 </template>
 <script lang="ts" setup>
