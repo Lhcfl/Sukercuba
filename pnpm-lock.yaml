@@ -11,6 +11,9 @@ importers:
       '@mdi/font':
         specifier: 7.4.47
         version: 7.4.47
+      '@misskey-dev/browser-image-resizer':
+        specifier: ^2024.1.0
+        version: 2024.1.0
       '@vueuse/core':
         specifier: ^13.6.0
         version: 13.6.0(vue@3.5.18(typescript@5.9.2))
@@ -26,6 +29,9 @@ importers:
       idb-keyval:
         specifier: ^6.2.2
         version: 6.2.2
+      is-file-animated:
+        specifier: ^1.0.2
+        version: 1.0.2
       mfm-js:
         specifier: ^0.25.0
         version: 0.25.0
@@ -619,6 +625,9 @@ packages:
 
   '@mdi/font@7.4.47':
     resolution: {integrity: sha512-43MtGpd585SNzHZPcYowu/84Vz2a2g31TvPMTm9uTiCSWzaheQySUcSyUH/46fPnuPQWof2yd0pGBtzee/IQWw==}
+
+  '@misskey-dev/browser-image-resizer@2024.1.0':
+    resolution: {integrity: sha512-4EnO0zLW5NDtng3Gaz5MuT761uiuoOuplwX18wBqgj8w56LTU5BjLn/vbHwDIIe0j2gwqDYhMb7bDjmr1/Fomg==}
 
   '@napi-rs/wasm-runtime@1.0.3':
     resolution: {integrity: sha512-rZxtMsLwjdXkMUGC3WwsPwLNVqVqnTJT6MNIB6e+5fhMcSCPP0AOsNWuMQ5mdCq6HNjs/ZeWAEchpqeprqBD2Q==}
@@ -1902,6 +1911,9 @@ packages:
   is-extglob@2.1.1:
     resolution: {integrity: sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==}
     engines: {node: '>=0.10.0'}
+
+  is-file-animated@1.0.2:
+    resolution: {integrity: sha512-TAYDUkvyBmxqneRU26zzpeHLAgtzEOIsRQWrtDidPT/tFK3Yc0WKgtF3u4oOEAiN0kAuVfl7MTgbD0vXdFDztA==}
 
   is-fullwidth-code-point@3.0.0:
     resolution: {integrity: sha512-zymm5+u+sCsSWyD9qNaejV3DFvhCKclKdizYaJUuHA83RLjb7nSuGnddCHGv0hk+KY7BMAlsWeK4Ueg6EV6XQg==}
@@ -3619,6 +3631,8 @@ snapshots:
 
   '@mdi/font@7.4.47': {}
 
+  '@misskey-dev/browser-image-resizer@2024.1.0': {}
+
   '@napi-rs/wasm-runtime@1.0.3':
     dependencies:
       '@emnapi/core': 1.4.5
@@ -5011,6 +5025,8 @@ snapshots:
   is-docker@3.0.0: {}
 
   is-extglob@2.1.1: {}
+
+  is-file-animated@1.0.2: {}
 
   is-fullwidth-code-point@3.0.0: {}
 

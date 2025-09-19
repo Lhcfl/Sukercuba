@@ -1,10 +1,9 @@
 <template>
-  <VDialog
-    :model-value="show"
-    max-width="500"
-    persistent
-  >
+  <VDialog :model-value="show" max-width="500" persistent>
     <VCard v-if="message">
+      <VCardTitle v-if="message.title">
+        {{ message.title }}
+      </VCardTitle>
       <VCardText v-if="message.message">
         {{ message.message }}
       </VCardText>
@@ -17,15 +16,8 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn
-          :text="message.okText ?? t('gotIt')"
-          @click="close(true)"
-        />
-        <v-btn
-          v-if="message.okcancel"
-          :text="message.cancelText ?? t('cancel')"
-          @click="close(false)"
-        />
+        <v-btn :text="message.okText ?? t('gotIt')" @click="close(true)" />
+        <v-btn v-if="message.okcancel" :text="message.cancelText ?? t('cancel')" @click="close(false)" />
       </v-card-actions>
     </VCard>
   </VDialog>

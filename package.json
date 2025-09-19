@@ -17,11 +17,13 @@
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
+    "@misskey-dev/browser-image-resizer": "^2024.1.0",
     "@vueuse/core": "^13.6.0",
     "buraha": "^0.0.1",
     "core-js": "^3.45.0",
     "fuse.js": "^7.1.0",
     "idb-keyval": "^6.2.2",
+    "is-file-animated": "^1.0.2",
     "mfm-js": "^0.25.0",
     "misskey-js": "2025.8.0-alpha.9",
     "photoswipe": "^5.4.4",

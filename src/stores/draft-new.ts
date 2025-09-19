@@ -1,4 +1,5 @@
 import * as IDB from "idb-keyval";
+import type { DriveFile } from "misskey-js/entities.js";
 import type { NoteWithExtension } from "./note-cache";
 
 export type DraftPoll = {
@@ -22,6 +23,7 @@ export type DraftState = {
   visibility: NoteWithExtension["visibility"];
   localOnly: boolean;
   poll: DraftPoll;
+  files: DriveFile[];
   showCw: boolean;
   showTags: boolean;
   showPreview: boolean;
@@ -29,7 +31,7 @@ export type DraftState = {
 };
 
 export class IdbDraft {
-  constructor(private opts: DraftOpts) {}
+  constructor(private opts: DraftOpts) { }
 
   // when null, it means not loaded yet
   // and it will not be exposed outside
@@ -68,6 +70,7 @@ export class IdbDraft {
         expiresAt: null,
         expiredAfter: null,
       },
+      files: [],
       showCw: !!this.opts.edit?.cw,
       showTags: false,
       showPreview: false,
@@ -80,7 +83,8 @@ export class IdbDraft {
     if (!memory) {
       this.state.value = this.defaultDraft();
     } else {
-      this.state.value = memory;
+      // to merge new fields
+      this.state.value = { ...this.defaultDraft(), ...memory };
     }
     return this.state;
   }
@@ -93,5 +97,12 @@ export class IdbDraft {
   async remove() {
     await IDB.del(this.storeId);
     this.state.value = this.defaultDraft();
+  }
+
+  async clean() {
+    // Clean draft
+    this.state.value.text = "";
+    this.state.value.poll = { choices: [] };
+    this.state.value.files = [];
   }
 }

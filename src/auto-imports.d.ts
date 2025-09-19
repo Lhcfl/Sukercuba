@@ -21,6 +21,7 @@ declare global {
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
   const effectScope: typeof import('vue')['effectScope']
+  const getCompressionConfig: typeof import('./stores/upload')['getCompressionConfig']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const getCurrentWatcher: typeof import('vue')['getCurrentWatcher']
@@ -31,6 +32,7 @@ declare global {
   const isReadonly: typeof import('vue')['isReadonly']
   const isRef: typeof import('vue')['isRef']
   const isShallow: typeof import('vue')['isShallow']
+  const isWebpSupported: typeof import('./stores/upload')['isWebpSupported']
   const markRaw: typeof import('vue')['markRaw']
   const nextTick: typeof import('vue')['nextTick']
   const onActivated: typeof import('vue')['onActivated']
@@ -62,6 +64,8 @@ declare global {
   const toValue: typeof import('vue')['toValue']
   const triggerRef: typeof import('vue')['triggerRef']
   const unref: typeof import('vue')['unref']
+  const uploadFile: typeof import('./services/upload')['uploadFile']
+  const uploads: typeof import('./services/upload')['uploads']
   const useAccount: typeof import('./stores/account')['useAccount']
   const useAppStore: typeof import('./stores/app')['useAppStore']
   const useAttrs: typeof import('vue')['useAttrs']
@@ -80,6 +84,9 @@ declare global {
   const useSlots: typeof import('vue')['useSlots']
   const useSnackbarQueue: typeof import('./stores/snackbar-queue')['useSnackbarQueue']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
+  const useUpload: typeof import('./stores/upload')['useUpload']
+  const useUploader: typeof import('./stores/upload')['useUploader']
+  const useUploading: typeof import('./stores/uploading')['useUploading']
   const useUserCache: typeof import('./stores/user-cache')['useUserCache']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
@@ -134,6 +141,7 @@ declare module 'vue' {
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly getCompressionConfig: UnwrapRef<typeof import('./stores/upload')['getCompressionConfig']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getCurrentWatcher: UnwrapRef<typeof import('vue')['getCurrentWatcher']>
@@ -144,6 +152,7 @@ declare module 'vue' {
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
     readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
     readonly isShallow: UnwrapRef<typeof import('vue')['isShallow']>
+    readonly isWebpSupported: UnwrapRef<typeof import('./stores/upload')['isWebpSupported']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
@@ -193,6 +202,7 @@ declare module 'vue' {
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useSnackbarQueue: UnwrapRef<typeof import('./stores/snackbar-queue')['useSnackbarQueue']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
+    readonly useUploader: UnwrapRef<typeof import('./stores/upload')['useUploader']>
     readonly useUserCache: UnwrapRef<typeof import('./stores/user-cache')['useUserCache']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>

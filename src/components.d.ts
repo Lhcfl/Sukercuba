@@ -45,6 +45,7 @@ declare module 'vue' {
     MkPostForm: typeof import('./components/postform/MkPostForm.vue')['default']
     MkPostFormAsync: typeof import('./components/postform/MkPostFormAsync.vue')['default']
     MkPostFormCard: typeof import('./components/postform/MkPostFormCard.vue')['default']
+    MkPostFormFiles: typeof import('./components/postform/MkPostFormFiles.vue')['default']
     MkSearchNote: typeof import('./components/MkSearchNote.vue')['default']
     MkSearchUser: typeof import('./components/MkSearchUser.vue')['default']
     MkTime: typeof import('./components/MkTime.vue')['default']

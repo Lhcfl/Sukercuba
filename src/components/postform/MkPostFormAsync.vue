@@ -14,7 +14,7 @@
       :label="t('_initialTutorial._postNote._cw.title')" hide-details="auto" />
     <VTextarea ref="textRef" v-model="draft.text" :loading :rows="2" density="compact"
       :placeholder="t('_postForm._placeholders.' + randomPlaceHolder)" variant="underlined" flat autofocus auto-grow
-      hide-details="auto" @keydown="onkeydown" />
+      hide-details="auto" @keydown="onkeydown" @paste="onPaste" />
     <VCombobox v-if="draft.showTags" v-model="draft.appendTags" :label="t('tags')" variant="underlined"
       :delimiters="[' ']" chips multiple closable-chips hide-details="auto">
       <template #chip="data">
@@ -23,6 +23,7 @@
     </VCombobox>
   </VCardText>
   <MkPollEditor v-if="draft.showPoll" v-model="draft.poll" />
+  <MkPostFormFiles v-if="draft.files.length" :files="draft.files" />
   <VCardText v-if="draft.showPreview">
     <div class="postform-preview rounded-lg">
       <p v-if="computedCw">
@@ -40,7 +41,7 @@
         <template #activator="{ props: p }">
           <VBtn icon="mdi-image-outline" v-bind="p" color="base"></VBtn>
         </template>
-        <MkUploadFileMenu />
+        <MkUploadFileMenu @uploading="onUploading" />
       </VMenu>
       <VBtn icon="mdi-poll" :color="draft.showPoll ? 'primary' : 'base'"
         @click.stop="draft.showPoll = !draft.showPoll" />
@@ -69,7 +70,7 @@
 import { IdbDraft } from '@/stores/draft-new';
 import type { NoteWithExtension } from '@/stores/note-cache';
 import { isAPIError } from 'misskey-js/api.js';
-import type { EmojiSimple, NotesCreateRequest } from 'misskey-js/entities.js';
+import type { DriveFile, EmojiSimple, NotesCreateRequest } from 'misskey-js/entities.js';
 
 const props = defineProps<{
   replyId?: string;
@@ -83,7 +84,6 @@ const manager = new IdbDraft({
   quoteId: props.quoteId,
   edit: props.edit,
 });
-
 
 const emit = defineEmits<{
   done: [];
@@ -106,6 +106,7 @@ const textRef = useTemplateRef("textRef");
 const loading = ref(false);
 const randomPlaceHolder = ref("abcdef"[Math.floor(Math.random() * 6)]);
 const popupMessages = usePopupMessage();
+const uploader = useUploader();
 
 watch(loading, (val) => {
   emit("update:loading", val);
@@ -159,6 +160,7 @@ async function submit() {
       visibility: draft.value.visibility,
       localOnly: draft.value.localOnly,
       poll: draft.value.showPoll ? draft.value.poll : undefined,
+      fileIds: draft.value.files.map(f => f.id),
     };
 
     if (props.edit) {
@@ -177,9 +179,7 @@ async function submit() {
     if (props.edit || props.quoteId || props.replyId) {
       manager.remove();
     } else {
-      // Clean draft
-      draft.value.text = "";
-      draft.value.poll = { choices: [] };
+      manager.clean();
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
@@ -220,4 +220,27 @@ function prependEmoji(emoji: EmojiSimple) {
     );
   }, 0);
 }
+
+async function onUploading(promises: Promise<DriveFile>[]) {
+  emit('update:loading', true);
+  const results = await Promise.allSettled(promises);
+  emit('update:loading', false);
+  draft.value.files = [
+    ...draft.value.files,
+    ...results.filter(x => x.status === 'fulfilled').map(x => x.value)
+  ];
+}
+
+async function onPaste(ev: ClipboardEvent) {
+  console.log(ev);
+  const files = ev.clipboardData?.files;
+  if (files && files.length > 0) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    onUploading(
+      Array.from(files).map(f => uploader.uploadFile(f))
+    );
+  }
+}
+
 </script>
