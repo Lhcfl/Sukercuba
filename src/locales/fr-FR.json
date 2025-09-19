@@ -220,6 +220,7 @@
   "mediaSilenceThisInstance": "Silence media from this instance",
   "operations": "Opérations",
   "software": "Logiciel",
+  "softwareName": "Software",
   "version": "Version",
   "metadata": "Métadonnées",
   "withNFiles": "{n} fichier(s)",
@@ -289,7 +290,6 @@
   "resetAreYouSure": "Voulez-vous réinitialiser ?",
   "areYouSure": "Êtes-vous sûr·e ?",
   "saved": "Enregistré",
-  "messaging": "Discuter",
   "upload": "Téléverser",
   "keepOriginalUploading": "Garder l’image d’origine",
   "keepOriginalUploadingDescription": "Conserve la version originale lors du téléchargement d'images. S'il est désactivé, le navigateur génère l'image pour la publication web lors du téléchargement.",
@@ -302,7 +302,7 @@
   "explore": "Découvrir",
   "messageRead": "Lu",
   "noMoreHistory": "Il n’y a plus d’historique",
-  "startMessaging": "Commencer à discuter",
+  "startChat": "Start chat",
   "nUsersRead": "Lu par {n} personnes",
   "agreeTo": "J’accepte {0}",
   "agree": "Accepter",
@@ -425,6 +425,7 @@
   "antennaKeywordsDescription": "Séparer avec des espaces pour la condition AND. Séparer avec un saut de ligne pour une condition OR.",
   "notifyAntenna": "Me notifier pour les nouvelles notes",
   "withFileAntenna": "Notes ayant des fichiers joints uniquement",
+  "excludeNotesInSensitiveChannel": "Exclude notes from sensitive channels",
   "enableServiceworker": "Activer ServiceWorker",
   "antennaUsersDescription": "Saisissez un seul nom d’utilisateur·rice par ligne",
   "caseSensitive": "Sensible à la casse",
@@ -491,8 +492,6 @@
   "quoteAttached": "Avec citation",
   "quoteQuestion": "Souhaitez-vous ajouter une citation ?",
   "attachAsFileQuestion": "The text in clipboard is long. Would you like to attach it as a text file?",
-  "noMessagesYet": "Pas encore de discussion",
-  "newMessageExists": "Vous avez un nouveau message",
   "onlyOneFileCanBeAttached": "Vous ne pouvez joindre qu’un seul fichier au message",
   "signinRequired": "Veuillez vous connecter",
   "signinOrContinueOnRemote": "To continue, you need to go to your instance to perform this action or sign up / log in to the instance you are trying to interact with.",
@@ -698,6 +697,7 @@
   "makeActive": "Activer",
   "display": "Affichage",
   "copy": "Copier",
+  "copiedToClipboard": "Copied to clipboard",
   "metrics": "Métriques",
   "overview": "Aperçu",
   "logs": "Journaux",
@@ -980,6 +980,7 @@
   "numberOfPageCache": "Nombre de pages en cache",
   "numberOfPageCacheDescription": "Plus de confort, mais aussi plus de poids et d'utilisation de la mémoire.",
   "logoutConfirm": "Se déconnecter ?",
+  "logoutWillClearClientData": "Logging out will erase the settings of the client from the browser. In order to be able to restore the settings upon logging in again, you must enable automatic backup of your settings.",
   "lastActiveDate": "Dernière utilisation",
   "statusbar": "Barre d’état",
   "pleaseSelect": "Choisir une option",
@@ -1309,6 +1310,147 @@
   "acknowledgeNotesAndEnable": "Turn on after understanding the precautions.",
   "federationSpecified": "This server is operated in an allowlist federation. Interacting with servers other than those designated by the administrator is not allowed.",
   "federationDisabled": "Federation is disabled on this server. You cannot interact with users on other servers.",
+  "confirmOnReact": "Confirm when reacting",
+  "reactAreYouSure": "Would you like to add a \"{emoji}\" reaction?",
+  "markAsSensitiveConfirm": "Do you want to set this media as sensitive?",
+  "unmarkAsSensitiveConfirm": "Do you want to remove the sensitive designation for this media?",
+  "preferences": "Preferences",
+  "accessibility": "Accessibility",
+  "preferencesProfile": "Preferences profile",
+  "copyPreferenceId": "Copy the preference ID",
+  "resetToDefaultValue": "Revert to default",
+  "overrideByAccount": "Override by the account",
+  "untitled": "Untitled",
+  "noName": "No name",
+  "skip": "Skip",
+  "restore": "Restore",
+  "syncBetweenDevices": "Sync between devices",
+  "preferenceSyncConflictTitle": "The configured value exists on the server.",
+  "preferenceSyncConflictText": "The sync enabled settings will save their values to the server. However, there are existing values on the server. Which set of values would you like to overwrite?",
+  "preferenceSyncConflictChoiceServer": "Configured value on server",
+  "preferenceSyncConflictChoiceDevice": "Configured value on device",
+  "preferenceSyncConflictChoiceCancel": "Cancel enabling sync",
+  "paste": "Paste",
+  "emojiPalette": "Emoji palette",
+  "postForm": "Formulaire de publication",
+  "textCount": "Character count",
+  "information": "Informations",
+  "chat": "Chat",
+  "migrateOldSettings": "Migrate old client settings",
+  "migrateOldSettings_description": "This should be done automatically but if for some reason the migration was not successful, you can trigger the migration process yourself manually. The current configuration information will be overwritten.",
+  "compress": "Compress",
+  "right": "Right",
+  "bottom": "Bottom",
+  "top": "Top",
+  "embed": "Embed",
+  "settingsMigrating": "Settings are being migrated, please wait a moment... (You can also migrate manually later by going to Settings→Others→Migrate old settings)",
+  "readonly": "Read only",
+  "goToDeck": "Return to Deck",
+  "federationJobs": "Federation Jobs",
+  "driveAboutTip": "In Drive, a list of files you've uploaded in the past will be displayed. <br>  \nYou can reuse these files when attaching them to notes, or you can upload files in advance to post later. <br>  \n<b>Be careful when deleting a file, as it will not be available in all places where it was used (such as notes, pages, avatars, banners, etc.).</b> <br>  \nYou can also create folders to organize your files.",
+  "scrollToClose": "Scroll to close",
+  "_chat": {
+    "noMessagesYet": "No messages yet",
+    "newMessage": "New message",
+    "individualChat": "Private Chat",
+    "individualChat_description": "Have a private chat with another person.",
+    "roomChat": "Room Chat",
+    "roomChat_description": "A chat room which can have multiple people.\nYou can also invite people who don't allow private chats if they accept the invite.",
+    "createRoom": "Create Room",
+    "inviteUserToChat": "Invite users to start chatting",
+    "yourRooms": "Created rooms",
+    "joiningRooms": "Joined rooms",
+    "invitations": "Inviter",
+    "noInvitations": "No invitations",
+    "history": "History",
+    "noHistory": "Pas d'historique",
+    "noRooms": "No rooms found",
+    "inviteUser": "Invite Users",
+    "sentInvitations": "Sent Invites",
+    "join": "Join",
+    "ignore": "Ignore",
+    "leave": "Leave room",
+    "members": "Membres",
+    "searchMessages": "Search messages",
+    "home": "Principal",
+    "send": "Envoyer",
+    "newline": "New line",
+    "muteThisRoom": "Mute room",
+    "deleteRoom": "Delete room",
+    "chatNotAvailableForThisAccountOrServer": "Chat is not enabled on this server or for this account.",
+    "chatIsReadOnlyForThisAccountOrServer": "Chat is read-only on this instance or this account. You cannot write new messages or create/join chat rooms.",
+    "chatNotAvailableInOtherAccount": "The chat function is disabled for the other user.",
+    "cannotChatWithTheUser": "Cannot start a chat with this user",
+    "cannotChatWithTheUser_description": "Chat is either unavailable or the other party has not enabled chat.",
+    "chatWithThisUser": "Chat with user",
+    "thisUserAllowsChatOnlyFromFollowers": "This user accepts chats from followers only.",
+    "thisUserAllowsChatOnlyFromFollowing": "This user accepts chats only from users they follow.",
+    "thisUserAllowsChatOnlyFromMutualFollowing": "This user only accepts chats from users who are mutual followers.",
+    "thisUserNotAllowedChatAnyone": "This user is not accepting chats from anyone.",
+    "chatAllowedUsers": "Who to allow chatting with",
+    "chatAllowedUsers_note": "You can chat with anyone to whom you have sent a chat message regardless of this setting.",
+    "_chatAllowedUsers": {
+      "everyone": "Everyone",
+      "followers": "Only your followers",
+      "following": "Only users you are following",
+      "mutual": "Mutual followers only",
+      "none": "Nobody"
+    }
+  },
+  "_emojiPalette": {
+    "palettes": "Palette",
+    "enableSyncBetweenDevicesForPalettes": "Enable palette sync between devices",
+    "paletteForMain": "Main palette",
+    "paletteForReaction": "Reaction palette"
+  },
+  "_settings": {
+    "driveBanner": "You can manage and configure the drive, check usage, and configure file upload settings.",
+    "pluginBanner": "You can extend client features with plugins. You can install plugins, configure and manage individually.",
+    "notificationsBanner": "You can configure the types and range of notifications from the server and push notifications.",
+    "api": "API",
+    "webhook": "Webhook",
+    "serviceConnection": "Service integration",
+    "serviceConnectionBanner": "Manage and configure access tokens and Webhooks to integrate with external apps or services.",
+    "accountData": "Account data",
+    "accountDataBanner": "Export and import to manage account data.",
+    "muteAndBlockBanner": "You can configure and manage settings to hide content and restrict actions from specific users.",
+    "accessibilityBanner": "You can personalize the client's visuals and behavior, and configure settings to optimize usage.",
+    "privacyBanner": "You can configure settings related to account privacy, such as content visibility, discoverability, and follow approval.",
+    "securityBanner": "You can configure settings related to account security, such as password, login methods, authentication apps, and Passkeys.",
+    "preferencesBanner": "You can configure the overall behavior of the client according to your preferences.",
+    "appearanceBanner": "You can configure the appearance and display settings for the client according to your preferences.",
+    "soundsBanner": "You can configure the sound settings for playback in the client.",
+    "timelineAndNote": "Timeline and note",
+    "makeEveryTextElementsSelectable": "Make all text elements selectable",
+    "makeEveryTextElementsSelectable_description": "Enabling this may reduce usability in some situations.",
+    "useStickyIcons": "Make icons follow while scrolling",
+    "showNavbarSubButtons": "Show sub-buttons on the navigation bar",
+    "ifOn": "When turned on",
+    "ifOff": "When turned off",
+    "enableSyncThemesBetweenDevices": "Synchronize installed themes across devices",
+    "enablePullToRefresh": "Pull to Refresh",
+    "enablePullToRefresh_description": "When using a mouse, drag while pressing in the scroll wheel.",
+    "_chat": {
+      "showSenderName": "Show sender's name",
+      "sendOnEnter": "Press Enter to send"
+    }
+  },
+  "_preferencesProfile": {
+    "profileName": "Profile name",
+    "profileNameDescription": "Set a name that identifies this device.",
+    "profileNameDescription2": "Example: \"Main PC\", \"Smartphone\"",
+    "manageProfiles": "プロファイルの管理"
+  },
+  "_preferencesBackup": {
+    "autoBackup": "Auto backup",
+    "restoreFromBackup": "Restore from backup",
+    "noBackupsFoundTitle": "No backups found",
+    "noBackupsFoundDescription": "No auto-created backups were found, but if you have manually saved a backup file, you can import and restore it.",
+    "selectBackupToRestore": "Select a backup to restore",
+    "youNeedToNameYourProfileToEnableAutoBackup": "A profile name must be set to enable auto backup.",
+    "autoPreferencesBackupIsNotEnabledForThisDevice": "Settings auto backup is not enabled on this device.",
+    "backupFound": "Settings backup is found"
+  },
   "_accountSettings": {
     "requireSigninToViewContents": "Require sign-in to view contents",
     "requireSigninToViewContentsDescription1": "Require login to view all notes and other content you have created. This will have the effect of preventing crawlers from collecting your information.",
@@ -1319,6 +1461,7 @@
     "makeNotesHiddenBefore": "Make past notes private",
     "makeNotesHiddenBeforeDescription": "While this feature is enabled, notes that are past the set date and time or have been visible only to you. When it is deactivated, the note publication status will also be restored.",
     "mayNotEffectForFederatedNotes": "Notes federated to a remote server may not be affected.",
+    "mayNotEffectSomeSituations": "These restrictions are simplified. They may not apply in some situations, such as when viewing on a remote server or during moderation.",
     "notesHavePassedSpecifiedPeriod": "Note that the specified time has passed",
     "notesOlderThanSpecifiedDateAndTime": "Notes before the specified date and time"
   },
@@ -1338,7 +1481,8 @@
       "none": "Publié",
       "manuallySuspended": "Suspendre manuellement",
       "goneSuspended": "L'instance est suspendue en raison de la suppression de ce dernier",
-      "autoSuspendedForNotResponding": "L'instance est suspendue car elle ne répond pas"
+      "autoSuspendedForNotResponding": "L'instance est suspendue car elle ne répond pas",
+      "softwareSuspended": "Suspended as this software is no longer being distributed to"
     }
   },
   "_bubbleGame": {
@@ -1372,7 +1516,13 @@
     "dialogAnnouncementUxWarn": "Avoir deux ou plus annonces de style dialogue en même temps pourrait nuire considérablement à l'expérience utilisateur. Veuillez les utiliser avec caution.",
     "silence": "Ne pas me notifier",
     "silenceDescription": "Si activée, vous ne recevrez pas de notifications sur les annonces et n'aurez pas besoin de les marquer comme lues.",
-    "new": "New"
+    "new": "New",
+    "onlyForRoles": "Restrict to roles",
+    "onlyForRolesChange": "Change role restrictions",
+    "onlyForRolesUnrestricted": "Shown to everyone",
+    "onlyForRolesRestricted": "Shown to members of {roles} roles",
+    "confetti": "Throw confetti",
+    "confettiDescription": "If enabled, the announcement will display a confetti effect when viewed."
   },
   "_initialAccountSetting": {
     "accountCreated": "Votre compte a été créé avec succès !",
@@ -1494,9 +1644,13 @@
     "openRegistration": "Make the account creation open",
     "openRegistrationWarning": "Opening registration carries risks. It is recommended to only enable it if you have a system in place to continuously monitor the server and respond immediately in case of any issues.",
     "thisSettingWillAutomaticallyOffWhenModeratorsInactive": "If no moderator activity is detected for a while, this setting will be automatically turned off to prevent spam.",
+    "deliverSuspendedSoftware": "Suspended Software",
+    "deliverSuspendedSoftwareDescription": "You can specify a range of names and versions of the server's software to stop delivery for vulnerability or other reasons. This version information is provided by the server and is not guaranteed to be reliable. A semver range specification can be used to specify the version, but specifying >= 2024.3.1 will not include custom versions such as 2024.3.1-custom.0, so it is recommended that a prerelease specification be used, such as >= 2024.3.1-0. Specifying * will match any name or version, even when the server doesn't provide one. You can also provide a regular expression like /^sharkey-/i or /^1-/",
     "sidebarLogoUrl": "Logo URL",
     "sidebarLogoDescription": "Specifies the logo to use instead of the regular icon in high definition, dynamic-width scenarios.",
-    "sidebarLogoUsageExample": "E.g. In the sidebar, to visitors and in the \"About\" page."
+    "sidebarLogoUsageExample": "E.g. In the sidebar, to visitors and in the \"About\" page.",
+    "aboutInstance": "About instance",
+    "aboutInstanceDescription": "A longer description that will be displayed in the 'Instance Information' page, going in place of the regular instance description. Supports HTML."
   },
   "_accountMigration": {
     "moveFrom": "Migrer un autre compte vers le présent compte",
@@ -1875,6 +2029,8 @@
     "descriptionOfIsExplorable": "This role's timeline and the list of users with this will be made public if enabled.",
     "displayOrder": "Classement",
     "descriptionOfDisplayOrder": "The higher the number, the higher its UI position.",
+    "preserveAssignmentOnMoveAccount": "Preserve role assignment during migration",
+    "preserveAssignmentOnMoveAccount_description": "When turned on, this role will be carried over to the destination account when an account with this role is migrated.",
     "canEditMembersByModerator": "Allow moderators to edit the list of members for this role",
     "descriptionOfCanEditMembersByModerator": "When turned on, moderators as well as administrators will be able to assign and unassign users to this role. When turned off, only administrators will be able to assign users.",
     "priority": "Priorité",
@@ -1895,6 +2051,7 @@
       "canManageCustomEmojis": "Gestion des émojis personnalisés",
       "canManageAvatarDecorations": "Gestion des décorations d'avatar",
       "driveCapacity": "Capacité de stockage du Disque",
+      "maxFileSize": "Upload-able max file size",
       "alwaysMarkNsfw": "Always mark files as NSFW",
       "canUpdateBioMedia": "Allow users to edit their avatar or banner",
       "pinMax": "Maximum number of pinned notes",
@@ -1916,9 +2073,11 @@
       "canImportFollowing": "Allow importing following",
       "canImportMuting": "Allow importing muting",
       "canImportUserLists": "Allow importing lists",
+      "chatAvailability": "Allow Chat",
       "btlAvailable": "Can view the bubble timeline",
       "canImportNotes": "Can import notes",
-      "scheduleNoteMax": "Maximum number of scheduled notes"
+      "scheduleNoteMax": "Maximum number of scheduled notes",
+      "canTrend": "Can appear in trending notes / users"
     },
     "_condition": {
       "roleAssignedTo": "Assigned to manual roles",
@@ -1939,8 +2098,21 @@
       "notesMoreThanOrEq": "Post count is greater than/equal to",
       "and": "AND-Condition",
       "or": "OR-Condition",
-      "not": "NOT-Condition"
-    }
+      "not": "NOT-Condition",
+      "isFromInstance": "Is from a specific instance",
+      "isFromInstanceHost": "Hostname (case-insensitive)",
+      "isFromInstanceSubdomains": "Match subdomains",
+      "fromBubbleInstance": "User is from a bubble instance",
+      "localFollowersLessThanOrEq": "Has X or fewer local followers",
+      "localFollowersMoreThanOrEq": "Has X or more local followers",
+      "localFollowingLessThanOrEq": "Follows X or fewer local accounts",
+      "localFollowingMoreThanOrEq": "Follows X or more local accounts",
+      "remoteFollowersLessThanOrEq": "Has X or fewer remote followers",
+      "remoteFollowersMoreThanOrEq": "Has X or more remote followers",
+      "remoteFollowingLessThanOrEq": "Follows X or fewer remote accounts",
+      "remoteFollowingMoreThanOrEq": "Follows X or more remote accounts"
+    },
+    "remoteDataWarning": "This condition may be incorrect for remote users."
   },
   "_sensitiveMediaDetection": {
     "description": "L'apprentissage automatique peut être utilisé pour détecter automatiquement les médias sensibles à modérer. La sollicitation des serveurs augmente légèrement.",
@@ -2115,6 +2287,7 @@
     "installed": "{name} a été installé",
     "installedThemes": "Thèmes installés",
     "builtinThemes": "Thèmes intégrés",
+    "instanceTheme": "Server theme",
     "alreadyInstalled": "Ce thème est déjà installé",
     "invalid": "Le format du thème n'est pas valide",
     "make": "Créer un thème",
@@ -2147,7 +2320,6 @@
       "header": "Entête",
       "navBg": "Fond de la barre latérale",
       "navFg": "Texte de la barre latérale",
-      "navHoverFg": "Texte de la barre latérale (survolé)",
       "navActive": "Texte de la barre latérale (actif)",
       "navIndicator": "Indicateur de barre latérale",
       "link": "Lien",
@@ -2170,11 +2342,8 @@
       "buttonHoverBg": "Arrière-plan du bouton (survolé)",
       "inputBorder": "Cadre de la zone de texte",
       "driveFolderBg": "Arrière-plan du dossier de disque",
-      "wallpaperOverlay": "Superposition de fond d'écran",
       "badge": "Badge",
       "messageBg": "Arrière plan de la discussion",
-      "accentDarken": "Plus sombre",
-      "accentLighten": "Plus clair",
       "fgHighlighted": "Texte mis en évidence"
     }
   },
@@ -2182,7 +2351,8 @@
     "note": "Nouvelle note",
     "noteMy": "Ma note",
     "notification": "Notifications",
-    "reaction": "Lors de la sélection de la réaction"
+    "reaction": "Lors de la sélection de la réaction",
+    "chatMessage": "Chat Messages"
   },
   "_soundSettings": {
     "driveFile": "Utiliser un effet sonore sur le Disque",
@@ -2335,12 +2505,14 @@
     "read:clip-favorite": "View favorited clips",
     "read:federation": "Get federation data",
     "write:report-abuse": "Report violation",
+    "write:chat": "Gérer les discussions",
+    "read:chat": "Browse Chat",
     "read:notes-schedule": "View your list of scheduled notes",
     "write:notes-schedule": "Compose or delete scheduled notes",
     "write:admin:approve-user": "Approve new users",
     "write:admin:decline-user": "Decline new users",
     "write:admin:nsfw-user": "Mark users as NSFW",
-    "write:admin:unnsfw-user": "Mark users an not NSFW",
+    "write:admin:unnsfw-user": "Mark users as not NSFW",
     "write:admin:cw-user": "Apply mandatory CW on users",
     "write:admin:silence-user": "Silence users",
     "write:admin:unsilence-user": "Un-silence users",
@@ -2409,6 +2581,7 @@
     },
     "clicker": "Clicker",
     "birthdayFollowings": "Utilisateurs qui fêtent l'anniversaire aujourd'hui",
+    "chat": "Chat",
     "search": "Search"
   },
   "_cw": {
@@ -2626,6 +2799,7 @@
     "newNote": "New note",
     "unreadAntennaNote": "Antenne {name}",
     "roleAssigned": "Rôle attribué",
+    "chatRoomInvitationReceived": "You have been invited to a chat room",
     "emptyPushNotificationMessage": "Les notifications push ont été mises à jour",
     "achievementEarned": "Accomplissement déverrouillé",
     "testNotification": "Tester la notification",
@@ -2639,6 +2813,8 @@
     "flushNotification": "Clear notifications",
     "exportOfXCompleted": "Export of {x} has been completed",
     "login": "Quelqu'un s'est connecté",
+    "createToken": "An access token has been created",
+    "createTokenDescription": "If you have no idea, delete the access token through \"{text}\".",
     "_types": {
       "all": "Toutes",
       "note": "Nouvelles notes",
@@ -2652,9 +2828,11 @@
       "receiveFollowRequest": "Demande d'abonnement reçue",
       "followRequestAccepted": "Demande d'abonnement acceptée",
       "roleAssigned": "Rôle reçu",
+      "chatRoomInvitationReceived": "Invited to chat room",
       "achievementEarned": "Déverrouillage d'accomplissement",
       "exportCompleted": "The export has been completed",
       "login": "Se connecter",
+      "createToken": "Create access token",
       "test": "Notification test",
       "app": "Notifications provenant des apps",
       "edited": "Edits",
@@ -2668,11 +2846,16 @@
     },
     "edited": "Note got edited",
     "scheduledNoteFailed": "Posting scheduled note failed",
-    "scheduledNotePosted": "Scheduled Note was posted"
+    "scheduledNotePosted": "Scheduled Note was posted",
+    "importOfXCompleted": "Import of {x} has been completed",
+    "reportAccepted": "Report Accepted"
   },
   "_deck": {
     "alwaysShowMainColumn": "Toujours afficher la colonne principale",
     "columnAlign": "Aligner les colonnes",
+    "columnGap": "Margin between columns",
+    "deckMenuPosition": "Deck menu position",
+    "navbarPosition": "Navigation bar position",
     "addColumn": "Ajouter une colonne",
     "newNoteNotificationSettings": "Notification setting for new notes",
     "configureColumn": "Configuration de la colonne",
@@ -2691,6 +2874,7 @@
     "useSimpleUiForNonRootPages": "Use simple UI for navigated pages",
     "usedAsMinWidthWhenFlexible": "Minimum width will be used for this when the \"Auto-adjust width\" option is enabled",
     "flexible": "Ajuster automatiquement la largeur",
+    "enableSyncBetweenDevicesForProfiles": "Enable profile information sync between devices",
     "_columns": {
       "main": "Principale",
       "widgets": "Widgets",
@@ -2702,6 +2886,7 @@
       "mentions": "Mentions",
       "direct": "Direct",
       "roleTimeline": "Role Timeline",
+      "chat": "Chat",
       "following": "Following"
     }
   },
@@ -2745,7 +2930,7 @@
   },
   "_abuseReport": {
     "_notificationRecipient": {
-      "createRecipient": "Add a recipient for reports",
+      "createRecipient": "Add recipient for reports",
       "modifyRecipient": "Edit a recipient for reports",
       "recipientType": "Notification type",
       "_recipientType": {
@@ -2811,9 +2996,11 @@
     "deletePage": "Page deleted",
     "deleteFlash": "Supprimer le Play",
     "deleteGalleryPost": "Gallery post deleted",
+    "deleteChatRoom": "Deleted Chat Room",
+    "updateProxyAccountDescription": "Update the description of the proxy account",
     "approve": "Approved",
     "setRemoteInstanceNSFW": "Set remote instance as NSFW",
-    "unsetRemoteInstanceNSFW": "Set remote instance as NSFW",
+    "unsetRemoteInstanceNSFW": "Unset remote instance as NSFW",
     "rejectRemoteInstanceReports": "Rejected reports from remote instance",
     "acceptRemoteInstanceReports": "Accepted reports from remote instance",
     "decline": "Declined",
@@ -2849,12 +3036,10 @@
     "title": "Installer depuis un site externe",
     "checkVendorBeforeInstall": "Veuillez confirmer que le distributeur est fiable avant l'installation.",
     "_plugin": {
-      "title": "Voulez-vous installer cette extension ?",
-      "metaTitle": "Informations sur l'extension"
+      "title": "Voulez-vous installer cette extension ?"
     },
     "_theme": {
-      "title": "Voulez-vous installer ce thème ?",
-      "metaTitle": "Informations sur le thème"
+      "title": "Voulez-vous installer ce thème ?"
     },
     "_meta": {
       "base": "Palette de couleurs de base"
@@ -3012,7 +3197,7 @@
   "_customEmojisManager": {
     "_gridCommon": {
       "copySelectionRows": "Copy selected rows",
-      "copySelectionRanges": "Copy selected ranges",
+      "copySelectionRanges": "Copy selection",
       "deleteSelectionRows": "Delete selected rows",
       "deleteSelectionRanges": "Delete rows in the selection",
       "searchSettings": "Search settings",
@@ -3037,7 +3222,7 @@
       "confirmImportEmojisDescription": "Import {count} Emoji(s) received from the remote server. Please pay close attention to the license of the Emoji. Are you sure to continue?"
     },
     "_local": {
-      "tabTitleList": "List of registered Emojis",
+      "tabTitleList": "Registered emojis",
       "tabTitleRegister": "Emoji registration",
       "_list": {
         "emojisNothing": "There are no registered Emojis.",
@@ -3051,7 +3236,7 @@
         "confirmDeleteEmojisDescription": "Delete checked {count} Emoji(s). Are you sure to continue?",
         "confirmResetDescription": "This will reset any changes you have made so far",
         "confirmMovePageDesciption": "Changes have been made to the Emojis on this page.\nIf you leave the page without saving, all changes made on this page will be discarded.",
-        "dialogSelectRoleTitle": "Search by roll set in Emojis"
+        "dialogSelectRoleTitle": "Search by role set in Emojis"
       },
       "_register": {
         "uploadSettingTitle": "Upload settings",
@@ -3111,9 +3296,6 @@
       "title": "Response is invalid",
       "description": "It could communicate with this server, but the data obtained was incorrect."
     },
-    "_responseInvalidIdHostNotMatch": {
-      "description": "The domain of the entered URI differs from the domain of the final obtained URI. If you are looking up remote content through a third-party server, please look up again using a URI that can be obtained from the origin server."
-    },
     "_noSuchObject": {
       "title": "Non trouvé",
       "description": "The requested resource was not found, please recheck the URI."
@@ -3136,6 +3318,28 @@
         "text": "An unexpected error occurred."
       }
     }
+  },
+  "_bootErrors": {
+    "title": "Failed to load",
+    "serverError": "If the problem persists after waiting a moment and reloading, please contact the server administrator with the following Error ID.",
+    "solution": "The following may solve the problem.",
+    "solution1": "Update your browser and OS to the latest version",
+    "solution2": "Disable ad blocker",
+    "solution3": "Clear the browser cache",
+    "solution4": "Set the dom.webaudio.enabled to true for Tor Browser",
+    "otherOption": "Other options",
+    "otherOption1": "Delete client settings and cache",
+    "otherOption2": "Start the simple client",
+    "otherOption3": "Launch the repair tool"
+  },
+  "_search": {
+    "searchScopeAll": "Tous",
+    "searchScopeLocal": "Local",
+    "searchScopeServer": "Specific server",
+    "searchScopeUser": "Spécifier l'utilisateur·rice",
+    "pleaseEnterServerHost": "Enter the server host",
+    "pleaseSelectUser": "Select user",
+    "serverHostPlaceholder": "Example: misskey.example.com"
   },
   "approvals": "Approvals",
   "openRemoteProfile": "Open remote profile",
@@ -3315,6 +3519,8 @@
     "backgroundDescription": "Change the background color of text.",
     "plain": "Plain",
     "plainDescription": "Deactivates the effects of all MFM contained within this MFM effect.",
+    "unixtime": "Unix Time",
+    "unixtimeDescription": "Displays a timestamp in the viewer's current timezone.",
     "border": "Border",
     "borderDescription": "Draw a border around the content."
   },
@@ -3339,6 +3545,8 @@
   },
   "schedulePost": "Schedule a note",
   "schedulePostList": "List of scheduled notes",
+  "trustedDomainsList": "Link to external site warning exclusion list",
+  "trustedDomainsListDescription": "Following links to these domains will not show a warning. Write one domain per line.",
   "isLocked": "Private account",
   "isAdmin": "Administrator",
   "isBot": "Bot user",
@@ -3346,6 +3554,10 @@
   "emailDestination": "Destination address",
   "date": "Date",
   "renoteShift": "Boost (hold Shift for visibility menu)",
+  "muteNote": "Mute note",
+  "unmuteNote": "Unmute note",
+  "userSaysSomethingInMutedNote": "{name} said something in a muted post",
+  "userSaysSomethingInMutedThread": "{name} said something in a muted thread",
   "rejectQuotesInstance": "Strip quote posts from this instance",
   "rejectQuotesRemoteUser": "Strip quote posts from this user",
   "rejectQuotesLocalUser": "Block quote posts from this user",
@@ -3354,7 +3566,10 @@
   "i18nInfoSharkey": "Sharkey specific changes are translated in its own {link}.",
   "enableRss": "Enable RSS feed",
   "enableRssDescription": "Generate an RSS feed containing your basic profile details and public notes. Users can subscribe to the feed without a follow request or approval.",
+  "clone": "Clone",
+  "deleteThisAccountConfirm": "This will irreversibly delete this account. Proceed?",
   "pendingFollowRequests": "Pending follow requests",
+  "undoFollowRequestConfirm": "Are you sure you want to cancel your follow request?",
   "showQuotes": "Show quotes",
   "showReplies": "Show replies",
   "showNonPublicNotes": "Show non-public",
@@ -3401,9 +3616,105 @@
   "id": "ID",
   "mandatoryCW": "Force content warning",
   "mandatoryCWDescription": "Applies a content warning to all posts created by this user. If the post already has a CW, then this is appended to the end.",
+  "fetchLinkedNote": "Fetch linked note",
+  "showTranslationButtonInNoteFooter": "Add \"Translate\" to note action menu",
+  "translationFailed": "Failed to translate note. Please try again later or contact an administrator for assistance.",
   "_processErrors": {
-    "quoteUnavailable": "Unable to process quote. This post may be missing context."
+    "quoteUnavailable": "Unable to process quote. This post may be missing context.",
+    "attachmentFailed": "One or more media attachments are unavailable and cannot be shown."
   },
+  "authorizedFetchSection": "Authorized Fetch",
+  "authorizedFetchLabel": "Allow unsigned ActivityPub requests:",
+  "authorizedFetchDescription": "This setting controls the behavior when a remote instance or user attempts to access your content without verifying their identity. If disabled, any remote user can access your profile and posts - even one who has been blocked or defederated.",
+  "_authorizedFetchValue": {
+    "never": "Never",
+    "always": "Always",
+    "essential": "Only for essential metadata",
+    "staff": "Use staff recommendation"
+  },
+  "_authorizedFetchValueDescription": {
+    "never": "Block all unsigned requests. Improves privacy and makes blocks more effective, but is not compatible with some very old or uncommon instance software.",
+    "always": "Allow all unsigned requests. Provides the greatest compatibility with other instances, but reduces privacy and weakens blocks.",
+    "essential": "Allow some limited unsigned requests. Provides a hybrid between \"Never\" and \"Always\" by exposing only the minimum profile metadata that is required for federation with older software.",
+    "staff": "Use the default value of \"{value}\" recommended by the instance staff."
+  },
+  "authorizedFetchLegacyWarning": "The configuration property 'checkActivityPubGetSignature' has been deprecated and replaced with the new Authorized Fetch setting. Please remove it from your configuration file.",
+  "deleted": "Deleted",
+  "enableProxyAccount": "Enable the proxy account.",
+  "enableProxyAccountDescription": "If disabled, then the proxy account will not be used. User lists will only include notes from local or followed users.",
+  "_confirmPollEdit": {
+    "title": "Are you sure you want to edit this poll",
+    "text": "Editing this poll will cause it to lose all previous votes"
+  },
+  "wordMuteTestLabel": "Test patterns",
+  "wordMuteTestDescription": "Enter some text here to test your word patterns. The matched words, if any, will be displayed below.",
+  "wordMuteTestTest": "Test",
+  "wordMuteTestMatch": "Matched words: {words}",
+  "wordMuteTestNoResults": "No results yet, enter some text and click \"Test\" to check it.",
+  "wordMuteTestNoMatch": "Text does not match any patterns.",
+  "wordMuteWarning": "All word mutes are *case-sensitive* and match on any substring, including part of a longer word or name. You can use regular expressions for more precise control.",
+  "bubbleTimeline": "Bubble timeline",
+  "bubbleTimelineDescription": "Choose which instances should be displayed in the bubble.",
+  "bubbleTimelineMustBeEnabled": "Note: the bubble timeline is hidden by default, and must be enabled via roles.",
+  "popularUsersGlobal": "Users popular on the global network",
+  "popularUsersLocal": "Users popular on {name}",
+  "pollsOnLocal": "Polls trending on {name}",
+  "pollsOnRemote": "Polls trending on the global network",
+  "pollsExpired": "Polls that have ended recently",
+  "trendingPollsDisabled": "Trending polls are disabled on this instance.",
+  "trendingPollsDisabledLogIn": "Please log in to view trending polls.",
+  "silenced": "Silenced",
+  "totalFollowers": "Total followers",
+  "totalFollowing": "Total following",
+  "localFollowers": "Local followers",
+  "localFollowing": "Local following",
+  "remoteFollowers": "Remote followers",
+  "remoteFollowing": "Remote following",
+  "activityPub": "Activity Pub",
+  "ip": "IP",
+  "ipTip": "The date is when IP address was first used.",
+  "rolePeriod": "Period",
+  "roleAssigned": "Assigned",
+  "roleAutomatic": "automatic",
+  "translationTimeoutLabel": "Translation timeout",
+  "translationTimeoutCaption": "Timeout in milliseconds for translation API requests.",
+  "staffNotes": "Staff notes",
+  "instanceIconAlt": "Icon of {name}",
+  "attributionDomains": "Attribution Domains",
+  "attributionDomainsDescription": "A list of domains whose content can be attributed to you on link previews, separated by new-line. Any subdomain will also be valid. The following needs to be on the webpage:",
+  "writtenBy": "Written by {user}",
+  "followingPub": "Following (Pub)",
+  "followersSub": "Followers (Sub)",
+  "wellKnownResources": "Well-known resources",
+  "lastPosted": "Last posted: {at}",
+  "nsfw": "NSFW",
+  "raw": "Raw",
+  "cw": "CW",
+  "mediaSilenced": "Media Silenced",
+  "bubble": "Bubble",
+  "verified": "Verified",
+  "notVerified": "Not Verified",
+  "hibernated": "Hibernated",
+  "keepCwDescription": "When replying to a post with a Content Warning, automatically use the same CW for the reply.",
+  "keepCwDisabled": "Disabled (do not copy CWs)",
+  "keepCwEnabled": "Enabled (copy CWs verbatim)",
+  "keepCwPrependRe": "Enabled (copy CW and prepend \"RE:\")",
+  "noteFooterLabel": "Note controls",
+  "rawUserDescription": "Packed user data in its raw form. Most of these fields are public and visible to all users.",
+  "rawInfoDescription": "Extended user data in its raw form. These fields are private and can only be accessed by moderators.",
+  "rawApDescription": "ActivityPub user data in its raw form. These fields are public and accessible to other instances.",
+  "signupReason": "Signup Reason",
+  "clearCachedFilesOptions": {
+    "title": "Delete all cached remote files",
+    "olderThan": "Only delete files older than:",
+    "now": "now",
+    "oneWeek": "one week",
+    "oneMonth": "one month",
+    "oneYear": "one year",
+    "keepFilesInUse": "Don't delete files used as avatars&c",
+    "keepFilesInUseDescription": "this option requires more complicated database queries, you may need to increase the value of db.extra.statement_timeout in the configuration file"
+  },
+  "customFontSize": "Custom font size",
   "stpvAntennaPatch": "Sharkey Stelpolva Edition adds additional keyword syntax to the antenna settings.\nThat means, the special keyword `domain:example.com` will match all posts from `example.com`. This keyword can also be used in OR syntax.\nSpecifically, you must use `domain:here` to match posts in this instance.\n",
   "stpvPgroongaSearchInstru": "Use the `A OR B` syntax to search for notes containing either A or B. `A B` (with a space in between) means posts containing both keywords A and B.",
   "timeTravel": "Time Travel",
@@ -3468,6 +3779,10 @@
     "disableTimeline": {
       "label": "Disable timeline",
       "caption": "Disable {name} timeline"
+    },
+    "aprilFools": {
+      "label": "April Fools' Day Easter Eggs",
+      "caption": "Open it and you will find a surprise(?) on April 1st"
     }
   },
   "stpvMuteUser": "Soft mute notes in timeline",
@@ -3481,5 +3796,6 @@
   "stpvPFprefix": "prefix...",
   "stpvPFsuffix": "...suffix",
   "stpvWarnNoQueryLocalFonts": "Oops! Your browser doesn't support the queryLocalFonts method, so please fill in the font name manually in the text box.",
-  "stpvEmojiPickerItemSize": "Emoji size"
+  "stpvEmojiPickerItemSize": "Emoji size",
+  "reportAcceptedBody": "Your report against {target} has been accepted. Thank you for your help! The administrators have taken appropriate action."
 }

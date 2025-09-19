@@ -52,6 +52,9 @@ _stpvPlus:
   disableTimeline:
     label: 禁用时间线
     caption: "禁用 {name} 时间线"
+  aprilFools:
+    label: 愚人节彩蛋
+    caption: "打开后在 4 月 1 日有意外惊喜（？）"
 stpvMuteUser: "在时间线上折叠该用户的帖子"
 stpvUnmuteUser: "在时间线上恢复显示该用户的帖子"
 stpvMuteNote: "以后在时间线上折叠"
@@ -69,3 +72,8 @@ wordMute: "折叠关键词"
 hardWordMute: "屏蔽关键词"
 mute: "静音"
 block: "屏蔽"
+
+_notification:
+  reportAccepted: "举报被接受"
+
+reportAcceptedBody: "您对 {target} 的举报已被接受。感谢您的帮助！管理人员已经采取了适当的措施。"

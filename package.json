@@ -37,6 +37,7 @@
     "@biomejs/biome": "^2.1.4",
     "@eslint/js": "^9.33.0",
     "@tsconfig/node22": "^22.0.2",
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.2.1",
     "@unocss/preset-wind4": "^66.4.2",
     "@unocss/transformer-directives": "^66.4.2",

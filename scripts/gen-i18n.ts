@@ -1,3 +1,4 @@
+// oxlint-disable no-explicit-any
 /**
  * Languages Loader
  */
@@ -5,16 +6,18 @@
 import * as fs from "node:fs";
 import * as yaml from "js-yaml";
 
-export const merge = (...args) =>
+const PROJECT_ROOT = new URL('..', import.meta.url);
+
+export const merge = (...args: any[]) =>
   args.reduce(
     (a, c) => ({
       ...a,
       ...c,
       ...Object.entries(a)
         .filter(([k]) => c && typeof c[k] === "object")
-        .reduce((a, [k, v]) => ((a[k] = merge(v, c[k])), a), {}),
+        .reduce((a, [k, v]) => ((a[k] = merge(v, c[k])), a), {} as Record<string, any>),
     }),
-    {}
+    {} as Record<string, any>
   );
 
 const languages = [
@@ -48,7 +51,7 @@ const languages = [
   "zh-WY",
 ];
 
-const primaries = {
+const primaries: Record<string, string> = {
   en: "US",
   ja: "JP",
   zh: "CN",
@@ -59,38 +62,34 @@ const primaries = {
 // also, we remove the backslashes in front of open braces (the
 // backslashes are only needed to tell `generateDTS.js` that the
 // braces do not represent parameters)
-const clean = (text) =>
+const clean = (text: string) =>
   text
     .replace(new RegExp(String.fromCodePoint(0x08), "g"), "")
     .replaceAll(new RegExp(/\\+\{/, "g"), "{");
 
-export const tryReadFile = (...rfsArgs) => {
+export const tryReadFile = (...rfsArgs: Parameters<typeof fs.readFileSync>) => {
   try {
-    return fs.readFileSync(...rfsArgs);
+    return fs.readFileSync(...rfsArgs).toString();
   } catch {
-    console.error(`Missing ${rfsArgs[0]}`);
+    console.warn(`[WARN] Missing ${rfsArgs[0]}, using empty string instead.`);
     return "";
   }
 };
 
 const locales_folders = [
-  `locales-source/locales`,
-  `locales-source/sharkey-locales`,
-  `locales-source/stpv-locales`,
+  `locales`,
+  `sharkey-locales`,
+  `stpv-locales`,
 ];
 
-function readLocale(locale) {
-  const metaUrl = import.meta.url;
-  return languages.reduce(
-    (a, c) => (
-      (a[c] =
-        yaml.load(
-          clean(tryReadFile(new URL(`${locale}/${c}.yml`, metaUrl), "utf-8"))
-        ) || {}),
-      a
-    ),
-    {}
-  );
+function readLocale(locale: string) {
+  return Object.fromEntries(
+    languages.map((lang) => [lang,
+      yaml.load(
+        clean(tryReadFile(new URL(`locales-source/${locale}/${lang}.yml`, PROJECT_ROOT), "utf-8"))
+      ) || {}
+    ])
+  )
 }
 
 export function build() {
@@ -101,7 +100,7 @@ export function build() {
   const locales = merge(...locales_folders.map((l) => readLocale(l)));
 
   // 空文字列が入ることがあり、フォールバックが動作しなくなるのでプロパティごと消す
-  const removeEmpty = (obj) => {
+  const removeEmpty = (obj: Record<string, any>) => {
     for (const [k, v] of Object.entries(obj)) {
       if (v === "") {
         delete obj[k];
@@ -111,6 +110,7 @@ export function build() {
     }
     return obj;
   };
+
   removeEmpty(locales);
 
   return Object.entries(locales).reduce(
@@ -135,7 +135,7 @@ export function build() {
       })()),
       a
     ),
-    {}
+    {} as Record<string, any>
   );
 }
 

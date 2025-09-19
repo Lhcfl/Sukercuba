@@ -55,6 +55,9 @@ _stpvPlus:
   disableTimeline:
     label: Disable timeline
     caption: "Disable {name} timeline"
+  aprilFools:
+    label: April Fools' Day Easter Eggs
+    caption: "Open it and you will find a surprise(?) on April 1st"
 stpvMuteUser: "Soft mute notes in timeline"
 stpvUnmuteUser: "Don't soft mute notes in timeline"
 stpvMuteNote: "Soft mute this note later"
@@ -67,3 +70,8 @@ stpvPFprefix: "prefix..."
 stpvPFsuffix: "...suffix"
 stpvWarnNoQueryLocalFonts: Oops! Your browser doesn't support the queryLocalFonts method, so please fill in the font name manually in the text box.
 stpvEmojiPickerItemSize: "Emoji size"
+
+_notification:
+  reportAccepted: "Report Accepted"
+
+reportAcceptedBody: "Your report against {target} has been accepted. Thank you for your help! The administrators have taken appropriate action."
