@@ -842,7 +842,7 @@ function renderMfm() {
 <style lang="scss">
 .mfm {
   &:not(.mfm-inline) {
-    line-height: 1.6em;
+    line-height: 1.5em;
   }
 
   blockquote {

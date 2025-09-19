@@ -1,10 +1,15 @@
-import { defineConfig } from 'unocss'
+import { defineConfig, presetWebFonts } from 'unocss'
 import presetWind4 from '@unocss/preset-wind4'
 import transformerDirectives from '@unocss/transformer-directives';
 
 export default defineConfig({
   presets: [
     presetWind4(),
+    presetWebFonts({
+      fonts: {
+        sans: ['Roboto', 'Noto Sans']
+      }
+    }),
   ],
   transformers: [
     transformerDirectives(),
@@ -30,4 +35,5 @@ export default defineConfig({
       'on-surface': 'rgb(var(--v-theme-on-surface))',
     }
   },
+
 })
