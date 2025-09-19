@@ -11,10 +11,5 @@ import { initI18n } from "./i18n";
 import vuetify from "./vuetify";
 
 export function registerPlugins(app: App) {
-  app
-    .use(vuetify)
-    .use(router)
-    .use(pinia)
-    .use(initI18n())
-    .use(VueQueryPlugin);
+  app.use(vuetify).use(router).use(pinia).use(initI18n()).use(VueQueryPlugin);
 }

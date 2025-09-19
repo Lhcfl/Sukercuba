@@ -33,7 +33,12 @@ export default defineConfig({
         "vue-i18n",
         {
           "vue-router/auto": ["useRoute", "useRouter"],
-          "@tanstack/vue-query": ["useQuery", "useInfiniteQuery", "useQueryClient", "useMutation"]
+          "@tanstack/vue-query": [
+            "useQuery",
+            "useInfiniteQuery",
+            "useQueryClient",
+            "useMutation",
+          ],
         },
       ],
       dts: "src/auto-imports.d.ts",
