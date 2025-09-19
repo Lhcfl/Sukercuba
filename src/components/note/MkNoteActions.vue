@@ -11,8 +11,8 @@
           text: `${note.repliesCount}`
         }" />
 
-      <VBtn v-if="renoteable" variant="plain" :loading="renoting" :color="note.isRenoted ? 'primary' : 'base'"
-        @click.stop="renoteOrCancel" v-bind="note.renoteCount == 0 ? {
+      <VBtn ref="renoteBtn" v-if="renoteable" variant="plain" :loading="renoting"
+        :color="note.isRenoted ? 'primary' : 'base'" @click.stop="renoteOrCancel" v-bind="note.renoteCount == 0 ? {
           icon: 'mdi-repeat-variant'
         } : {
           prependIcon: 'mdi-repeat-variant',
@@ -20,6 +20,18 @@
           size: 'large',
           text: `${note.renoteCount}`
         }" />
+      <VMenu v-model="showRenoteVisibilitySelector" :activator="renoteBtn">
+        <VList>
+          <VListItem v-for="visibility in visibilities" :key="visibility.value" :prepend-icon="visibility.icon"
+            :title="visibility.title" :subtitle="visibility.subtitle"
+            @click.stop="renoteWithVisibility(visibility.value)" />
+          <VListItem :class="renoteLocalOnly && 'text-primary'" :prepend-icon="renoteLocalOnly
+            ? 'mdi-toggle-switch-outline'
+            : 'mdi-toggle-switch-off-outline'
+            " :title="t('_visibility.disableFederation')" :subtitle="t('_visibility.disableFederationDescription')"
+            @click.stop="renoteLocalOnly = !renoteLocalOnly" />
+        </VList>
+      </VMenu>
 
       <VBtn variant="plain" icon="mdi-format-quote-close-outline" :color="posting === 'quote' ? 'primary' : 'base'"
         @click.stop="posting = posting === 'quote' ? null : 'quote'" />
@@ -91,10 +103,30 @@ const reacting = ref(false);
 const posting = ref<"reply" | "quote" | "edit" | null>(null);
 const deleting = ref(false);
 const showMenu = ref(false);
+const showRenoteVisibilitySelector = ref(false);
 const showEmojiPicker = ref(false);
+const renoteLocalOnly = ref(false);
 const renoteable = computed(() => props.note.visibility === "public" || props.note.visibility === "home");
 const isMyNote = computed(() => props.note.userId === account.me?.id);
 const isRemote = computed(() => props.note.user.host != null)
+
+// type trick: bypass `:activator=` check
+// oxlint-disable-next-line no-explicit-any
+const renoteBtn = useTemplateRef("renoteBtn") as unknown as Ref<any>;
+
+const visibilities = computed(() =>
+  (
+    [
+      { value: "public", icon: "mdi-earth" },
+      { value: "home", icon: "mdi-home-outline" },
+      { value: "followers", icon: "mdi-lock-outline" },
+    ] as const
+  ).map((v) => ({
+    ...v,
+    title: t(`_visibility.${v.value}`),
+    subtitle: t(`_visibility.${v.value}Description`),
+  }))
+);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function popupError(err: any) {
@@ -114,8 +146,22 @@ async function renoteOrCancel() {
     if (props.note.isRenoted) {
       await account.api.request("notes/unrenote", { noteId: props.note.id });
     } else {
-      await account.api.request("notes/create", { renoteId: props.note.id });
+      // do nothing
+      // showRenoteVisibilitySelector.value = true
+      // await account.api.request("notes/create", { renoteId: props.note.id });
     }
+  } catch (err) {
+    popupError(err);
+  } finally {
+    renoting.value = false;
+  }
+}
+
+async function renoteWithVisibility(visibility: "public" | "home" | "followers") {
+  try {
+    showRenoteVisibilitySelector.value = false;
+    renoting.value = true;
+    await account.api.request("notes/create", { renoteId: props.note.id, visibility });
   } catch (err) {
     popupError(err);
   } finally {
