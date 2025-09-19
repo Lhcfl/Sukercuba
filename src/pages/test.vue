@@ -1,7 +1,9 @@
 <template>
-  <button p="2" flex="~ col" @click="num++">{{ num }} test miao</button>
+  <MkNoteSkeleton />
 </template>
 
 <script setup lang="ts">
+import MkNoteSkeleton from '@/components/MkNoteSkeleton.vue';
+
 const num = ref(0);
 </script>

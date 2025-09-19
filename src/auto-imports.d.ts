@@ -74,11 +74,13 @@ declare global {
   const useCustomEmojisData: typeof import('./stores/custom-emoji-map')['useCustomEmojisData']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useId: typeof import('vue')['useId']
+  const useInfiniteQuery: typeof import('@tanstack/vue-query')['useInfiniteQuery']
   const useModel: typeof import('vue')['useModel']
   const useNavigations: typeof import('./services/navigations')['useNavigations']
   const useNoteCache: typeof import('./stores/note-cache')['useNoteCache']
   const usePopupMessage: typeof import('./stores/popup-message')['usePopupMessage']
   const usePreferences: typeof import('./stores/preference')['usePreferences']
+  const useQuery: typeof import('@tanstack/vue-query')['useQuery']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
@@ -192,11 +194,13 @@ declare module 'vue' {
     readonly useCustomEmojisData: UnwrapRef<typeof import('./stores/custom-emoji-map')['useCustomEmojisData']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
+    readonly useInfiniteQuery: UnwrapRef<typeof import('@tanstack/vue-query')['useInfiniteQuery']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
     readonly useNavigations: UnwrapRef<typeof import('./services/navigations')['useNavigations']>
     readonly useNoteCache: UnwrapRef<typeof import('./stores/note-cache')['useNoteCache']>
     readonly usePopupMessage: UnwrapRef<typeof import('./stores/popup-message')['usePopupMessage']>
     readonly usePreferences: UnwrapRef<typeof import('./stores/preference')['usePreferences']>
+    readonly useQuery: UnwrapRef<typeof import('@tanstack/vue-query')['useQuery']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>

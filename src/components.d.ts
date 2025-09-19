@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppBottomNavigation: typeof import('./components/AppBottomNavigation.vue')['default']
+    AppInfiniteScroll: typeof import('./components/AppInfiniteScroll.vue')['default']
     AppPopupMessageContainer: typeof import('./components/AppPopupMessageContainer.vue')['default']
     AppRightSidebar: typeof import('./components/AppRightSidebar.vue')['default']
     AppSidebar: typeof import('./components/AppSidebar.vue')['default']
@@ -34,6 +35,7 @@ declare module 'vue' {
     MkNotePoll: typeof import('./components/note/MkNotePoll.vue')['default']
     MkNoteReactions: typeof import('./components/note/MkNoteReactions.vue')['default']
     MkNoteRenoteBar: typeof import('./components/note/MkNoteRenoteBar.vue')['default']
+    MkNoteSkeleton: typeof import('./components/MkNoteSkeleton.vue')['default']
     MkNotesList: typeof import('./components/note/MkNotesList.vue')['default']
     MkNoteSub: typeof import('./components/note/MkNoteSub.vue')['default']
     MkNoteText: typeof import('./components/note/MkNoteText.vue')['default']
