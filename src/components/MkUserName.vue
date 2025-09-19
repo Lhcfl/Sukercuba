@@ -1,6 +1,6 @@
 <template>
-  <span v-if="user.name" class="mfm-name mb--2">
-    <MkMfm inline plain nowrap :text="user.name" :author="user" :emoji-urls="user.emojis" />
+  <span v-if="user.name" class="mfm-name">
+    <MkMfm inline plain :nowrap="!wrap" :text="user.name" :author="user" :emoji-urls="user.emojis" />
   </span>
   <span v-else>
     {{ user.username }}
@@ -12,5 +12,6 @@ import type { User } from "misskey-js/entities.js";
 
 defineProps<{
   user: User;
+  wrap?: boolean
 }>();
 </script>

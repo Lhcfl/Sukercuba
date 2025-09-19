@@ -1,15 +1,7 @@
 <template>
   <span class="mk-any-emoji">
-    <MkCustomEmoji
-      v-if="isCustom"
-      v-bind="props"
-      :url
-    />
-    <MkEmoji
-      v-else
-      v-bind="props"
-      :emoji="name"
-    />
+    <MkCustomEmoji v-if="isCustom" v-bind="props" :url />
+    <MkEmoji v-else v-bind="props" :emoji="name" />
   </span>
 </template>
 

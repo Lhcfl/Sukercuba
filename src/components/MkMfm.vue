@@ -830,7 +830,7 @@ function renderMfm() {
       {
         // https://codeday.me/jp/qa/20190424/690106.html
         class: props.nowrap
-          ? "inline-block truncate whitespace-pre"
+          ? "inline-block truncate line-clamp-1 whitespace-pre"
           : "whitespace-pre-wrap",
       },
       genEl(rootAst.value, props.rootScale ?? 1),

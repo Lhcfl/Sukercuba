@@ -1,10 +1,10 @@
 <template>
   <VCard v-ripple :variant @click.stop="router.push({ name: '/notes/[id]', params: { id: appearNote.id } })">
     <VCardItem :prepend-icon="icon">
-      <div v-if="avatars" class="flex flex-wrap">
-        <div v-for="(pair, index) in avatars" :key="index" class="w-14 h-14 relative">
-          <MkAvatar :user="pair.user" />
-          <MkAnyEmoji v-if="pair.reaction" class="absolute right-0 bottom-0 scale-75" :name="pair.reaction"
+      <div v-if="avatars" class="flex flex-wrap gap-2">
+        <div v-for="(pair, index) in avatars" :key="index" class="relative">
+          <MkAvatar :user="pair.user" size="2.5rem" />
+          <MkAnyEmoji v-if="pair.reaction" class="absolute right-0 bottom-0 text-1rem!" :name="pair.reaction"
             :urls="appearNote.reactionEmojis" />
         </div>
         <VBtn class="w-12 h-12" v-if="showMore" color="secondary-container" rounded="circle" variant="flat"
@@ -14,11 +14,11 @@
       </div>
     </VCardItem>
     <VCardText>
-      <p class="mt--2" :class="{ 'line-clamp-3': !showMore }">
-        <span v-if="appearNote.files?.length">
+      <p :class="{ 'line-clamp-3': !showMore }">
+        <VChip v-if="appearNote.files?.length" class="mr-1">
           <VIcon icon="mdi-image" />
           x{{ appearNote.files?.length }}
-        </span>
+        </VChip>
         <MkMfm v-if="appearNote.text" :text="appearNote.text" :author="appearNote.user"
           :emoji-urls="appearNote.emojis" />
       </p>

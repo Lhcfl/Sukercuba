@@ -1,5 +1,5 @@
 <template>
-  <VCard :class="$style.main" :loading :width>
+  <VCard :class="$style.main" :loading :width class="rounded-none">
     <VCardActions v-if="user.hasPendingFollowRequestToYou">
       <span>
         {{ t("receiveFollowRequest") }}
@@ -10,16 +10,22 @@
       <VBtn class="text-red" prepend-icon="mdi-close-circle-outline" :loading="sendingReject" :text="t('reject')"
         @click.stop="reject" />
     </VCardActions>
-    <VParallax :class="$style.parallax" :src="user?.bannerUrl">
+    <VParallax class="w-full aspect-[2/1]" :src="user?.bannerUrl">
+      <template #placeholder>
+        <div class="relative w-full h-full">
+          <MkImageBlurHash class="w-full h-full object-cover" v-if="user.bannerBlurhash" :blurhash="user.bannerBlurhash"
+            :id="user.id" />
+        </div>
+      </template>
       <VCardText class="flex h-100 justify-between justify-end">
         <div>
-          <VChip v-if="user.isFollowed" class="bg-background">
+          <VChip v-if="user.isFollowed" class="bg-primary-container">
             {{ user.isFollowing ? t('mutualFollow') : t('followsYou') }}
           </VChip>
           <VChip v-if="user.isBlocked" class="bg-black">
             {{ t('blockingYou') }}
           </VChip>
-          <VChip v-if="user.isMuted" class="bg-grey-darken-2">
+          <VChip v-if="user.isMuted" class="bg-gray">
             {{ t('muted') }}
           </VChip>
         </div>
@@ -49,16 +55,13 @@
         </VBtnGroup>
       </VCardText>
     </VParallax>
-    <div :class="$style.avatarContainer">
+    <div class="avatar-and-name w-full relative p-2 mt--20 flex gap-3">
       <MkAvatar :user :size="150" />
+      <div class="name-username flex w-full flex-col justify-center gap-2 flex-[1_1_0] min-w-0">
+        <MkUserName class="text-2xl text-white drop-shadow-lg drop-shadow-color-black" :user wrap />
+        <span>@{{ acct.toString(user) }}</span>
+      </div>
     </div>
-    <VCardTitle class="text-center">
-      <MkMfm :text="user.name ?? user.username" :emoji-urls="user.emojis" plain />
-    </VCardTitle>
-    <VCardSubtitle class="text-center">
-      <span>@{{ user.username }}</span>
-      <span v-if="user.host">@{{ user.host }}</span>
-    </VCardSubtitle>
     <VCardText class="text-center">
       <VAlert v-if="user.followedMessage" class="text-secondary" density="compact">
         <p>
@@ -111,6 +114,7 @@
 </template>
 
 <script setup lang="ts">
+import { acct } from "misskey-js";
 import type { User, UserDetailed } from "misskey-js/entities.js";
 
 const props = defineProps<{
@@ -132,9 +136,6 @@ const isMe = computed(() => account.me?.id === props.user.id);
 const followText = computed(() =>
   props.user.isLocked ? t("followRequest") : t("follow"),
 );
-const parallaxMaxH = computed(
-  () => `${props.width ? props.width * 0.6 : 500}px`,
-);
 const followLoading = ref(false);
 const sendingAccept = ref(false);
 const sendingReject = ref(false);
@@ -152,10 +153,6 @@ const cancelFollowRequest = () =>
 
 <style lang="scss" module>
 .main {
-  .parallax {
-    max-height: v-bind("parallaxMaxH");
-  }
-
   .avatarContainer {
     margin-top: -80px;
     display: flex;

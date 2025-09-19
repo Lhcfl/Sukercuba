@@ -26,22 +26,9 @@ const parsed = computed(() =>
 
 <style lang="scss" module>
 .root {
-  height: 2em;
-  vertical-align: middle;
-  transition: transform 0.2s ease;
-  display: inline;
-}
-
-.normal {
   height: 1.25em;
   vertical-align: -0.25em;
-
-  &:hover {
-    transform: none;
-  }
-}
-
-.noStyle {
-  height: auto !important;
+  transition: transform 0.2s ease;
+  display: inline;
 }
 </style>
