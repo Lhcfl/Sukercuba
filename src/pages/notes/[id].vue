@@ -1,7 +1,5 @@
 <template>
-  <div v-if="!note" class="flex items-center justify-evenly h-screen w-full">
-    <VProgressCircular indeterminate />
-  </div>
+  <MkNoteSkeleton v-if="!note" />
   <div v-else class="p-2">
     <VCard v-if="note.replyId" class="previous-conversations mb-2 border">
       <VInfiniteScroll side="start" @load="preConversation">

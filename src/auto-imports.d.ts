@@ -81,6 +81,7 @@ declare global {
   const usePopupMessage: typeof import('./stores/popup-message')['usePopupMessage']
   const usePreferences: typeof import('./stores/preference')['usePreferences']
   const useQuery: typeof import('@tanstack/vue-query')['useQuery']
+  const useQueryClient: typeof import('@tanstack/vue-query')['useQueryClient']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
   const useSlots: typeof import('vue')['useSlots']
@@ -201,6 +202,7 @@ declare module 'vue' {
     readonly usePopupMessage: UnwrapRef<typeof import('./stores/popup-message')['usePopupMessage']>
     readonly usePreferences: UnwrapRef<typeof import('./stores/preference')['usePreferences']>
     readonly useQuery: UnwrapRef<typeof import('@tanstack/vue-query')['useQuery']>
+    readonly useQueryClient: UnwrapRef<typeof import('@tanstack/vue-query')['useQueryClient']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>

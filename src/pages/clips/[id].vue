@@ -24,15 +24,22 @@
 </template>
 
 <script setup lang="ts">
+import type { InfiniteData } from '@tanstack/vue-query';
+import type { Clip } from 'misskey-js/entities.js';
+
 const account = useAccount();
 const noteCache = useNoteCache();
 const notes = ref<NoteWithExtension[]>([]);
-
+const queryClient = useQueryClient();
 const route = useRoute<"/clips/[id]">();
 
 const { data: clip, isPending, isError, error } = useQuery({
   queryKey: ["clips", route.params.id],
   queryFn: () => account.api.request("clips/show", { clipId: route.params.id }),
+  placeholderData: () => {
+    const d = queryClient.getQueryData<InfiniteData<Clip[]>>(["clips"]);
+    return d?.pages.flat().find(c => c.id === route.params.id);
+  },
 })
 
 async function load(notes: NoteWithExtension[]) {

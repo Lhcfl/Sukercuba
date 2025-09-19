@@ -95,6 +95,7 @@
     "usePopupMessage": true,
     "usePreferences": true,
     "useQuery": true,
+    "useQueryClient": true,
     "useRoute": true,
     "useRouter": true,
     "useSlots": true,
