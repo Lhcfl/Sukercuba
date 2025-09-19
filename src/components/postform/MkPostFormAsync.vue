@@ -24,17 +24,24 @@
   </VCardText>
   <MkPollEditor v-if="draft.showPoll" v-model="draft.poll" />
   <VCardText v-if="draft.showPreview">
-    <p v-if="computedCw">
-      <MkMfm :text="computedCw" />
-      <VDivider />
-    </p>
-    <p>
-      <MkMfm :text="computedText" />
-    </p>
+    <div class="postform-preview rounded-lg">
+      <p v-if="computedCw">
+        <MkMfm :text="computedCw" />
+        <VDivider />
+      </p>
+      <p>
+        <MkMfm :text="computedText" />
+      </p>
+    </div>
   </VCardText>
   <VCardActions class="flex justify-between">
     <div>
-      <VBtn color="base" icon="mdi-image-outline" />
+      <VMenu :close-on-content-click="true">
+        <template #activator="{ props: p }">
+          <VBtn icon="mdi-image-outline" v-bind="p" color="base"></VBtn>
+        </template>
+        <MkUploadFileMenu />
+      </VMenu>
       <VBtn icon="mdi-poll" :color="draft.showPoll ? 'primary' : 'base'"
         @click.stop="draft.showPoll = !draft.showPoll" />
       <VBtn icon="mdi-eye-off-outline" :color="draft.showCw ? 'primary' : 'base'"

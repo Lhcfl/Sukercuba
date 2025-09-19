@@ -50,6 +50,8 @@ declare module 'vue' {
     MkTime: typeof import('./components/MkTime.vue')['default']
     MkTimeline: typeof import('./components/MkTimeline.vue')['default']
     MkTimelines: typeof import('./components/MkTimelines.vue')['default']
+    MkUploadFileMenu: typeof import('./components/MkUploadFileMenu.vue')['default']
+    MkUploadMenu: typeof import('./components/MkUploadMenu.vue')['default']
     MkUrl: typeof import('./components/MkUrl.vue')['default']
     MkUserMenu: typeof import('./components/MkUserMenu.vue')['default']
     MkUserName: typeof import('./components/MkUserName.vue')['default']
