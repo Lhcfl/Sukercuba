@@ -68,7 +68,6 @@ declare global {
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
   const useCustomEmojisData: typeof import('./stores/custom-emoji-map')['useCustomEmojisData']
-  const useDraft: typeof import('./stores/draft')['useDraft']
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useId: typeof import('vue')['useId']
   const useModel: typeof import('vue')['useModel']
