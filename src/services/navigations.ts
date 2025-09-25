@@ -60,6 +60,7 @@ export function useNavigations() {
       },
       { title: t("clips"), icon: "mdi-bookmark", to: "/clips", sidebar: true },
       { title: t("login"), icon: "mdi-login", to: "/login", sidebar: true },
+      { title: t("settings"), icon: "mdi-cog", to: "/settings", sidebar: true },
       {
         title: t("clearCache"),
         icon: "mdi-delete",

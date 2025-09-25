@@ -29,6 +29,8 @@ declare module 'vue-router/auto-routes' {
     '/notes/[id]': RouteRecordInfo<'/notes/[id]', '/notes/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/notifications': RouteRecordInfo<'/notifications', '/notifications', Record<never, never>, Record<never, never>>,
     '/search': RouteRecordInfo<'/search', '/search', Record<never, never>, Record<never, never>>,
+    '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>, '/settings/'>,
+    '/settings/': RouteRecordInfo<'/settings/', '/settings', Record<never, never>, Record<never, never>>,
     '/tags/[tag]': RouteRecordInfo<'/tags/[tag]', '/tags/:tag', { tag: ParamValue<true> }, { tag: ParamValue<false> }>,
     '/test': RouteRecordInfo<'/test', '/test', Record<never, never>, Record<never, never>>,
   }
@@ -86,6 +88,14 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/search.vue': {
       routes: '/search'
+      views: never
+    }
+    'src/pages/settings.vue': {
+      routes: '/settings' | '/settings/'
+      views: 'default'
+    }
+    'src/pages/settings/index.vue': {
+      routes: '/settings/'
       views: never
     }
     'src/pages/tags/[tag].vue': {
