@@ -1,6 +1,7 @@
 <template>
-  <MkNoteSkeleton v-if="!note" />
-  <div v-else class="p-2">
+  <MkNoteSkeleton v-if="loading" />
+  <MkError v-else-if="error" :title="$t('error')" :message="errorToString(error)" />
+  <div v-if="note">
     <VCard v-if="note.replyId" class="previous-conversations mb-2 border">
       <VInfiniteScroll side="start" @load="preConversation">
         <TransitionGroup name="note">
@@ -40,14 +41,8 @@ const conversationsComputed = computed(() =>
 const repliesComputed = computed(() =>
   replies.value.filter((x) => !x.isDeleted),
 );
-const note = ref<NoteWithExtension | null>(null);
 
-async function load() {
-  const n = await account.api.request("notes/show", {
-    noteId: route.params.id,
-  });
-  note.value = noteCache.cached(n, true).value;
-}
+const { note, loading, error } = noteCache.query(route.params.id);
 
 async function preConversation(context: {
   done: (stat: "ok" | "error" | "empty") => void;
@@ -81,6 +76,4 @@ async function nextReplies(context: {
     context.done("error");
   }
 }
-
-load();
 </script>

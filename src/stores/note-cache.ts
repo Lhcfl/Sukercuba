@@ -101,8 +101,8 @@ export const useNoteCache = defineStore("note-cache", () => {
           votes: choices[choice].votes + 1,
           ...(me && body.userId === me.id
             ? {
-                isVoted: true,
-              }
+              isVoted: true,
+            }
             : {}),
         };
 
@@ -239,9 +239,31 @@ export const useNoteCache = defineStore("note-cache", () => {
     }
   }
 
+  function query(noteId: Note["id"]) {
+    const error = ref<unknown>(null);
+    const loading = ref(true);
+    const note = computed(() => loading.value ? null : noteCache.get(noteId)?.value);
+    account.api.request("notes/show", {
+      noteId,
+    }).then(res => {
+      cached(res, true);
+    }).catch(e => {
+      error.value = e;
+    }).finally(() => {
+      loading.value = false;
+    });
+
+    return {
+      loading,
+      error,
+      note,
+    }
+  }
+
   return {
     noteCache,
     cached,
     update,
+    query,
   };
 });

@@ -37,6 +37,7 @@
     "defineAsyncComponent": true,
     "defineComponent": true,
     "effectScope": true,
+    "errorToString": true,
     "getCompressionConfig": true,
     "getCurrentInstance": true,
     "getCurrentScope": true,
