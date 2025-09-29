@@ -152,6 +152,8 @@ async function submit() {
   try {
     loading.value = true;
     draft.value.poll.choices = draft.value.poll.choices.filter((x) => x);
+
+    const fileIds = draft.value.files.map(f => f.id);
     const req: NotesCreateRequest = {
       text: computedText.value || null,
       cw: computedCw.value || null,
@@ -160,7 +162,7 @@ async function submit() {
       visibility: draft.value.visibility,
       localOnly: draft.value.localOnly,
       poll: draft.value.showPoll ? draft.value.poll : undefined,
-      fileIds: draft.value.files.map(f => f.id),
+      fileIds: fileIds.length > 0 ? fileIds : undefined,
     };
 
     if (props.edit) {
