@@ -27,7 +27,7 @@ app.config.errorHandler = (err, vm, info) => {
     console.error(info, err);
   }
   useSnackbarQueue().push({ color: "error", text: errorToString(err) });
-}
+};
 
 app.mount("#app");
 

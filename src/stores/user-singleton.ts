@@ -5,13 +5,13 @@ import { getI18n } from "@/plugins/i18n";
 
 type UserSingletonCache = (
   | {
-    detailed: true;
-    user: Ref<UserDetailed | null>;
-  }
+      detailed: true;
+      user: Ref<UserDetailed | null>;
+    }
   | {
-    detailed: false;
-    user: Ref<UserLite | null>;
-  }
+      detailed: false;
+      user: Ref<UserLite | null>;
+    }
 ) & {
   loading: Ref<boolean>;
   error: Ref<unknown>;
@@ -35,13 +35,13 @@ export const useUserSingleton = defineStore("user-singleton", () => {
       user: computed({
         get: () => account.me ?? null,
         set: () => {
-          console.warn("DO NOT SET ME IN USER CACHE")
-        }
+          console.warn("DO NOT SET ME IN USER CACHE");
+        },
       }),
       loading: ref(false),
       cachedAt: Date.now(),
       error: ref(null),
-    })
+    });
     createUsername2IdMapping(account.me);
   }
 
@@ -58,11 +58,13 @@ export const useUserSingleton = defineStore("user-singleton", () => {
     username2id.set(`${user.username}@${user.host}`, user.id);
   }
 
-  function isMe(props: { id: string } | { username: string; host: string | null }) {
-    return "id" in props ? props.id === account.me?.id
-      : props.username === account.me?.username && (
-        props.host === account.me.host
-      );
+  function isMe(
+    props: { id: string } | { username: string; host: string | null },
+  ) {
+    return "id" in props
+      ? props.id === account.me?.id
+      : props.username === account.me?.username &&
+          props.host === account.me.host;
   }
 
   function forceFetchUser(
@@ -91,8 +93,7 @@ export const useUserSingleton = defineStore("user-singleton", () => {
     }
 
     const promise = isMe(props)
-      ? account.api.request("i", {})
-        .then((user) => {
+      ? account.api.request("i", {}).then((user) => {
           entry.error.value = null;
           account.me = user;
           createUsername2IdMapping(user);
@@ -102,22 +103,23 @@ export const useUserSingleton = defineStore("user-singleton", () => {
           }
         })
       : account.api
-        .request(
-          "users/show",
-          "id" in props
-            ? {
-              userId: props.id,
+          .request(
+            "users/show",
+            "id" in props
+              ? {
+                  userId: props.id,
+                }
+              : props,
+          )
+          .then((user) => {
+            entry.error.value = null;
+            entry.user.value = user;
+            createUsername2IdMapping(user);
+            if (!resolved) {
+              userCache.set(user.id, entry);
+              userCache.delete(key);
             }
-            : props,
-        ).then((user) => {
-          entry.error.value = null;
-          entry.user.value = user;
-          createUsername2IdMapping(user);
-          if (!resolved) {
-            userCache.set(user.id, entry);
-            userCache.delete(key);
-          }
-        })
+          });
 
     promise
       .catch((err) => {
