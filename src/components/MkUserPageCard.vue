@@ -1,153 +1,151 @@
 <template>
-  <VCard :class="$style.main" :loading :width class="rounded-none">
-    <VCardActions v-if="user.hasPendingFollowRequestToYou">
-      <span>
-        {{ t("receiveFollowRequest") }}
-      </span>
-      <VSpacer />
-      <VBtn class="text-secondary" prepend-icon="mdi-check-circle-outline" :text="t('accept')" :loading="sendingAccept"
-        @click.stop="accept" />
-      <VBtn class="text-red" prepend-icon="mdi-close-circle-outline" :loading="sendingReject" :text="t('reject')"
-        @click.stop="reject" />
-    </VCardActions>
-    <VParallax class="w-full aspect-[2/1]" :src="user?.bannerUrl">
-      <template #placeholder>
-        <div class="relative w-full h-full">
-          <MkImageBlurHash class="w-full h-full object-cover" v-if="user.bannerBlurhash" :blurhash="user.bannerBlurhash"
-            :id="user.id" />
-        </div>
-      </template>
-      <VCardText class="flex h-100 justify-between justify-end">
-        <div>
-          <VChip v-if="user.isFollowed" class="bg-primary-container">
-            {{ user.isFollowing ? t('mutualFollow') : t('followsYou') }}
-          </VChip>
-          <VChip v-if="user.isBlocked" class="bg-black">
-            {{ t('blockingYou') }}
-          </VChip>
-          <VChip v-if="user.isMuted" class="bg-gray">
-            {{ t('muted') }}
-          </VChip>
-        </div>
+  <div>
+    <VCard v-if="user" :class="$style.main" :loading :width class="rounded-none">
+      <VCardActions v-if="user.hasPendingFollowRequestToYou">
+        <span>
+          {{ t("receiveFollowRequest") }}
+        </span>
+        <VSpacer />
+        <VBtn class="text-secondary" prepend-icon="mdi-check-circle-outline" :text="t('accept')"
+          :loading="sendingAccept" @click.stop="accept" />
+        <VBtn class="text-red" prepend-icon="mdi-close-circle-outline" :loading="sendingReject" :text="t('reject')"
+          @click.stop="reject" />
+      </VCardActions>
+      <VParallax class="w-full aspect-[2/1]" :src="user?.bannerUrl">
+        <template #placeholder>
+          <div class="relative w-full h-full">
+            <MkImageBlurHash class="w-full h-full object-cover" v-if="user.bannerBlurhash"
+              :blurhash="user.bannerBlurhash" :id="user.id" />
+          </div>
+        </template>
+        <VCardText class="flex h-100 justify-between justify-end">
+          <div>
+            <VChip v-if="user.isFollowed" class="bg-primary-container">
+              {{ user.isFollowing ? t('mutualFollow') : t('followsYou') }}
+            </VChip>
+            <VChip v-if="user.isBlocked" class="bg-black">
+              {{ t('blockingYou') }}
+            </VChip>
+            <VChip v-if="user.isMuted" class="bg-gray">
+              {{ t('muted') }}
+            </VChip>
+          </div>
 
-        <VBtnGroup>
-          <template v-if="!isMe">
-            <VBtn v-if="user.isFollowing" prepend-icon="mdi-minus" color="primary" :loading="followLoading"
-              @click.stop="unfollow">
-              {{ t('youFollowing') }}
+          <VBtnGroup>
+            <template v-if="!isMe">
+              <VBtn v-if="user.isFollowing" prepend-icon="mdi-minus" color="primary" :loading="followLoading"
+                @click.stop="unfollow">
+                {{ t('youFollowing') }}
+              </VBtn>
+              <VBtn v-else-if="user.isBlocking" prepend-icon="mdi-cancel" color="black" :loading="followLoading"
+                @click.stop="unblock">
+                {{ t('blocked') }}
+              </VBtn>
+              <VBtn v-else-if="user.hasPendingFollowRequestFromYou" prepend-icon="mdi-clock-outline"
+                :loading="followLoading" color="secondary" @click.stop="cancelFollowRequest">
+                {{ t('followRequestPending') }}
+              </VBtn>
+              <VBtn v-else prepend-icon="mdi-plus" :loading="followLoading" @click.stop="follow">
+                {{ followText }}
+              </VBtn>
+            </template>
+            <VBtn>
+              <VIcon icon="mdi-dots-vertical" />
+              <MkUserMenu :user="user" />
             </VBtn>
-            <VBtn v-else-if="user.isBlocking" prepend-icon="mdi-cancel" color="black" :loading="followLoading"
-              @click.stop="unblock">
-              {{ t('blocked') }}
-            </VBtn>
-            <VBtn v-else-if="user.hasPendingFollowRequestFromYou" prepend-icon="mdi-clock-outline"
-              :loading="followLoading" color="secondary" @click.stop="cancelFollowRequest">
-              {{ t('followRequestPending') }}
-            </VBtn>
-            <VBtn v-else prepend-icon="mdi-plus" :loading="followLoading" @click.stop="follow">
-              {{ followText }}
-            </VBtn>
-          </template>
-          <VBtn>
-            <VIcon icon="mdi-dots-vertical" />
-            <MkUserMenu v-if="detailedUser?.detailed" :user="detailedUser.data" />
-          </VBtn>
-        </VBtnGroup>
-      </VCardText>
-    </VParallax>
-    <div class="avatar-and-name w-full relative p-2 mt--20 flex gap-3">
-      <MkAvatar :user :size="150" />
-      <div class="name-username flex w-full flex-col justify-center gap-2 flex-[1_1_0] min-w-0">
-        <MkUserName class="text-2xl text-white drop-shadow-lg drop-shadow-color-black" :user wrap />
-        <span>@{{ acct.toString(user) }}</span>
+          </VBtnGroup>
+        </VCardText>
+      </VParallax>
+      <div class="avatar-and-name w-full relative p-2 mt--20 flex gap-3">
+        <MkAvatar :user :size="150" />
+        <div class="name-username flex w-full flex-col justify-center gap-2 flex-[1_1_0] min-w-0">
+          <MkUserName class="text-2xl text-white drop-shadow-lg drop-shadow-color-black" :user wrap />
+          <span>@{{ acct.toString(user) }}</span>
+        </div>
       </div>
-    </div>
-    <VCardText class="text-center">
-      <VAlert v-if="user.followedMessage" class="text-secondary" density="compact">
-        <p>
-          <small>
-            {{ t('messageToFollower') }}
-          </small>
+      <VCardText class="text-center">
+        <VAlert v-if="user.followedMessage" class="text-secondary" density="compact">
+          <p>
+            <small>
+              {{ t('messageToFollower') }}
+            </small>
+          </p>
+          <MkMfm :text="user.followedMessage" :emoji-urls="user.emojis" :author="user" />
+        </VAlert>
+        <p v-if="user.description" class="py-3">
+          <MkMfm :text="user.description" :emoji-urls="user.emojis" :author="user" />
         </p>
-        <MkMfm :text="user.followedMessage" :emoji-urls="user.emojis" :author="user" />
-      </VAlert>
-      <p v-if="user.description" class="py-3">
-        <MkMfm :text="user.description" :emoji-urls="user.emojis" :author="user" />
-      </p>
-    </VCardText>
-    <VCardText v-if="Object.keys(user.fields ?? {}).length > 0">
-      <VDivider />
-      <div class="flex justify-evenly  mt-2">
-        <VTable :class="$style.fieldTable">
-          <tbody>
-            <tr v-for="(item, idx) in user.fields" :key="idx">
-              <td :class="$style.fieldName">
-                <MkMfm :text="item.name" :emoji-urls="user.emojis" :author="user" />
-              </td>
-              <td />
-              <td :class="$style.fieldVal">
-                <MkMfm :text="item.value" :emoji-urls="user.emojis" :author="user" />
-              </td>
-            </tr>
-          </tbody>
-        </VTable>
-      </div>
-    </VCardText>
-    <VCardText>
-      <VDivider />
-      <div class="flex justify-evenly text-center mt-2">
-        <div class="flex flex-col">
-          <span class="text-h5">{{ user.notesCount }}</span>
-          <span class="text-subtitle-2">{{ t('notes') }}</span>
+      </VCardText>
+      <VCardText v-if="Object.keys(user.fields ?? {}).length > 0">
+        <VDivider />
+        <div class="flex justify-evenly  mt-2">
+          <VTable :class="$style.fieldTable">
+            <tbody>
+              <tr v-for="(item, idx) in user.fields" :key="idx">
+                <td :class="$style.fieldName">
+                  <MkMfm :text="item.name" :emoji-urls="user.emojis" :author="user" />
+                </td>
+                <td />
+                <td :class="$style.fieldVal">
+                  <MkMfm :text="item.value" :emoji-urls="user.emojis" :author="user" />
+                </td>
+              </tr>
+            </tbody>
+          </VTable>
         </div>
-        <div class="flex flex-col">
-          <span class="text-h5">{{ user.followersCount }}</span>
-          <span class="text-subtitle-2">{{ t('followers') }}</span>
+      </VCardText>
+      <VCardText>
+        <VDivider />
+        <div class="flex justify-evenly text-center mt-2">
+          <div class="flex flex-col">
+            <span class="text-h5">{{ user.notesCount }}</span>
+            <span class="text-subtitle-2">{{ t('notes') }}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-h5">{{ user.followersCount }}</span>
+            <span class="text-subtitle-2">{{ t('followers') }}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-h5">{{ user.followingCount }}</span>
+            <span class="text-subtitle-2">{{ t('following') }}</span>
+          </div>
         </div>
-        <div class="flex flex-col">
-          <span class="text-h5">{{ user.followingCount }}</span>
-          <span class="text-subtitle-2">{{ t('following') }}</span>
-        </div>
-      </div>
-    </VCardText>
-  </VCard>
+      </VCardText>
+    </VCard>
+    <VSkeletonLoader v-if="loading" type="card-avatar,article"></VSkeletonLoader>
+    <MkError v-if="error" :message="errorToString(error)" />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { acct } from "misskey-js";
-import type { User, UserDetailed } from "misskey-js/entities.js";
 
 const props = defineProps<{
-  user: Partial<UserDetailed> & User;
+  query: { id: string } | { username: string, host: string | null };
   width?: number;
 }>();
 
 const { t } = useI18n();
 const account = useAccount();
-const userCache = useUserCache();
-const detailedUser = computed(
-  () => userCache.cache(props.user, { detailed: true }).value,
-);
-const user = computed(() =>
-  detailedUser.value.detailed ? detailedUser.value.data : props.user,
-);
-const loading = computed(() => !detailedUser.value.detailed);
-const isMe = computed(() => account.me?.id === props.user.id);
+const { user, loading, error, controller } = useUserQuery({
+  ...props.query,
+  detailed: true,
+});
+const isMe = computed(() => account.me?.id === user.value?.id);
 const followText = computed(() =>
-  props.user.isLocked ? t("followRequest") : t("follow"),
+  user.value?.isLocked ? t("followRequest") : t("follow"),
 );
 const followLoading = ref(false);
 const sendingAccept = ref(false);
 const sendingReject = ref(false);
-const userApi = computed(() => new UserApi(props.user));
 
-const accept = () => userApi.value.accept(sendingAccept);
-const reject = () => userApi.value.reject(sendingReject);
-const unblock = () => userApi.value.unblock(followLoading);
-const unfollow = () => userApi.value.unfollow(followLoading);
-const follow = () => userApi.value.follow(followLoading);
+const accept = () => controller.value!.accept(sendingAccept);
+const reject = () => controller.value!.reject(sendingReject);
+const unblock = () => controller.value!.unblock(followLoading);
+const unfollow = () => controller.value!.unfollow(followLoading);
+const follow = () => controller.value!.follow(followLoading);
 const cancelFollowRequest = () =>
-  userApi.value.cancelFollowRequest(followLoading);
+  controller.value!.cancelFollowRequest(followLoading);
 </script>
 
 

@@ -22,6 +22,7 @@ registerPlugins(app);
 app.config.errorHandler = (err, vm, info) => {
   if (import.meta.env.DEV) {
     console.error("unhandled error", { err, vm, info });
+    console.error(err);
   } else {
     console.error(info, err);
   }

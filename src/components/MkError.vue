@@ -1,6 +1,7 @@
 <template>
   <VAlert type="error" variant="outlined" class="ma-4">
-    <VAlertTitle>{{ title }}</VAlertTitle>
+    <VAlertTitle v-if="title">{{ title }}</VAlertTitle>
+    <VAlertTitle v-else>{{ t("somethingHappened") }}</VAlertTitle>
     <div>{{ message }}</div>
     <VBtn v-if="retryable" variant="text" @click="emit('retry')">
       {{ $t("retry") }}
@@ -9,11 +10,13 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n();
+
 defineProps<{
-  title: string;
+  title?: string;
   message: string;
   retryable?: boolean;
-}>();
+}>()
 
 const emit = defineEmits<{
   retry: [];

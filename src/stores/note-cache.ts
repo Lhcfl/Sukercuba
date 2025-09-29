@@ -3,7 +3,6 @@ import { isPureRenote } from "misskey-js/note.js";
 import { defineStore } from "pinia";
 import { type Ref, ref } from "vue";
 import { useAccount } from "./account";
-import { useUserCache } from "./user-cache";
 
 export type NoteWithExtension = Note & {
   renote?: NoteWithExtension;
@@ -23,7 +22,7 @@ type ActullyStoredNote = Ref<
  * Use singleton mode to ensure that each note will be retrieved only once for the same period of time.
  */
 export const useNoteCache = defineStore("note-cache", () => {
-  const userCache = useUserCache();
+  const userSingleton = useUserSingleton();
   const noteCache = new Map<Note["id"], ActullyStoredNote>();
 
   const account = useAccount();
@@ -207,7 +206,7 @@ export const useNoteCache = defineStore("note-cache", () => {
       /**
        * we can also cache the user for the note
        */
-      userCache.cache(note.user);
+      userSingleton.cache(note.user);
     }
 
     if (oldNote == null) {

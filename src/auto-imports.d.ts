@@ -12,6 +12,7 @@ declare global {
   const IdbDraft: typeof import('./stores/draft-new')['IdbDraft']
   const SiteStore: typeof import('./stores/store')['SiteStore']
   const UserApi: typeof import('./stores/user-cache')['UserApi']
+  const UserController: typeof import('./stores/user-singleton')['UserController']
   const UserStore: typeof import('./stores/store')['UserStore']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']
@@ -93,7 +94,8 @@ declare global {
   const useUploader: typeof import('./stores/upload')['useUploader']
   const useUploading: typeof import('./stores/uploading')['useUploading']
   const useUserCache: typeof import('./stores/user-cache')['useUserCache']
-  const useUserQuery: typeof import('./stores/user-query')['useUserQuery']
+  const useUserQuery: typeof import('./stores/user-singleton')['useUserQuery']
+  const useUserSingleton: typeof import('./stores/user-singleton')['useUserSingleton']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -120,8 +122,8 @@ declare global {
   export type { IDBStore, SiteStore, UserStore } from './stores/store'
   import('./stores/store')
   // @ts-ignore
-  export type { UserApi } from './stores/user-cache'
-  import('./stores/user-cache')
+  export type { UserController } from './stores/user-singleton'
+  import('./stores/user-singleton')
   // @ts-ignore
   export type { NavigationItem } from './services/navigations'
   import('./services/navigations')
@@ -137,7 +139,7 @@ declare module 'vue' {
     readonly IDBStore: UnwrapRef<typeof import('./stores/store')['IDBStore']>
     readonly IdbDraft: UnwrapRef<typeof import('./stores/draft-new')['IdbDraft']>
     readonly SiteStore: UnwrapRef<typeof import('./stores/store')['SiteStore']>
-    readonly UserApi: UnwrapRef<typeof import('./stores/user-cache')['UserApi']>
+    readonly UserController: UnwrapRef<typeof import('./stores/user-singleton')['UserController']>
     readonly UserStore: UnwrapRef<typeof import('./stores/store')['UserStore']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
@@ -214,8 +216,8 @@ declare module 'vue' {
     readonly useSnackbarQueue: UnwrapRef<typeof import('./stores/snackbar-queue')['useSnackbarQueue']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
     readonly useUploader: UnwrapRef<typeof import('./stores/upload')['useUploader']>
-    readonly useUserCache: UnwrapRef<typeof import('./stores/user-cache')['useUserCache']>
-    readonly useUserQuery: UnwrapRef<typeof import('./stores/user-query')['useUserQuery']>
+    readonly useUserQuery: UnwrapRef<typeof import('./stores/user-singleton')['useUserQuery']>
+    readonly useUserSingleton: UnwrapRef<typeof import('./stores/user-singleton')['useUserSingleton']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>

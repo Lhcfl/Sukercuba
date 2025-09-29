@@ -18,7 +18,7 @@
         @click.stop="reject" />
     </VCardActions>
     <VCardActions v-if="showFollowBack" class="py-0">
-      <VBtn v-if="userDetailed?.hasPendingFollowRequestFromYou" class="bg-primary" prepend-icon="mdi-clock-outline"
+      <VBtn v-if="user?.hasPendingFollowRequestFromYou" class="bg-primary" prepend-icon="mdi-clock-outline"
         :text="t('followRequestPending')" :loading="sendingCancelFollowRequest" @click.stop="cancelFollowRequest" />
       <VBtn v-else class="text-primary" prepend-icon="mdi-account-plus-outline" :text="t('follow')"
         :loading="sendingFollow" @click.stop="follow" />
@@ -49,12 +49,10 @@ const props = defineProps<{
 
 const { t } = useI18n();
 const router = useRouter();
-const cached = useUserCache().cache(props.notification.user, {
+const { user, loading, error } = useUserQuery({
+  id: props.notification.user.id,
   detailed: true,
 });
-const userDetailed = computed(() =>
-  cached.value.detailed ? cached.value.data : undefined,
-);
 
 const sendingFollow = ref(false);
 const sendingBreakFollow = ref(false);
@@ -74,13 +72,13 @@ const message = computed(
 
 const showAcceptRefuse = computed(() =>
   !rejected.value && props.notification.type === "receiveFollowRequest"
-    ? !(userDetailed.value?.isFollowed || userDetailed.value?.isBlocking)
+    ? !(user.value?.isFollowed || user.value?.isBlocking)
     : false,
 );
 
 const showFollowBack = computed(() =>
-  userDetailed.value?.isFollowed && props.notification.type === "follow"
-    ? !userDetailed.value?.isFollowing
+  user.value?.isFollowed && props.notification.type === "follow"
+    ? !user.value?.isFollowing
     : false,
 );
 
@@ -91,7 +89,7 @@ function routeToUser() {
   });
 }
 
-const userApi = computed(() => new UserApi(props.notification.user));
+const userApi = computed(() => new UserController(props.notification.user));
 const accept = () => userApi.value.accept(sendingAccept);
 const reject = () => userApi.value.reject(sendingReject);
 const follow = () => userApi.value.follow(sendingFollow);
