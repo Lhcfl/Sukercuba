@@ -4,6 +4,11 @@
       <MkNotification tile :notification />
       <VDivider />
     </div>
+    <template #loading>
+      <div class="w-full block">
+        <VSkeletonLoader v-for="n in 10" :key="n" type="list-item-avatar-three-line" />
+      </div>
+    </template>
   </VInfiniteScroll>
 </template>
 <script lang="ts" setup>
@@ -32,6 +37,7 @@ async function load(context: { done: (stat: "ok" | "error") => void }) {
   try {
     const res = await account.api.request("i/notifications-grouped", {
       untilId: untilId.value,
+      limit: 50,
     });
     untilId.value = res.at(-1)?.id;
     notifications.value = notifications.value.concat(res);
