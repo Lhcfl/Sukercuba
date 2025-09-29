@@ -19,6 +19,15 @@ const app = createApp(App);
 
 registerPlugins(app);
 
+app.config.errorHandler = (err, vm, info) => {
+  if (import.meta.env.DEV) {
+    console.error("unhandled error", { err, vm, info });
+  } else {
+    console.error(info, err);
+  }
+  useSnackbarQueue().push({ color: "error", text: errorToString(err) });
+}
+
 app.mount("#app");
 
 // boot;

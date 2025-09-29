@@ -105,6 +105,7 @@
     "useTemplateRef": true,
     "useUploader": true,
     "useUserCache": true,
+    "useUserQuery": true,
     "watch": true,
     "watchEffect": true,
     "watchPostEffect": true,

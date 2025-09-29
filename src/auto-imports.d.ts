@@ -93,6 +93,7 @@ declare global {
   const useUploader: typeof import('./stores/upload')['useUploader']
   const useUploading: typeof import('./stores/uploading')['useUploading']
   const useUserCache: typeof import('./stores/user-cache')['useUserCache']
+  const useUserQuery: typeof import('./stores/user-query')['useUserQuery']
   const watch: typeof import('vue')['watch']
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
@@ -214,6 +215,7 @@ declare module 'vue' {
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
     readonly useUploader: UnwrapRef<typeof import('./stores/upload')['useUploader']>
     readonly useUserCache: UnwrapRef<typeof import('./stores/user-cache')['useUserCache']>
+    readonly useUserQuery: UnwrapRef<typeof import('./stores/user-query')['useUserQuery']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
