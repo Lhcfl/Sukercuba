@@ -101,6 +101,7 @@
     "useQueryClient": true,
     "useRoute": true,
     "useRouter": true,
+    "useSharedLoading": true,
     "useSlots": true,
     "useSnackbarQueue": true,
     "useTemplateRef": true,
@@ -110,6 +111,7 @@
     "watch": true,
     "watchEffect": true,
     "watchPostEffect": true,
-    "watchSyncEffect": true
+    "watchSyncEffect": true,
+    "withLoading": true
   }
 }

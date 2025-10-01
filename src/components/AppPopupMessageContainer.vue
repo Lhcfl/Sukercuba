@@ -1,5 +1,5 @@
 <template>
-  <VDialog :model-value="show" max-width="500" persistent>
+  <VDialog :model-value="show" max-width="500" :persistent="message?.okcancel">
     <VCard v-if="message">
       <VCardTitle v-if="message.title">
         {{ message.title }}

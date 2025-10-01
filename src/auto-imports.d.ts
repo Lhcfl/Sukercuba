@@ -88,6 +88,7 @@ declare global {
   const useQueryClient: typeof import('@tanstack/vue-query')['useQueryClient']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
+  const useSharedLoading: typeof import('./services/use-loading')['useSharedLoading']
   const useSlots: typeof import('vue')['useSlots']
   const useSnackbarQueue: typeof import('./stores/snackbar-queue')['useSnackbarQueue']
   const useTemplateRef: typeof import('vue')['useTemplateRef']
@@ -101,6 +102,7 @@ declare global {
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
   const watchSyncEffect: typeof import('vue')['watchSyncEffect']
+  const withLoading: typeof import('./services/use-loading')['withLoading']
 }
 // for type re-export
 declare global {
@@ -214,6 +216,7 @@ declare module 'vue' {
     readonly useQueryClient: UnwrapRef<typeof import('@tanstack/vue-query')['useQueryClient']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
+    readonly useSharedLoading: UnwrapRef<typeof import('./services/use-loading')['useSharedLoading']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useSnackbarQueue: UnwrapRef<typeof import('./stores/snackbar-queue')['useSnackbarQueue']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
@@ -224,5 +227,6 @@ declare module 'vue' {
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
     readonly watchSyncEffect: UnwrapRef<typeof import('vue')['watchSyncEffect']>
+    readonly withLoading: UnwrapRef<typeof import('./services/use-loading')['withLoading']>
   }
 }

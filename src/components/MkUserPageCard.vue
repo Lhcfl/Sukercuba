@@ -128,15 +128,13 @@ const isMe = computed(() => account.me?.id === user.value?.id);
 const followText = computed(() =>
   user.value?.isLocked ? t("followRequest") : t("follow"),
 );
-const followLoading = ref(false);
-const sendingAccept = ref(false);
-const sendingReject = ref(false);
 
-const accept = () => controller.value!.with(sendingAccept).accept();
-const reject = () => controller.value!.with(sendingReject).reject();
-const unblock = () => controller.value!.with(followLoading).unblock();
-const unfollow = () => controller.value!.with(followLoading).unfollow();
-const follow = () => controller.value!.with(followLoading).follow();
-const cancelFollowRequest = () =>
-  controller.value!.with(followLoading).cancelFollowRequest();
+const [sendingAccept, accept] = useLoading(() => controller.value!.accept());
+const [sendingReject, reject] = useLoading(() => controller.value!.reject());
+const [followLoading, unblock, unfollow, follow, cancelFollowRequest] = useSharedLoading(
+  () => controller.value!.unblock(),
+  () => controller.value!.unfollow(),
+  () => controller.value!.follow(),
+  () => controller.value!.cancelFollowRequest(),
+);
 </script>

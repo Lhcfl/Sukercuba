@@ -5,13 +5,13 @@ import { getI18n } from "@/plugins/i18n";
 
 type UserSingletonCache = (
   | {
-      detailed: true;
-      user: Ref<UserDetailed | null>;
-    }
+    detailed: true;
+    user: Ref<UserDetailed | null>;
+  }
   | {
-      detailed: false;
-      user: Ref<UserLite | null>;
-    }
+    detailed: false;
+    user: Ref<UserLite | null>;
+  }
 ) & {
   loading: Ref<boolean>;
   error: Ref<unknown>;
@@ -64,7 +64,7 @@ export const useUserSingleton = defineStore("user-singleton", () => {
     return "id" in props
       ? props.id === account.me?.id
       : props.username === account.me?.username &&
-          props.host === account.me.host;
+      props.host === account.me.host;
   }
 
   function forceFetchUser(
@@ -94,32 +94,32 @@ export const useUserSingleton = defineStore("user-singleton", () => {
 
     const promise = isMe(props)
       ? account.api.request("i", {}).then((user) => {
+        entry.error.value = null;
+        account.me = user;
+        createUsername2IdMapping(user);
+        if (!resolved) {
+          userCache.set(user.id, entry);
+          userCache.delete(key);
+        }
+      })
+      : account.api
+        .request(
+          "users/show",
+          "id" in props
+            ? {
+              userId: props.id,
+            }
+            : props,
+        )
+        .then((user) => {
           entry.error.value = null;
-          account.me = user;
+          entry.user.value = user;
           createUsername2IdMapping(user);
           if (!resolved) {
             userCache.set(user.id, entry);
             userCache.delete(key);
           }
-        })
-      : account.api
-          .request(
-            "users/show",
-            "id" in props
-              ? {
-                  userId: props.id,
-                }
-              : props,
-          )
-          .then((user) => {
-            entry.error.value = null;
-            entry.user.value = user;
-            createUsername2IdMapping(user);
-            if (!resolved) {
-              userCache.set(user.id, entry);
-              userCache.delete(key);
-            }
-          });
+        });
 
     promise
       .catch((err) => {
@@ -303,6 +303,7 @@ export class UserController {
       message: i18n.t("unfollowConfirm", {
         name: this.user.name ?? this.user.username,
       }),
+      okcancel: true,
     });
     if (!ok) {
       return;
