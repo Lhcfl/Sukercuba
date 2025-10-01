@@ -47,9 +47,9 @@ watch(valid, (ns) => {
   }
 })
 
-const userApi = computed(() => new UserController(props.user));
-const accept = () => userApi.value.accept(sendingAccept).then(() => valid.value = false);
-const reject = () => userApi.value.reject(sendingReject).then(() => valid.value = false);
+const controller = computed(() => new UserController(props.user));
+const accept = () => controller.value.with(sendingAccept).accept().then(() => valid.value = false);
+const reject = () => controller.value.with(sendingReject).reject().then(() => valid.value = false);
 const cancelFollowRequest = () =>
-  userApi.value.cancelFollowRequest(sendingCancelFollowRequest).then(() => valid.value = false);
+  controller.value.with(sendingCancelFollowRequest).cancelFollowRequest().then(() => valid.value = false);
 </script>
