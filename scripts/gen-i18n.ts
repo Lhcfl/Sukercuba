@@ -80,6 +80,7 @@ const locales_folders = [
   `locales`,
   `sharkey-locales`,
   `stpv-locales`,
+  `sukerbuka-locales`,
 ];
 
 function readLocale(locale: string) {

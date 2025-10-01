@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VCard v-if="user" :class="$style.main" :loading :width class="rounded-none">
+    <VCard v-if="user" :class="$style.main" :loading :width class="rounded-none" density="compact">
       <VCardActions v-if="user.hasPendingFollowRequestToYou">
         <span>
           {{ t("receiveFollowRequest") }}
@@ -77,37 +77,28 @@
         </p>
       </VCardText>
       <VCardText v-if="Object.keys(user.fields ?? {}).length > 0">
-        <VDivider />
-        <div class="flex justify-evenly  mt-2">
-          <VTable :class="$style.fieldTable">
-            <tbody>
-              <tr v-for="(item, idx) in user.fields" :key="idx">
-                <td :class="$style.fieldName">
-                  <MkMfm :text="item.name" :emoji-urls="user.emojis" :author="user" />
-                </td>
-                <td />
-                <td :class="$style.fieldVal">
-                  <MkMfm :text="item.value" :emoji-urls="user.emojis" :author="user" />
-                </td>
-              </tr>
-            </tbody>
-          </VTable>
+        <div class="flex flex-col gap-1">
+          <VAlert v-for="(item, idx) in user.fields" :key="idx" class="bg-secondary-container" density="compact">
+            <p class="title text-sm opacity-70">
+              <MkMfm :text="item.name" :emoji-urls="user.emojis" :author="user" />
+            </p>
+            <MkMfm :text="item.value" :emoji-urls="user.emojis" :author="user" />
+          </VAlert>
         </div>
       </VCardText>
       <VCardText>
-        <VDivider />
         <div class="flex justify-evenly text-center mt-2">
           <div class="flex flex-col">
-            <span class="text-h5">{{ user.notesCount }}</span>
-            <span class="text-subtitle-2">{{ t('notes') }}</span>
+            <span class="text-xl">{{ user.notesCount }}</span>
+            <span class="text-xs opacity-70">{{ t('notes') }}</span>
           </div>
           <div class="flex flex-col">
-            <span class="text-h5">{{ user.followersCount }}</span>
-            <span class="text-subtitle-2">{{ t('followers') }}</span>
+            <span class="text-xl">{{ user.followersCount }}</span>
+            <span class="text-xs opacity-70">{{ t('followers') }}</span>
           </div>
           <div class="flex flex-col">
-            <span class="text-h5">{{ user.followingCount }}</span>
-            <span class="text-subtitle-2">{{ t('following') }}</span>
+            <span class="text-xl">{{ user.followingCount }}</span>
+            <span class="text-xs opacity-70">{{ t('following') }}</span>
           </div>
         </div>
       </VCardText>
@@ -151,13 +142,6 @@ const cancelFollowRequest = () =>
 
 <style lang="scss" module>
 .main {
-  .avatarContainer {
-    margin-top: -80px;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-  }
-
   .fieldTable {
     width: 500px;
     --v-table-row-height: 2.5em;

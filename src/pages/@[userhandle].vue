@@ -2,7 +2,11 @@
   <MkError v-if="error" :message="errorToString(error)"></MkError>
   <MkUserPageCard :query="query" />
   <MkNoteSkeleton v-if="loading"></MkNoteSkeleton>
-  <MkUserTimeline v-if="user" :user-id="user.id" />
+  <template v-if="user">
+    <MkError :title="$t('userBlockedYou', { name: user.name || user.username })" v-if="user.isBlocked"
+      :message="$t('youCanNotSeeBecauseYouAreBlocked')" />
+    <MkUserTimeline v-else :user-id="user.id" />
+  </template>
 </template>
 
 <script setup lang="ts">
