@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VCard v-if="user" :class="$style.main" :loading :width class="rounded-none" density="compact">
+    <VCard v-if="user" :class="$style.main" :width class="rounded-none" density="compact" :loading="sendingRequest">
       <VCardActions v-if="user.hasPendingFollowRequestToYou">
         <span>
           {{ t("receiveFollowRequest") }}
@@ -19,7 +19,7 @@
           </div>
         </template>
         <VCardText class="flex h-100 justify-between justify-end">
-          <div>
+          <div class="flex gap-1">
             <VChip v-if="user.isFollowed" class="bg-primary-container">
               {{ user.isFollowing ? t('mutualFollow') : t('followsYou') }}
             </VChip>
@@ -51,7 +51,7 @@
             </template>
             <VBtn>
               <VIcon icon="mdi-dots-vertical" />
-              <MkUserMenu :user="user" />
+              <MkUserMenu :user="user" @update:loading="(x) => sendingRequest = x" />
             </VBtn>
           </VBtnGroup>
         </VCardText>
@@ -122,6 +122,7 @@ const { user, loading, error, controller } = useUserQuery({
   ...props.query,
   detailed: true,
 });
+const sendingRequest = ref(false);
 const isMe = computed(() => account.me?.id === user.value?.id);
 const followText = computed(() =>
   user.value?.isLocked ? t("followRequest") : t("follow"),
@@ -130,13 +131,13 @@ const followLoading = ref(false);
 const sendingAccept = ref(false);
 const sendingReject = ref(false);
 
-const accept = () => controller.value!.accept(sendingAccept);
-const reject = () => controller.value!.reject(sendingReject);
-const unblock = () => controller.value!.unblock(followLoading);
-const unfollow = () => controller.value!.unfollow(followLoading);
-const follow = () => controller.value!.follow(followLoading);
+const accept = () => controller.value!.with(sendingAccept).accept();
+const reject = () => controller.value!.with(sendingReject).reject();
+const unblock = () => controller.value!.with(followLoading).unblock();
+const unfollow = () => controller.value!.with(followLoading).unfollow();
+const follow = () => controller.value!.with(followLoading).follow();
 const cancelFollowRequest = () =>
-  controller.value!.cancelFollowRequest(followLoading);
+  controller.value!.with(followLoading).cancelFollowRequest();
 </script>
 
 

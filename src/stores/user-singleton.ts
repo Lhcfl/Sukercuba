@@ -5,13 +5,13 @@ import { getI18n } from "@/plugins/i18n";
 
 type UserSingletonCache = (
   | {
-      detailed: true;
-      user: Ref<UserDetailed | null>;
-    }
+    detailed: true;
+    user: Ref<UserDetailed | null>;
+  }
   | {
-      detailed: false;
-      user: Ref<UserLite | null>;
-    }
+    detailed: false;
+    user: Ref<UserLite | null>;
+  }
 ) & {
   loading: Ref<boolean>;
   error: Ref<unknown>;
@@ -64,7 +64,7 @@ export const useUserSingleton = defineStore("user-singleton", () => {
     return "id" in props
       ? props.id === account.me?.id
       : props.username === account.me?.username &&
-          props.host === account.me.host;
+      props.host === account.me.host;
   }
 
   function forceFetchUser(
@@ -94,32 +94,32 @@ export const useUserSingleton = defineStore("user-singleton", () => {
 
     const promise = isMe(props)
       ? account.api.request("i", {}).then((user) => {
+        entry.error.value = null;
+        account.me = user;
+        createUsername2IdMapping(user);
+        if (!resolved) {
+          userCache.set(user.id, entry);
+          userCache.delete(key);
+        }
+      })
+      : account.api
+        .request(
+          "users/show",
+          "id" in props
+            ? {
+              userId: props.id,
+            }
+            : props,
+        )
+        .then((user) => {
           entry.error.value = null;
-          account.me = user;
+          entry.user.value = user;
           createUsername2IdMapping(user);
           if (!resolved) {
             userCache.set(user.id, entry);
             userCache.delete(key);
           }
-        })
-      : account.api
-          .request(
-            "users/show",
-            "id" in props
-              ? {
-                  userId: props.id,
-                }
-              : props,
-          )
-          .then((user) => {
-            entry.error.value = null;
-            entry.user.value = user;
-            createUsername2IdMapping(user);
-            if (!resolved) {
-              userCache.set(user.id, entry);
-              userCache.delete(key);
-            }
-          });
+        });
 
     promise
       .catch((err) => {
@@ -261,13 +261,30 @@ export class UserController {
     });
   }
 
-  async follow(ing: Ref<boolean>) {
+  /**
+   * Magic function to wrap all methods to set ing state
+   * @param ing
+   * @returns
+   */
+  with(ing: Ref<boolean>) {
+    return new Proxy(this, {
+      get: (target, prop) => {
+        if (typeof target[prop as keyof UserController] === "function") {
+          return (...args: unknown[]) => {
+            return target.withState(ing, () => {
+              // @ts-expect-error: we checked it's a function
+              return target[prop](...args);
+            });
+          };
+        }
+      }
+    });
+  }
+
+  private async withState<T>(ing: Ref<boolean>, fn: () => Promise<T>) {
     ing.value = true;
     try {
-      await this.account.api.request("following/create", {
-        userId: this.user.id,
-      });
-      this.userSingleton.forceFetchUser(this.user);
+      return await fn();
     } catch (err) {
       this.handleRequestError(err);
     } finally {
@@ -275,56 +292,42 @@ export class UserController {
     }
   }
 
-  async accept(ing: Ref<boolean>) {
-    ing.value = true;
-    try {
-      await this.account.api.request("following/requests/accept", {
-        userId: this.user.id,
-      });
-      this.userSingleton.updateUser(this.user.id, {
-        isFollowed: true,
-        hasPendingFollowRequestToYou: false,
-      });
-    } catch (err) {
-      this.handleRequestError(err);
-    } finally {
-      ing.value = false;
-    }
+  async follow() {
+    await this.account.api.request("following/create", {
+      userId: this.user.id,
+    });
+    this.userSingleton.forceFetchUser(this.user);
   }
 
-  async reject(ing: Ref<boolean>) {
-    ing.value = true;
-    try {
-      await this.account.api.request("following/requests/reject", {
-        userId: this.user.id,
-      });
-      this.userSingleton.updateUser(this.user.id, {
-        hasPendingFollowRequestToYou: false,
-      });
-    } catch (err) {
-      this.handleRequestError(err);
-    } finally {
-      ing.value = false;
-    }
+  async accept() {
+    await this.account.api.request("following/requests/accept", {
+      userId: this.user.id,
+    });
+    this.userSingleton.updateUser(this.user.id, {
+      isFollowed: true,
+      hasPendingFollowRequestToYou: false,
+    });
   }
 
-  async cancelFollowRequest(ing: Ref<boolean>) {
-    ing.value = true;
-    try {
-      await this.account.api.request("following/requests/cancel", {
-        userId: this.user.id,
-      });
-      this.userSingleton.updateUser(this.user.id, {
-        hasPendingFollowRequestFromYou: false,
-      });
-    } catch (err) {
-      this.handleRequestError(err);
-    } finally {
-      ing.value = false;
-    }
+  async reject() {
+    await this.account.api.request("following/requests/reject", {
+      userId: this.user.id,
+    });
+    this.userSingleton.updateUser(this.user.id, {
+      hasPendingFollowRequestToYou: false,
+    });
   }
 
-  async unfollow(ing: Ref<boolean>) {
+  async cancelFollowRequest() {
+    await this.account.api.request("following/requests/cancel", {
+      userId: this.user.id,
+    });
+    this.userSingleton.updateUser(this.user.id, {
+      hasPendingFollowRequestFromYou: false,
+    });
+  }
+
+  async unfollow() {
     const i18n = getI18n().global;
     const { ok } = await usePopupMessage().push({
       type: "info",
@@ -335,44 +338,54 @@ export class UserController {
     if (!ok) {
       return;
     }
-    ing.value = true;
-    try {
-      await this.account.api.request("following/delete", {
+    await this.account.api.request("following/delete", {
+      userId: this.user.id,
+    });
+    this.userSingleton.updateUser(this.user.id, { isFollowing: false });
+  }
+
+  async unblock() {
+    await this.account.api.request("blocking/delete", {
+      userId: this.user.id,
+    });
+    this.userSingleton.updateUser(this.user.id, { isBlocking: false });
+  }
+
+  async block() {
+    const i18n = getI18n().global;
+    const { ok } = await usePopupMessage().push({
+      type: "info",
+      message: i18n.t("blockConfirm", {
+        name: this.user.name ?? this.user.username,
+      }),
+    });
+    if (ok) {
+      await this.account.api.request("blocking/create", {
         userId: this.user.id,
       });
-      this.userSingleton.updateUser(this.user.id, { isFollowing: false });
-    } catch (err) {
-      this.handleRequestError(err);
-    } finally {
-      ing.value = false;
+      this.userSingleton.updateUser(this.user.id, { isBlocking: true });
     }
   }
 
-  async unblock(ing: Ref<boolean>) {
-    ing.value = true;
-    try {
-      await this.account.api.request("blocking/delete", {
-        userId: this.user.id,
-      });
-      this.userSingleton.updateUser(this.user.id, { isBlocking: false });
-    } catch (err) {
-      this.handleRequestError(err);
-    } finally {
-      ing.value = false;
-    }
+  async breakFollow() {
+    await this.account.api.request("following/invalidate", {
+      userId: this.user.id,
+    });
+    this.userSingleton.updateUser(this.user.id, { isFollowed: false });
   }
 
-  async breakFollow(ing: Ref<boolean>) {
-    ing.value = true;
-    try {
-      await this.account.api.request("following/invalidate", {
-        userId: this.user.id,
-      });
-      this.userSingleton.updateUser(this.user.id, { isFollowed: false });
-    } catch (err) {
-      this.handleRequestError(err);
-    } finally {
-      ing.value = false;
-    }
+  async mute(expiresAt: number | null) {
+    await this.account.api.request("mute/create", {
+      userId: this.user.id,
+      expiresAt,
+    });
+    this.userSingleton.updateUser(this.user.id, { isMuted: true });
+  }
+
+  async unmute() {
+    await this.account.api.request("mute/delete", {
+      userId: this.user.id,
+    });
+    this.userSingleton.updateUser(this.user.id, { isMuted: false });
   }
 }

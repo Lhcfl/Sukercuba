@@ -89,13 +89,13 @@ function routeToUser() {
   });
 }
 
-const userApi = computed(() => new UserController(props.notification.user));
-const accept = () => userApi.value.accept(sendingAccept);
-const reject = () => userApi.value.reject(sendingReject);
-const follow = () => userApi.value.follow(sendingFollow);
+const controller = computed(() => new UserController(props.notification.user));
+const accept = () => controller.value.with(sendingAccept).accept();
+const reject = () => controller.value.with(sendingReject).reject();
+const follow = () => controller.value.with(sendingFollow).follow();
 const cancelFollowRequest = () =>
-  userApi.value.cancelFollowRequest(sendingCancelFollowRequest);
-const breakFollow = () => userApi.value.breakFollow(sendingBreakFollow);
+  controller.value.with(sendingCancelFollowRequest).cancelFollowRequest();
+const breakFollow = () => controller.value.with(sendingBreakFollow).breakFollow();
 </script>
 
 <style lang="scss" module>
