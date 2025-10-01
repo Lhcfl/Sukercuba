@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VCard v-if="user" :class="$style.main" :width class="rounded-none" density="compact" :loading="sendingRequest">
+    <VCard v-if="user" :width class="rounded-none" density="compact" :loading="sendingRequest">
       <VCardActions v-if="user.hasPendingFollowRequestToYou">
         <span>
           {{ t("receiveFollowRequest") }}
@@ -11,11 +11,12 @@
         <VBtn class="text-red" prepend-icon="mdi-close-circle-outline" :loading="sendingReject" :text="t('reject')"
           @click.stop="reject" />
       </VCardActions>
-      <VParallax class="w-full aspect-[2/1]" :src="user?.bannerUrl">
+      <VParallax class="w-full min-h-40" :class="[user.bannerUrl ? 'aspect-[2/1]' : 'aspect-[6/1]']"
+        :src="user?.bannerUrl">
         <template #placeholder>
           <div class="relative w-full h-full">
-            <MkImageBlurHash class="w-full h-full object-cover" v-if="user.bannerBlurhash"
-              :blurhash="user.bannerBlurhash" :id="user.id" />
+            <MkImageBlurHash class="w-full h-full object-cover" :blurhash="user.bannerBlurhash || user.avatarBlurhash"
+              :id="user.id" />
           </div>
         </template>
         <VCardText class="flex h-100 justify-between justify-end">
@@ -139,32 +140,3 @@ const follow = () => controller.value!.with(followLoading).follow();
 const cancelFollowRequest = () =>
   controller.value!.with(followLoading).cancelFollowRequest();
 </script>
-
-
-<style lang="scss" module>
-.main {
-  .fieldTable {
-    width: 500px;
-    --v-table-row-height: 2.5em;
-
-    tr {
-      margin: 1em;
-    }
-
-    td {
-      border: none !important;
-    }
-
-    .fieldName {
-      width: 25%;
-      text-align: right;
-      font-weight: bold;
-    }
-
-    .fieldVal {
-      width: 65%;
-      text-align: left;
-    }
-  }
-}
-</style>
