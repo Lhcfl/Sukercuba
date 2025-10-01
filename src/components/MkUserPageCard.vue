@@ -45,7 +45,7 @@
                 :loading="followLoading" color="secondary" @click.stop="cancelFollowRequest">
                 {{ t('followRequestPending') }}
               </VBtn>
-              <VBtn v-else prepend-icon="mdi-plus" :loading="followLoading" @click.stop="follow">
+              <VBtn v-else-if="!user.isBlocked" prepend-icon="mdi-plus" :loading="followLoading" @click.stop="follow">
                 {{ followText }}
               </VBtn>
             </template>
