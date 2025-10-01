@@ -3,7 +3,7 @@
     <TransitionGroup name="note">
       <div v-for="note in computedNotes" :key="note.id">
         <VCard class="note-card border">
-          <MkNote :note />
+          <MkNote :note collapse-reply />
         </VCard>
         <VDivider v-if="perfer.noteGap === 0" />
       </div>

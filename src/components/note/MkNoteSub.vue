@@ -1,8 +1,10 @@
 <template>
   <div v-ripple="!disableRoute" :class="$style.note" @click.stop="routeToNote">
     <div class="flex">
-      <div class="flex-0-0" :class="$style.avatarContainer">
+      <div class="flex-0-0 flex flex-col items-center" :class="$style.avatarContainer">
         <MkAvatar :user="appearNote.user" :class="$style.avatar" />
+        <VIcon v-if="collapseable" icon="mdi-chevron-down" class="opacity-80 hover:opacity-100 cursor-pointer"
+          @click.stop="emit('collapse')" />
       </div>
       <div class="flex-1-1">
         <VCardItem>
@@ -33,11 +35,16 @@ const props = withDefaults(
     hideActions?: boolean;
     disableRoute?: boolean;
     hideReactions?: boolean;
+    collapseable?: boolean;
   }>(),
   {
     variant: "text",
   },
 );
+
+const emit = defineEmits<{
+  (e: "collapse"): void;
+}>();
 
 const router = useRouter();
 
@@ -68,11 +75,6 @@ function routeToNote() {
 
   .avatarContainer {
     padding: 1rem 0 0 1rem;
-  }
-
-  .avatar {
-    position: sticky;
-    top: 0;
   }
 }
 </style>

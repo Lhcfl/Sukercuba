@@ -1,7 +1,7 @@
 <template>
   <MkNotificationNoteEvent v-if="isNoteEventNotification(notification)" :notification variant="flat" />
   <MkNote v-else-if="notification.type === 'mention' || notification.type === 'quote' || notification.type === 'reply'"
-    variant="flat" :note="note!" />
+    variant="flat" :note="note!" collapse-reply />
   <MkNotificationFollow
     v-else-if="notification.type === 'follow' || notification.type === 'receiveFollowRequest' || notification.type === 'followRequestAccepted'"
     variant="flat" :notification />

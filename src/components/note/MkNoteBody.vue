@@ -1,5 +1,6 @@
 <template>
   <VCardText v-if="note.cw" class="note-body with-cw">
+    <MkNoteCollapsedReply :note="note" v-if="prependReply" @uncollapse="emit('uncollapseReply')" />
     <p class="cw">
       <MkMfm :text="note.cw" :author="note.user" :emoji-urls="note.emojis" />
     </p>
@@ -14,6 +15,7 @@
     </div>
   </VCardText>
   <VCardText v-else class="note-body">
+    <MkNoteCollapsedReply :note="note" v-if="prependReply" @uncollapse="emit('uncollapseReply')" />
     <div :class="!neverCollapse && isLongNote && collapsed && $style.collapsed">
       <MkNoteText :simple :note="note" :never-collapse="neverCollapse || isLongNote" :expandImages="!collapsed" />
     </div>
@@ -34,6 +36,11 @@ const props = defineProps<{
   simple?: boolean;
   /** 防止subnote也被折叠 */
   neverCollapse?: boolean;
+  prependReply?: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: "uncollapseReply"): void;
 }>();
 
 const collapsed = ref(true);

@@ -1,6 +1,7 @@
 <template>
   <div v-ripple="!disableRoute" :class="$style.note" @click.stop="routeToNote">
-    <MkNoteSub v-if="appearNote.reply && !detailed && !simple" :note="appearNote.reply" :detailed="false" />
+    <MkNoteSub v-if="appearNote.reply && !detailed && !simple && !replyCollapsed" :note="appearNote.reply"
+      :detailed="false" collapseable @collapse="replyCollapsed = true" />
     <MkNoteRenoteBar v-if="isPureRenote" :note />
     <VCardItem>
       <template #prepend>
@@ -8,7 +9,8 @@
       </template>
       <MkNoteHeader :note="appearNote" />
     </VCardItem>
-    <MkNoteBody :note="appearNote" :detailed :simple :never-collapse />
+    <MkNoteBody :note="appearNote" :detailed :simple :never-collapse :prepend-reply="replyCollapsed"
+      @uncollapse-reply="replyCollapsed = false" />
     <template v-if="translatedText || translating" :loading="translating">
       <VCardText v-if="translatedText">
         <p class="font-bold my-2">{{ $t("translatedFrom", { x: sourceLang }) }}</p>
@@ -44,6 +46,7 @@ const props = withDefaults(
     hideReactions?: boolean;
     /** 防止subnote也被折叠 */
     neverCollapse?: boolean;
+    collapseReply?: boolean;
   }>(),
   {
     variant: undefined,
@@ -62,6 +65,7 @@ const appearNote = computed(() =>
 const translating = ref(false);
 const sourceLang = ref<string | null>(null);
 const translatedText = ref<string | null>(null);
+const replyCollapsed = ref(props.collapseReply);
 
 function routeToNote() {
   if (window.getSelection()?.toString()) {
@@ -86,7 +90,6 @@ async function translateNote() {
     translating.value = false;
   }
 }
-
 </script>
 
 <style lang="scss" module>
