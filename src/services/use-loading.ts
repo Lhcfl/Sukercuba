@@ -21,9 +21,9 @@ export function withLoading<F extends (...args: never[]) => Promise<unknown>>(
   };
 }
 
-export function useSharedLoading<Fs extends ((...args: never[]) => Promise<unknown>)[]>(
-  ...triggers: Fs
-) {
+export function useSharedLoading<
+  Fs extends ((...args: never[]) => Promise<unknown>)[],
+>(...triggers: Fs) {
   const loading = ref(false);
   const wrapped = triggers.map((trigger) => {
     return (...args: Parameters<typeof trigger>) => {
