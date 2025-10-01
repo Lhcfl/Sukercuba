@@ -54,11 +54,12 @@ const { user, loading, error } = useUserQuery({
   detailed: true,
 });
 
-const sendingFollow = ref(false);
-const sendingBreakFollow = ref(false);
-const sendingAccept = ref(false);
-const sendingReject = ref(false);
-const sendingCancelFollowRequest = ref(false);
+const controller = computed(() => new UserController(props.notification.user));
+const [sendingAccept, accept] = useLoading(() => controller.value.accept());
+const [sendingFollow, follow] = useLoading(() => controller.value.follow());
+const [sendingBreakFollow, breakFollow] = useLoading(() => controller.value.breakFollow());
+const [sendingReject, reject] = useLoading(() => controller.value.reject());
+const [sendingCancelFollowRequest, cancelFollowRequest] = useLoading(() => controller.value.cancelFollowRequest());
 const rejected = ref(false);
 
 const message = computed(
@@ -88,14 +89,6 @@ function routeToUser() {
     params: { userhandle: acct.toString(props.notification.user) },
   });
 }
-
-const controller = computed(() => new UserController(props.notification.user));
-const accept = () => controller.value.with(sendingAccept).accept();
-const reject = () => controller.value.with(sendingReject).reject();
-const follow = () => controller.value.with(sendingFollow).follow();
-const cancelFollowRequest = () =>
-  controller.value.with(sendingCancelFollowRequest).cancelFollowRequest();
-const breakFollow = () => controller.value.with(sendingBreakFollow).breakFollow();
 </script>
 
 <style lang="scss" module>

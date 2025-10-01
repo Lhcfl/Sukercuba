@@ -243,9 +243,9 @@ export function useUserQuery<D extends boolean>(
 }
 
 export class UserController {
-  account: ReturnType<typeof useAccount>;
-  userSingleton: ReturnType<typeof useUserSingleton>;
-  user: User;
+  private account: ReturnType<typeof useAccount>;
+  private userSingleton: ReturnType<typeof useUserSingleton>;
+  private user: User;
 
   constructor(user: User) {
     this.account = useAccount();
@@ -259,37 +259,6 @@ export class UserController {
       type: "error",
       message: errorToString(err),
     });
-  }
-
-  /**
-   * Magic function to wrap all methods to set ing state
-   * @param ing
-   * @returns
-   */
-  with(ing: Ref<boolean>) {
-    return new Proxy(this, {
-      get: (target, prop) => {
-        if (typeof target[prop as keyof UserController] === "function") {
-          return (...args: unknown[]) => {
-            return target.withState(ing, () => {
-              // @ts-expect-error: we checked it's a function
-              return target[prop](...args);
-            });
-          };
-        }
-      },
-    });
-  }
-
-  private async withState<T>(ing: Ref<boolean>, fn: () => Promise<T>) {
-    ing.value = true;
-    try {
-      return await fn();
-    } catch (err) {
-      this.handleRequestError(err);
-    } finally {
-      ing.value = false;
-    }
   }
 
   async follow() {

@@ -35,9 +35,11 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const valid = ref(true);
-const sendingAccept = ref(false);
-const sendingReject = ref(false);
-const sendingCancelFollowRequest = ref(false);
+
+const controller = computed(() => new UserController(props.user));
+const [sendingAccept, accept] = useLoading(() => controller.value.accept().then(() => valid.value = false));
+const [sendingReject, reject] = useLoading(() => controller.value.reject().then(() => valid.value = false));
+const [sendingCancelFollowRequest, cancelFollowRequest] = useLoading(() => controller.value.cancelFollowRequest().then(() => valid.value = false));
 
 const queryClient = useQueryClient();
 
@@ -46,10 +48,4 @@ watch(valid, (ns) => {
     queryClient.invalidateQueries({ queryKey: ['follow-requests', props.type] })
   }
 })
-
-const controller = computed(() => new UserController(props.user));
-const accept = () => controller.value.with(sendingAccept).accept().then(() => valid.value = false);
-const reject = () => controller.value.with(sendingReject).reject().then(() => valid.value = false);
-const cancelFollowRequest = () =>
-  controller.value.with(sendingCancelFollowRequest).cancelFollowRequest().then(() => valid.value = false);
 </script>

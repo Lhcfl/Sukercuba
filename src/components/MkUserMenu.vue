@@ -8,15 +8,15 @@
       <template v-if="!isMe">
         <VDivider />
         <VListItem v-if="user.isFollowing" prepend-icon="mdi-account-minus-outline" :title="t('breakFollow')"
-          @click="controllerWithLoading.breakFollow()" />
+          @click="withEmitLoading('breakFollow')" />
         <VListItem v-if="user.isMuted" prepend-icon="mdi-bell-outline" :title="t('unmute')"
-          @click="controllerWithLoading.unmute()" />
+          @click="withEmitLoading('unmute')" />
         <VListItem v-if="!user.isMuted" prepend-icon="mdi-bell-off-outline" :title="t('mute')"
           @click="showMuteModal = true" />
         <VListItem v-if="user.isBlocking" prepend-icon="mdi-cancel" :title="t('unblock')"
-          @click="controllerWithLoading.unblock()" />
+          @click="withEmitLoading('unblock')" />
         <VListItem v-if="!user.isBlocking" prepend-icon="mdi-block-helper" :title="t('block')"
-          @click="controllerWithLoading.block()" />
+          @click="withEmitLoading('block')" />
         <VDivider />
         <VListItem prepend-icon="mdi-alert-circle-outline" :title="t('reportAbuse')" />
       </template>
@@ -27,7 +27,7 @@
     </VList>
   </VMenu>
   <VDialog v-model="showMuteModal" class="max-w-100">
-    <VCard :loading="isMuting">
+    <VCard :loading="muting">
       <VCardTitle>{{ t('mutePeriod') }}</VCardTitle>
       <VCardText>
         <VSelect :items="availableMutingPeriods" item-title="label" item-value="value" v-model="mutePeriod" />
@@ -35,7 +35,7 @@
       <VCardActions>
         <VBtn prepend-icon="mdi-close" @click="showMuteModal = false">{{ t('cancel') }}</VBtn>
         <VBtn prepend-icon="mdi-volume-off" @click="mute">{{ t('mute')
-        }}</VBtn>
+          }}</VBtn>
       </VCardActions>
     </VCard>
   </VDialog>
@@ -70,17 +70,18 @@ const availableMutingPeriods = computed(() => [
 ]);
 
 const mutePeriod = ref<number | null>(null);
-const isMuting = ref(false);
-const loading = ref(false);
-watch(loading, val => emit("update:loading", val));
+const controller = computed(() => new UserController(props.user));
+const [muting, mute] = useLoading(() =>
+  controller.value
+    .mute(mutePeriod.value && Date.now() + mutePeriod.value)
+    .then(() => {
+      showMuteModal.value = false;
+    }));
 
 const isMe = computed(() => account.me?.id === props.user.id);
-const controller = computed(() => new UserController(props.user));
-const controllerWithLoading = computed(() => controller.value.with(loading));
 
-async function mute() {
-  // we don't need to set loading here
-  await controller.value.with(isMuting).mute(mutePeriod.value && Date.now() + mutePeriod.value);
-  showMuteModal.value = false;
+function withEmitLoading(k: "breakFollow" | "unmute" | "unblock" | "block") {
+  emit("update:loading", true);
+  return controller.value[k]().finally(() => emit("update:loading", false));
 }
 </script>

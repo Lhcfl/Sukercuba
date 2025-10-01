@@ -77,6 +77,7 @@ declare global {
   const useI18n: typeof import('vue-i18n')['useI18n']
   const useId: typeof import('vue')['useId']
   const useInfiniteQuery: typeof import('@tanstack/vue-query')['useInfiniteQuery']
+  const useLoading: typeof import('./services/use-loading')['useLoading']
   const useModel: typeof import('vue')['useModel']
   const useMutation: typeof import('@tanstack/vue-query')['useMutation']
   const useNavigations: typeof import('./services/navigations')['useNavigations']
@@ -202,6 +203,7 @@ declare module 'vue' {
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
     readonly useInfiniteQuery: UnwrapRef<typeof import('@tanstack/vue-query')['useInfiniteQuery']>
+    readonly useLoading: UnwrapRef<typeof import('./services/use-loading')['useLoading']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
     readonly useMutation: UnwrapRef<typeof import('@tanstack/vue-query')['useMutation']>
     readonly useNavigations: UnwrapRef<typeof import('./services/navigations')['useNavigations']>

@@ -90,6 +90,7 @@
     "useI18n": true,
     "useId": true,
     "useInfiniteQuery": true,
+    "useLoading": true,
     "useModel": true,
     "useMutation": true,
     "useNavigations": true,
